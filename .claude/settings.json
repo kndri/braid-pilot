@@ -1,0 +1,50 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/check-docs.sh",
+            "timeout": 3000,
+            "description": "Check if documentation needs updating after code changes"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/check-docs.sh",
+            "timeout": 3000,
+            "description": "Final documentation check after task completion"
+          }
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "auto_update": true,
+    "check_on_commit": true,
+    "create_missing_docs": true,
+    "update_frequency": "after_each_task",
+    "doc_standards": {
+      "api_docs": "OpenAPI 3.0 compatible",
+      "component_docs": "React TypeScript with props documentation",
+      "architecture_docs": "C4 model with Mermaid diagrams",
+      "user_guides": "Step-by-step with screenshots"
+    }
+  },
+  "project": {
+    "name": "Braid Pilot",
+    "type": "Next.js Application",
+    "version": "0.1.0",
+    "documentation_root": "./docs",
+    "primary_language": "TypeScript",
+    "frameworks": ["Next.js", "React", "Tailwind CSS"]
+  }
+}
