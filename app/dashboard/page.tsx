@@ -4,33 +4,34 @@ import { useQuery, useMutation } from 'convex/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '@/convex/_generated/api'
-import { useUser, UserButton } from '@clerk/nextjs'
+import { useAuthActions } from '@convex-dev/auth/react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { user, isLoaded: userLoaded } = useUser()
+  const { signOut } = useAuthActions()
   const [isInitializing, setIsInitializing] = useState(false)
   
-  // Check onboarding status
-  const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
+  // Get current user
+  const viewer = useQuery(api.users.viewer)
   const currentUser = useQuery(api.users.getCurrentUser)
+  const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const createInitialSalonRecord = useMutation(api.users.createInitialSalonRecord)
   
   // Handle user initialization and onboarding redirect
   useEffect(() => {
     async function initializeUser() {
-      if (!userLoaded || !user || isInitializing) return
+      if (!viewer || isInitializing) return
       
-      // If user doesn't have a record, create one
-      if (onboardingStatus && !onboardingStatus.hasRecord) {
+      // If user doesn't have a salon, create one
+      if (viewer && !viewer.salonId) {
         setIsInitializing(true)
         try {
           await createInitialSalonRecord({
             salonData: {
-              name: user.fullName || 'My Salon',
-              email: user.primaryEmailAddress?.emailAddress || '',
-              phone: user.primaryPhoneNumber?.phoneNumber || undefined,
+              name: viewer.name || 'My Salon',
+              email: viewer.email,
+              phone: undefined,
             }
           })
         } catch (error) {
@@ -46,10 +47,15 @@ export default function DashboardPage() {
     }
     
     initializeUser()
-  }, [userLoaded, user, onboardingStatus, router, createInitialSalonRecord, isInitializing])
+  }, [viewer, onboardingStatus, router, createInitialSalonRecord, isInitializing])
+  
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/')
+  }
   
   // Loading states
-  if (!userLoaded || onboardingStatus === undefined) {
+  if (viewer === undefined || onboardingStatus === undefined) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -58,6 +64,11 @@ export default function DashboardPage() {
         </div>
       </div>
     )
+  }
+  
+  if (!viewer) {
+    router.push('/sign-in')
+    return null
   }
   
   if (isInitializing) {
@@ -114,7 +125,19 @@ export default function DashboardPage() {
             </nav>
             
             <div className="flex items-center space-x-4">
-              <UserButton afterSignOutUrl="/" />
+              <div className="relative">
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
+                >
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium">
+                      {viewer?.name?.charAt(0).toUpperCase() || 'U'}
+                    </span>
+                  </div>
+                  <span className="hidden md:inline text-sm">Sign Out</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -124,7 +147,7 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {currentUser?.salon?.name || user?.firstName || 'there'}!
+            Welcome back, {currentUser?.salon?.name || viewer?.name || 'there'}!
           </h1>
           <p className="text-gray-600 mt-2">
             Here&apos;s what&apos;s happening with your salon today.
@@ -215,11 +238,12 @@ export default function DashboardPage() {
           </div>
         </div>
         
-        {/* Pricing Config Count (for debugging) */}
+        {/* Debug Info */}
         {onboardingStatus && (
           <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
             <p>Debug Info: You have {onboardingStatus.pricingConfigCount || 0} pricing configurations.</p>
             <p>Onboarding Status: {onboardingStatus.onboardingComplete ? 'Complete' : 'Incomplete'}</p>
+            <p>User Email: {viewer?.email}</p>
           </div>
         )}
       </main>

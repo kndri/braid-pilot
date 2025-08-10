@@ -2,16 +2,17 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useMutation } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { UserButton, useUser } from '@clerk/nextjs'
+import { useAuthActions } from '@convex-dev/auth/react'
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const { user } = useUser()
+  const { signOut } = useAuthActions()
   const [currentStep, setCurrentStep] = useState(1)
   const [isCompleting, setIsCompleting] = useState(false)
   
+  const viewer = useQuery(api.users.viewer)
   const completeOnboarding = useMutation(api.users.completeOnboarding)
   
   const totalSteps = 3
@@ -43,6 +44,22 @@ export default function OnboardingPage() {
     router.push('/dashboard')
   }
   
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/')
+  }
+  
+  if (!viewer) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Header */}
@@ -53,7 +70,12 @@ export default function OnboardingPage() {
               <div className="w-8 h-8 bg-orange-500 rounded"></div>
               <span className="text-xl font-semibold text-gray-900">braidpilot</span>
             </div>
-            <UserButton afterSignOutUrl="/" />
+            <button
+              onClick={handleSignOut}
+              className="text-sm text-gray-500 hover:text-gray-700"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </header>
@@ -85,7 +107,7 @@ export default function OnboardingPage() {
           {currentStep === 1 && (
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Welcome to Braid Pilot, {user?.firstName}! 👋
+                Welcome to Braid Pilot, {viewer?.name?.split(' ')[0]}! 👋
               </h1>
               <p className="text-lg text-gray-600 mb-8">
                 Let&apos;s get your salon set up in just a few minutes. We&apos;ll help you configure your pricing, 
