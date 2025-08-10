@@ -53,7 +53,7 @@ export default function Hero() {
           
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              href="/signup"
+              href="/sign-up"
               className="inline-block bg-orange-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Get Started for Free

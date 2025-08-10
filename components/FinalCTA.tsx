@@ -16,7 +16,7 @@ export default function FinalCTA() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link 
-              href="/signup"
+              href="/sign-up"
               className="inline-block bg-white text-orange-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl"
             >
               Start Your Free Trial

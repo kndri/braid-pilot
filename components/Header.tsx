@@ -29,7 +29,7 @@ export default function Header() {
           
           <div className="flex items-center space-x-4">
             <Link 
-              href="/signup" 
+              href="/sign-up" 
               className="hidden md:inline-block bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
             >
               Get Started for Free
@@ -77,7 +77,7 @@ export default function Header() {
               Contact
             </Link>
             <Link
-              href="/signup"
+              href="/sign-up"
               className="block px-3 py-2 rounded-md text-base font-medium bg-orange-500 text-white hover:bg-orange-600"
             >
               Get Started for Free
