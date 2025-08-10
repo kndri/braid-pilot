@@ -29,20 +29,13 @@ Braid Pilot uses Convex Auth for authentication, providing a unified solution wh
    cp .env.local.example .env.local
    ```
 
-2. **Fill in your credentials**
+2. **Fill in your Convex URL**
    ```env
    # Convex Configuration
    NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+   ```
    
-   # Auth Secret (generate a random 32+ character string)
-   AUTH_SECRET=your-random-secret-at-least-32-characters-long
-   ```
-
-3. **Generate AUTH_SECRET**
-   ```bash
-   # Generate a secure random secret
-   openssl rand -base64 32
-   ```
+   That's it! Convex Auth handles all session management internally.
 
 ### 3. Run the Application
 
@@ -189,7 +182,7 @@ const complete = useMutation(api.users.completeOnboarding)
 ## Troubleshooting
 
 ### "Not authenticated" error
-- Ensure AUTH_SECRET is set in `.env.local`
+- Ensure NEXT_PUBLIC_CONVEX_URL is correctly set in `.env.local`
 - Check that cookies are enabled in your browser
 - Try clearing browser cache and cookies
 
