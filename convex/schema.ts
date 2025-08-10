@@ -2,20 +2,19 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
 
-export default defineSchema({
+// Merge auth tables with custom tables
+const schema = defineSchema({
   ...authTables,
   
-  users: defineTable({
-    email: v.string(),
-    name: v.string(),
-    emailVerified: v.boolean(),
-    image: v.union(v.string(), v.null()),
+  // Extended user profile data
+  userProfiles: defineTable({
+    userId: v.id("users"),
     salonId: v.optional(v.id("salons")),
     onboardingComplete: v.boolean(),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index("by_email", ["email"])
+    .index("by_userId", ["userId"])
     .index("by_salonId", ["salonId"]),
   
   salons: defineTable({
@@ -23,7 +22,7 @@ export default defineSchema({
     address: v.optional(v.string()),
     phone: v.optional(v.string()),
     email: v.string(),
-    ownerId: v.id("users"),
+    ownerId: v.id("userProfiles"),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_ownerId", ["ownerId"]),
@@ -40,3 +39,5 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("by_salonId", ["salonId"]),
 });
+
+export default schema;

@@ -3,11 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useAuthActions } from '@convex-dev/auth/react'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 export default function SignInPage() {
   const router = useRouter()
-  const { signIn } = useAuthActions()
+  const signIn = useMutation(api.auth.signIn)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -21,7 +22,10 @@ export default function SignInPage() {
     const password = formData.get('password') as string
     
     try {
-      await signIn("password", { email, password, flow: "signIn" })
+      await signIn({ 
+        provider: "password",
+        params: { email, password }
+      })
       router.push('/dashboard')
     } catch (err) {
       console.error(err)

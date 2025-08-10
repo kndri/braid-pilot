@@ -4,11 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { useAuthActions } from '@convex-dev/auth/react'
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const { signOut } = useAuthActions()
   const [currentStep, setCurrentStep] = useState(1)
   const [isCompleting, setIsCompleting] = useState(false)
   
@@ -45,7 +43,8 @@ export default function OnboardingPage() {
   }
   
   const handleSignOut = async () => {
-    await signOut()
+    // Sign out by clearing cookies and redirecting
+    await fetch('/api/auth/signout', { method: 'POST' })
     router.push('/')
   }
   

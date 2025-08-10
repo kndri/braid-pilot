@@ -8,74 +8,53 @@
  * @module
  */
 
-import type { Document, TableNames } from "convex/server"
+import type {
+  DataModelFromSchemaDefinition,
+  DocumentByName,
+  TableNamesInDataModel,
+  SystemTableNames,
+} from "convex/server";
+import type { GenericId } from "convex/values";
+import schema from "../schema.js";
 
 /**
  * The names of all of your Convex tables.
  */
-export type TableNames = "users" | "salons" | "pricingConfigs"
+export type TableNames = TableNamesInDataModel<DataModel>;
 
 /**
  * The type of a document stored in Convex.
+ *
+ * @typeParam TableName - A string literal type of the table name (like "users").
  */
-export type Doc<TableName extends TableNames> = Document<TableName>
+export type Doc<TableName extends TableNames> = DocumentByName<
+  DataModel,
+  TableName
+>;
 
 /**
  * An identifier for a document in Convex.
  *
+ * Convex documents are uniquely identified by their `Id`, which is accessible
+ * on the `_id` field. To learn more, see [Document IDs](https://docs.convex.dev/using/document-ids).
+ *
  * Documents can be loaded using `db.get(id)` in query and mutation functions.
+ *
+ * IDs are just strings at runtime, but this type can be used to distinguish them from other
+ * strings when type checking.
+ *
+ * @typeParam TableName - A string literal type of the table name (like "users").
  */
-export type Id<TableName extends TableNames = TableNames> = string & { __tableName: TableName }
+export type Id<TableName extends TableNames | SystemTableNames> =
+  GenericId<TableName>;
 
 /**
- * The `users` table document type.
+ * A type describing your Convex data model.
+ *
+ * This type includes information about what tables you have, the type of
+ * documents stored in those tables, and the indexes defined on them.
+ *
+ * This type is used to parameterize methods like `queryGeneric` and
+ * `mutationGeneric` to make them type-safe.
  */
-export interface User {
-  _id: Id<"users">
-  _creationTime: number
-  clerkId: string
-  salonId: Id<"salons">
-  onboardingComplete: boolean
-  createdAt: number
-  updatedAt: number
-}
-
-/**
- * The `salons` table document type.
- */
-export interface Salon {
-  _id: Id<"salons">
-  _creationTime: number
-  name: string
-  address?: string
-  phone?: string
-  email: string
-  createdAt: number
-  updatedAt: number
-}
-
-/**
- * The `pricingConfigs` table document type.
- */
-export interface PricingConfig {
-  _id: Id<"pricingConfigs">
-  _creationTime: number
-  salonId: Id<"salons">
-  serviceName: string
-  basePrice: number
-  duration: number
-  category: string
-  description?: string
-  isActive: boolean
-  createdAt: number
-  updatedAt: number
-}
-
-/**
- * The data model for your Convex project.
- */
-export type DataModel = {
-  users: User
-  salons: Salon
-  pricingConfigs: PricingConfig
-}
+export type DataModel = DataModelFromSchemaDefinition<typeof schema>;

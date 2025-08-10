@@ -12,16 +12,22 @@ const isPublicPage = createRouteMatcher([
   "/pricing",
   "/features",
   "/contact",
+  "/api/auth/signout",
 ]);
 
-export default convexAuthNextjsMiddleware((request) => {
+export default convexAuthNextjsMiddleware(async (request) => {
+  const isAuthenticated = await isAuthenticatedNextjs();
+  const path = request.nextUrl.pathname;
+  
+  console.log(`Middleware: Path=${path}, Authenticated=${isAuthenticated}`);
+  
   // If not on a public page and not authenticated, redirect to sign-in
-  if (!isPublicPage(request) && !isAuthenticatedNextjs()) {
+  if (!isPublicPage(request) && !isAuthenticated) {
     return nextjsMiddlewareRedirect(request, "/sign-in");
   }
   
   // If authenticated and on sign-in or sign-up, redirect to dashboard
-  if (isAuthenticatedNextjs() && (request.nextUrl.pathname === "/sign-in" || request.nextUrl.pathname === "/sign-up")) {
+  if (isAuthenticated && (path === "/sign-in" || path === "/sign-up")) {
     return nextjsMiddlewareRedirect(request, "/dashboard");
   }
 });

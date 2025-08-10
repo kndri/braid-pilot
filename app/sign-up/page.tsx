@@ -3,11 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useAuthActions } from '@convex-dev/auth/react'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 export default function SignUpPage() {
   const router = useRouter()
-  const { signIn } = useAuthActions()
+  const signIn = useMutation(api.auth.signIn)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -37,11 +38,15 @@ export default function SignUpPage() {
     }
     
     try {
-      await signIn("password", { 
-        email, 
-        password, 
-        name,
-        flow: "signUp" 
+      // For sign up, we pass additional params
+      await signIn({ 
+        provider: "password",
+        params: { 
+          email, 
+          password,
+          name,
+          flow: "signUp"
+        }
       })
       router.push('/onboarding')
     } catch (err) {

@@ -4,12 +4,10 @@ import { useQuery, useMutation } from 'convex/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '@/convex/_generated/api'
-import { useAuthActions } from '@convex-dev/auth/react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { signOut } = useAuthActions()
   const [isInitializing, setIsInitializing] = useState(false)
   
   // Get current user
@@ -50,7 +48,8 @@ export default function DashboardPage() {
   }, [viewer, onboardingStatus, router, createInitialSalonRecord, isInitializing])
   
   const handleSignOut = async () => {
-    await signOut()
+    // Sign out by clearing cookies and redirecting
+    await fetch('/api/auth/signout', { method: 'POST' })
     router.push('/')
   }
   
