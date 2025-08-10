@@ -12,7 +12,7 @@ const isPublicPage = createRouteMatcher([
   "/pricing",
   "/features",
   "/contact",
-  "/api/auth/signout",
+  "/api/(.*)",
 ]);
 
 export default convexAuthNextjsMiddleware(async (request) => {
