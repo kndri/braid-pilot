@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useMutation } from 'convex/react'
+import { useAction } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 
 export default function SignInPage() {
   const router = useRouter()
-  const signIn = useMutation(api.auth.signIn)
+  const signIn = useAction(api.auth.signIn)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
