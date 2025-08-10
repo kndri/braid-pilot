@@ -24,7 +24,11 @@ export default function SignInPage() {
     try {
       await signIn({ 
         provider: "password",
-        params: { email, password }
+        params: { 
+          email, 
+          password,
+          flow: "signIn"
+        }
       })
       router.push('/dashboard')
     } catch (err) {
@@ -58,7 +62,7 @@ export default function SignInPage() {
                 id="email"
                 name="email"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-colors"
                 placeholder="you@example.com"
                 disabled={isLoading}
               />
@@ -73,7 +77,7 @@ export default function SignInPage() {
                 id="password"
                 name="password"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-colors"
+                className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-colors"
                 placeholder="••••••••"
                 disabled={isLoading}
               />
