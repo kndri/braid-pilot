@@ -1,38 +1,14 @@
-import {
-  convexAuthNextjsMiddleware,
-  createRouteMatcher,
-  isAuthenticatedNextjs,
-  nextjsMiddlewareRedirect,
-} from "@convex-dev/auth/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-const isPublicPage = createRouteMatcher([
-  "/",
-  "/sign-in",
-  "/sign-up", 
-  "/pricing",
-  "/features",
-  "/contact",
-  "/api/(.*)",
-]);
-
-export default convexAuthNextjsMiddleware(async (request) => {
-  const isAuthenticated = await isAuthenticatedNextjs();
-  const path = request.nextUrl.pathname;
-  
-  console.log(`Middleware: Path=${path}, Authenticated=${isAuthenticated}`);
-  
-  // If not on a public page and not authenticated, redirect to sign-in
-  if (!isPublicPage(request) && !isAuthenticated) {
-    return nextjsMiddlewareRedirect(request, "/sign-in");
-  }
-  
-  // If authenticated and on sign-in or sign-up, redirect to dashboard
-  if (isAuthenticated && (path === "/sign-in" || path === "/sign-up")) {
-    return nextjsMiddlewareRedirect(request, "/dashboard");
-  }
-});
+// Simple middleware that lets Clerk handle authentication
+// No custom redirects to avoid loops
+export default clerkMiddleware();
 
 export const config = {
-  // The middleware will be invoked for all routes except Next.js internals
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    // Skip Next.js internals and all static files
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };

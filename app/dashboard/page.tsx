@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '@/convex/_generated/api'
 import Link from 'next/link'
+import { useUser, SignOutButton } from '@clerk/nextjs'
+import { ManualUserSync } from '@/components/ManualUserSync'
 
 export default function DashboardPage() {
   const router = useRouter()
+  const { user, isLoaded } = useUser()
   const [isInitializing, setIsInitializing] = useState(false)
   
-  // Get current user
+  // Get current user data from Convex
   const viewer = useQuery(api.users.viewer)
   const currentUser = useQuery(api.users.getCurrentUser)
   const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
@@ -18,13 +21,19 @@ export default function DashboardPage() {
   
   // Handle user initialization and onboarding redirect
   useEffect(() => {
+    if (!isLoaded || !user || isInitializing) return
+    
     async function initializeUser() {
-      if (!viewer || isInitializing) return
+      if (!viewer || isInitializing) {
+        console.log('[Dashboard] initializeUser: skipped', { hasViewer: Boolean(viewer), isInitializing })
+        return
+      }
       
       // If user doesn't have a salon, create one
       if (viewer && !viewer.salonId) {
         setIsInitializing(true)
         try {
+          console.log('[Dashboard] createInitialSalonRecord:start', { viewerEmail: viewer.email })
           await createInitialSalonRecord({
             salonData: {
               name: viewer.name || 'My Salon',
@@ -32,6 +41,7 @@ export default function DashboardPage() {
               phone: undefined,
             }
           })
+          console.log('[Dashboard] createInitialSalonRecord:success')
         } catch (error) {
           console.error('Error creating salon record:', error)
         }
@@ -40,21 +50,16 @@ export default function DashboardPage() {
       
       // Redirect to onboarding if not completed
       if (onboardingStatus && onboardingStatus.hasRecord && !onboardingStatus.onboardingComplete) {
+        console.log('[Dashboard] redirecting to /onboarding')
         router.push('/onboarding')
       }
     }
     
     initializeUser()
-  }, [viewer, onboardingStatus, router, createInitialSalonRecord, isInitializing])
-  
-  const handleSignOut = async () => {
-    // Sign out by clearing cookies and redirecting
-    await fetch('/api/auth/signout', { method: 'POST' })
-    router.push('/')
-  }
+  }, [viewer, onboardingStatus, router, createInitialSalonRecord, isInitializing, user, isLoaded])
   
   // Loading states
-  if (viewer === undefined || onboardingStatus === undefined) {
+  if (!isLoaded || viewer === undefined || onboardingStatus === undefined) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -65,9 +70,37 @@ export default function DashboardPage() {
     )
   }
   
-  if (!viewer) {
+  if (!user) {
     router.push('/sign-in')
     return null
+  }
+  
+  if (!viewer) {
+    // User is authenticated with Clerk but not yet in Convex - wait for sync
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
+          <p className="text-gray-600">Setting up your account...</p>
+          <p className="text-sm text-gray-500 mt-2">This should only take a moment</p>
+          
+          {/* Show debug info and manual sync */}
+          <div className="mt-8 space-y-4">
+            <div className="text-xs text-gray-400">
+              <p>Clerk User ID: {user?.id}</p>
+              <p>Email: {user?.emailAddresses?.[0]?.emailAddress}</p>
+            </div>
+            <ManualUserSync />
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
   
   if (isInitializing) {
@@ -75,7 +108,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Setting up your account...</p>
+          <p className="text-gray-600">Setting up your salon...</p>
         </div>
       </div>
     )
@@ -125,17 +158,20 @@ export default function DashboardPage() {
             
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
-                >
-                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium">
-                      {viewer?.name?.charAt(0).toUpperCase() || 'U'}
-                    </span>
-                  </div>
-                  <span className="hidden md:inline text-sm">Sign Out</span>
-                </button>
+                <SignOutButton>
+                  <button className="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
+                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                      {user.imageUrl ? (
+                        <img src={user.imageUrl} alt={user.firstName || 'User'} className="w-8 h-8 rounded-full" />
+                      ) : (
+                        <span className="text-sm font-medium">
+                          {viewer?.name?.charAt(0).toUpperCase() || user?.firstName?.charAt(0).toUpperCase() || 'U'}
+                        </span>
+                      )}
+                    </div>
+                    <span className="hidden md:inline text-sm">Sign Out</span>
+                  </button>
+                </SignOutButton>
               </div>
             </div>
           </div>
@@ -146,7 +182,7 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {currentUser?.salon?.name || viewer?.name || 'there'}!
+            Welcome back, {currentUser?.salon?.name || viewer?.name || user?.firstName || 'there'}!
           </h1>
           <p className="text-gray-600 mt-2">
             Here&apos;s what&apos;s happening with your salon today.
@@ -237,12 +273,13 @@ export default function DashboardPage() {
           </div>
         </div>
         
-        {/* Debug Info */}
+        {/* Debug Info - Remove in production */}
         {onboardingStatus && (
           <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
             <p>Debug Info: You have {onboardingStatus.pricingConfigCount || 0} pricing configurations.</p>
             <p>Onboarding Status: {onboardingStatus.onboardingComplete ? 'Complete' : 'Incomplete'}</p>
-            <p>User Email: {viewer?.email}</p>
+            <p>User Email: {viewer?.email || user?.emailAddresses?.[0]?.emailAddress}</p>
+            <p>Clerk User ID: {user?.id}</p>
           </div>
         )}
       </main>

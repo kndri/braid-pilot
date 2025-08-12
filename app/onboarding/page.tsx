@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { SignOutButton } from '@clerk/nextjs'
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -11,7 +12,15 @@ export default function OnboardingPage() {
   const [isCompleting, setIsCompleting] = useState(false)
   
   const viewer = useQuery(api.users.viewer)
+  const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const completeOnboarding = useMutation(api.users.completeOnboarding)
+  
+  // Redirect to dashboard if onboarding is already complete
+  useEffect(() => {
+    if (onboardingStatus?.onboardingComplete) {
+      router.replace('/dashboard')
+    }
+  }, [onboardingStatus, router])
   
   const totalSteps = 3
   
@@ -42,18 +51,43 @@ export default function OnboardingPage() {
     router.push('/dashboard')
   }
   
-  const handleSignOut = async () => {
-    // Sign out by clearing cookies and redirecting
-    await fetch('/api/auth/signout', { method: 'POST' })
-    router.push('/')
-  }
+
   
-  if (!viewer) {
+  // Show loading while data is being fetched
+  if (viewer === undefined || onboardingStatus === undefined) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Setting up your account...</p>
+          <p className="text-sm text-gray-500 mt-2">This may take a few seconds</p>
+        </div>
+      </div>
+    )
+  }
+  
+  // If viewer is null (user not in database), show error
+  if (viewer === null) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-500 rounded-lg mx-auto mb-4"></div>
+          <p className="text-gray-900 font-semibold mb-2">Account Setup Required</p>
+          <p className="text-gray-600 mb-4">We're having trouble setting up your account.</p>
+          <p className="text-sm text-gray-500 mb-6">Please try refreshing the page or sign out and back in.</p>
+          <div className="space-y-2">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="block w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            >
+              Refresh Page
+            </button>
+            <SignOutButton>
+              <button className="block w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                Sign Out
+              </button>
+            </SignOutButton>
+          </div>
         </div>
       </div>
     )
@@ -69,12 +103,11 @@ export default function OnboardingPage() {
               <div className="w-8 h-8 bg-orange-500 rounded"></div>
               <span className="text-xl font-semibold text-gray-900">braidpilot</span>
             </div>
-            <button
-              onClick={handleSignOut}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Sign Out
-            </button>
+            <SignOutButton>
+              <button className="text-sm text-gray-500 hover:text-gray-700">
+                Sign Out
+              </button>
+            </SignOutButton>
           </div>
         </div>
       </header>
