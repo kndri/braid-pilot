@@ -20,19 +20,40 @@ export default defineSchema({
     phone: v.optional(v.string()),
     email: v.string(),
     ownerId: v.id("users"), // Link to users table
+    businessName: v.optional(v.string()),
+    onboardingToken: v.optional(v.string()),
+    quoteToolUrl: v.optional(v.string()),
+    standardHairType: v.optional(v.string()), // Standard hair type for base pricing
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_ownerId", ["ownerId"]),
   
+  // Updated pricing configs for granular style-specific pricing
   pricingConfigs: defineTable({
     salonId: v.id("salons"),
-    serviceName: v.string(),
-    basePrice: v.number(),
-    duration: v.number(),
-    category: v.string(),
-    description: v.optional(v.string()),
-    isActive: v.boolean(),
+    styleName: v.string(), // E.g., "Box Braids", "Knotless Braids", "Boho Knotless"
+    adjustmentType: v.union(
+      v.literal("base_price"),      // Base price for Jumbo/Shoulder-Length
+      v.literal("length_adj"),      // Length adjustments (Bra, Mid-Back, Waist)
+      v.literal("size_adj"),        // Size adjustments (Small, Medium, Large, XL)
+      v.literal("hair_type_adj"),   // Global hair type adjustments
+      v.literal("curly_hair_adj")   // Boho Knotless specific
+    ),
+    adjustmentLabel: v.string(), // E.g., "Bra-Length", "Small", "100% Human Hair"
+    adjustmentValue: v.number(), // Price adjustment value
+    isActive: v.optional(v.boolean()),
+    metadata: v.optional(v.any()), // For storing additional config data
     createdAt: v.number(),
     updatedAt: v.number(),
+  }).index("by_salonId_and_style", ["salonId", "styleName"])
+    .index("by_salonId", ["salonId"]),
+  
+  // Store selected styles for each salon
+  salonStyles: defineTable({
+    salonId: v.id("salons"),
+    styleName: v.string(),
+    isCustom: v.boolean(), // Whether it's a custom style
+    displayOrder: v.number(), // For ordering in UI
+    createdAt: v.number(),
   }).index("by_salonId", ["salonId"]),
 });

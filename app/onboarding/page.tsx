@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { SignOutButton } from '@clerk/nextjs'
+import { SignOutButton, useUser } from '@clerk/nextjs'
+import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(1)
-  const [isCompleting, setIsCompleting] = useState(false)
+  const { user } = useUser()
+  const [showLegacyWizard, setShowLegacyWizard] = useState(false)
   
   const viewer = useQuery(api.users.viewer)
+  const currentUser = useQuery(api.users.getCurrentUser)
   const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const completeOnboarding = useMutation(api.users.completeOnboarding)
   
@@ -93,6 +95,17 @@ export default function OnboardingPage() {
     )
   }
   
+  // Use the new comprehensive wizard if we have salon data
+  if (currentUser?.salon?._id && currentUser.salon.name) {
+    return (
+      <OnboardingWizard 
+        salonId={currentUser.salon._id} 
+        salonName={currentUser.salon.name} 
+      />
+    );
+  }
+  
+  // Fallback to simple onboarding for initial setup
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Header */}
