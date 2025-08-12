@@ -36,4 +36,3 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
     </div>
   );
 }
-EOF < /dev/null

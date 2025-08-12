@@ -41,4 +41,3 @@ export default function SizeAdjustmentScreen({ data, styleName, onNext, onBack }
     </div>
   );
 }
-EOF < /dev/null

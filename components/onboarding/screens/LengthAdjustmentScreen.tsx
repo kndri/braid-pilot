@@ -37,4 +37,3 @@ export default function LengthAdjustmentScreen({ data, styleName, onNext, onBack
     </div>
   );
 }
-EOF < /dev/null

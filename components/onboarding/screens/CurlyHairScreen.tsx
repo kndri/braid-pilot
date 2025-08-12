@@ -38,4 +38,3 @@ export default function CurlyHairScreen({ data, styleName, onNext, onBack }: Pro
     </div>
   );
 }
-EOF < /dev/null

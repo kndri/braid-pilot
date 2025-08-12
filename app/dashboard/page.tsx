@@ -114,8 +114,9 @@ export default function DashboardPage() {
     )
   }
   
-  // Redirecting state
+  // Redirecting state - actually perform the redirect
   if (onboardingStatus && !onboardingStatus.onboardingComplete) {
+    router.push('/onboarding');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">

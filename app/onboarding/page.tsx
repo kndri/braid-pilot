@@ -10,7 +10,8 @@ import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
 export default function OnboardingPage() {
   const router = useRouter()
   const { user } = useUser()
-  const [showLegacyWizard, setShowLegacyWizard] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
+  const [isCompleting, setIsCompleting] = useState(false)
   
   const viewer = useQuery(api.users.viewer)
   const currentUser = useQuery(api.users.getCurrentUser)

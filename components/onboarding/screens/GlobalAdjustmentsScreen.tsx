@@ -39,4 +39,3 @@ export default function GlobalAdjustmentsScreen({ data, onNext, onBack }: Props)
     </div>
   );
 }
-EOF < /dev/null

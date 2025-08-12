@@ -34,4 +34,3 @@ export default function SuccessScreen({ data }: Props) {
     </div>
   );
 }
-EOF < /dev/null
