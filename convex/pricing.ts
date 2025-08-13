@@ -208,6 +208,15 @@ export const generateQuoteToolUrl = mutation({
       throw new Error("Salon not found");
     }
     
+    // If token already exists, return it
+    if (salon.onboardingToken) {
+      return { 
+        success: true, 
+        quoteToolUrl: salon.quoteToolUrl || `/quote/${salon.onboardingToken}`,
+        token: salon.onboardingToken,
+      };
+    }
+    
     // Generate a unique token for the quote tool
     const token = Math.random().toString(36).substring(2, 15) + 
                   Math.random().toString(36).substring(2, 15);
@@ -221,6 +230,65 @@ export const generateQuoteToolUrl = mutation({
     return { 
       success: true, 
       quoteToolUrl: `/quote/${token}`,
+      token: token,
+    };
+  },
+});
+
+// Ensure salon has a quote tool URL (for existing salons)
+export const ensureQuoteToolUrl = mutation({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+    
+    const clerkId = identity.subject;
+    
+    // Get user and salon
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+    
+    if (!user || !user.salonId) {
+      throw new Error("User or salon not found");
+    }
+    
+    const salon = await ctx.db.get(user.salonId);
+    if (!salon) {
+      throw new Error("Salon not found");
+    }
+    
+    // If token already exists, return it
+    if (salon.onboardingToken) {
+      const baseUrl = 'http://localhost:3002';
+      const quoteToolPath = salon.quoteToolUrl || `/quote/${salon.onboardingToken}`;
+      const fullUrl = quoteToolPath.startsWith('http') ? quoteToolPath : `${baseUrl}${quoteToolPath}`;
+      
+      return { 
+        success: true, 
+        quoteToolUrl: fullUrl,
+        token: salon.onboardingToken,
+      };
+    }
+    
+    // Generate a unique token
+    const token = Math.random().toString(36).substring(2, 15) + 
+                  Math.random().toString(36).substring(2, 15);
+    
+    await ctx.db.patch(user.salonId, {
+      onboardingToken: token,
+      quoteToolUrl: `/quote/${token}`,
+      updatedAt: Date.now(),
+    });
+    
+    const baseUrl = 'http://localhost:3002';
+    const fullUrl = `${baseUrl}/quote/${token}`;
+    
+    return { 
+      success: true, 
+      quoteToolUrl: fullUrl,
       token: token,
     };
   },

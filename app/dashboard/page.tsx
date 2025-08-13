@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const viewer = useQuery(api.users.viewer)
   const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const createInitialSalonRecord = useMutation(api.users.createInitialSalonRecord)
+  const ensureQuoteToolUrl = useMutation(api.pricing.ensureQuoteToolUrl)
   const dashboardData = useQuery(api.dashboard.getDashboardData)
   
   // ALL hooks must be called before any conditional returns
@@ -73,6 +74,21 @@ export default function DashboardPage() {
       router.push('/onboarding');
     }
   }, [onboardingStatus, router])
+  
+  // Ensure quote tool URL exists for completed onboarding
+  useEffect(() => {
+    async function ensureUrl() {
+      if (dashboardData && dashboardData.onboardingComplete && !dashboardData.salon.quoteToolUrl) {
+        try {
+          const result = await ensureQuoteToolUrl();
+          console.log('Generated quote tool URL:', result);
+        } catch (error) {
+          console.error('Error generating quote tool URL:', error);
+        }
+      }
+    }
+    ensureUrl();
+  }, [dashboardData, ensureQuoteToolUrl])
   
   // Now we can have conditional returns after all hooks are called
   

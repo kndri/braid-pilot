@@ -10,6 +10,7 @@ export function PriceMyStyleCard({ quoteToolUrl }: PriceMyStyleCardProps) {
   const [copied, setCopied] = useState(false);
   
   const copyToClipboard = async () => {
+    if (!quoteToolUrl) return;
     try {
       await navigator.clipboard.writeText(quoteToolUrl);
       setCopied(true);
@@ -20,6 +21,7 @@ export function PriceMyStyleCard({ quoteToolUrl }: PriceMyStyleCardProps) {
   };
   
   const openTool = () => {
+    if (!quoteToolUrl) return;
     window.open(quoteToolUrl, '_blank');
   };
   
@@ -37,13 +39,19 @@ export function PriceMyStyleCard({ quoteToolUrl }: PriceMyStyleCardProps) {
           <div className="flex">
             <input
               type="text"
-              value={quoteToolUrl}
+              value={quoteToolUrl || 'Generating URL...'}
               readOnly
               className="flex-1 rounded-l-md border border-gray-300 bg-gray-50 text-sm px-3 py-2 focus:outline-none"
+              placeholder="URL will appear here"
             />
             <button
               onClick={copyToClipboard}
-              className="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm font-medium"
+              disabled={!quoteToolUrl}
+              className={`px-4 py-2 rounded-r-md transition-colors text-sm font-medium ${
+                quoteToolUrl 
+                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             >
               {copied ? 'Copied!' : 'Copy Link'}
             </button>
@@ -52,7 +60,12 @@ export function PriceMyStyleCard({ quoteToolUrl }: PriceMyStyleCardProps) {
         
         <button
           onClick={openTool}
-          className="w-full bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors font-medium"
+          disabled={!quoteToolUrl}
+          className={`w-full px-4 py-2 rounded-md transition-colors font-medium ${
+            quoteToolUrl
+              ? 'bg-purple-600 text-white hover:bg-purple-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
           View My Tool
         </button>
