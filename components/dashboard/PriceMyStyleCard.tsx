@@ -41,7 +41,7 @@ export function PriceMyStyleCard({ quoteToolUrl }: PriceMyStyleCardProps) {
               type="text"
               value={quoteToolUrl || 'Generating URL...'}
               readOnly
-              className="flex-1 rounded-l-md border border-gray-300 bg-gray-50 text-sm px-3 py-2 focus:outline-none"
+              className="text-black flex-1 rounded-l-md border border-gray-300 bg-gray-50 text-sm px-3 py-2 focus:outline-none"
               placeholder="URL will appear here"
             />
             <button

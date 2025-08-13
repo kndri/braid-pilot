@@ -38,28 +38,15 @@ export default function DashboardPage() {
         return
       }
       
-      // If user doesn't have a salon, create one
+      // If user doesn't have a salon, redirect to salon setup
       if (viewer && !viewer.salonId) {
-        setIsInitializing(true)
-        try {
-          console.log('[Dashboard] createInitialSalonRecord:start', { viewerEmail: viewer.email })
-          await createInitialSalonRecord({
-            salonData: {
-              name: viewer.name || 'My Salon',
-              email: viewer.email,
-              phone: undefined,
-            }
-          })
-          console.log('[Dashboard] createInitialSalonRecord:success')
-        } catch (error) {
-          console.error('Error creating salon record:', error)
-        }
-        setIsInitializing(false)
+        console.log('[Dashboard] No salon found, redirecting to salon setup')
+        router.push('/salon-setup')
       }
     }
     
     initializeUser()
-  }, [viewer, createInitialSalonRecord, isInitializing, user, isLoaded])
+  }, [viewer, router, isInitializing, user, isLoaded])
   
   // Redirect to sign-in if not authenticated
   useEffect(() => {

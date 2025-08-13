@@ -43,10 +43,10 @@ export function WelcomeStatusBar({ salonName, isOnline }: WelcomeStatusBarProps)
         </div>
         <div className="ml-3">
           <h2 className="text-lg font-medium text-green-800">
-            Welcome back, {salonName}!
+            Welcome back!
           </h2>
           <p className="text-sm text-green-700">
-            Your business is online!
+            {salonName} is online and ready for business!
           </p>
         </div>
       </div>

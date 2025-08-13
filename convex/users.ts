@@ -41,6 +41,8 @@ export const createInitialSalonRecord = mutation({
       email: v.string(),
       address: v.optional(v.string()),
       phone: v.optional(v.string()),
+      website: v.optional(v.string()),
+      hours: v.optional(v.string()),
     })
   },
   handler: async (ctx, args) => {

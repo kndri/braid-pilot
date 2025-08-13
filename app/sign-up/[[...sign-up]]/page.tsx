@@ -23,7 +23,7 @@ export default function SignUpPage() {
                 headerSubtitle: "hidden",
               }
             }}
-            fallbackRedirectUrl="/onboarding"
+            fallbackRedirectUrl="/salon-setup"
             signInUrl="/sign-in"
           />
         </div>

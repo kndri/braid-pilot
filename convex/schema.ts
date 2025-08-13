@@ -19,6 +19,8 @@ export default defineSchema({
     address: v.optional(v.string()),
     phone: v.optional(v.string()),
     email: v.string(),
+    website: v.optional(v.string()),
+    hours: v.optional(v.string()), // JSON string of business hours
     ownerId: v.id("users"), // Link to users table
     businessName: v.optional(v.string()),
     onboardingToken: v.optional(v.string()),
