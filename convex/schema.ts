@@ -56,4 +56,27 @@ export default defineSchema({
     displayOrder: v.number(), // For ordering in UI
     createdAt: v.number(),
   }).index("by_salonId", ["salonId"]),
+  
+  // Bookings table for appointments
+  bookings: defineTable({
+    salonId: v.id("salons"),
+    clientName: v.string(),
+    clientEmail: v.optional(v.string()),
+    clientPhone: v.optional(v.string()),
+    appointmentDate: v.string(), // ISO date string
+    appointmentTime: v.string(), // Time string
+    serviceQuoteDetails: v.string(),
+    totalPrice: v.number(),
+    platformFee: v.optional(v.number()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("completed"),
+      v.literal("cancelled")
+    ),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_salonId", ["salonId"])
+    .index("by_status", ["status"])
+    .index("by_salonId_and_status", ["salonId", "status"]),
 });

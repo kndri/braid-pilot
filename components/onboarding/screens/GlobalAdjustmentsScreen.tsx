@@ -35,17 +35,28 @@ export default function GlobalAdjustmentsScreen({ data, onNext, onBack }: Props)
   const [hairTypeAdjustments, setHairTypeAdjustments] = useState<HairTypeState>(initialState);
 
   const handleContinue = () => {
-    const cleanedAdjustments = Object.fromEntries(
-      Object.entries(hairTypeAdjustments).map(([key, value]) => 
-        [key, value === "" ? 0 : value]
-      )
-    );
+    // Build the complete HairTypeAdjustments object with all required properties
+    const adjustments: HairTypeAdjustments = {
+      "Synthetic": 0,
+      "100% Human Hair": 0,
+      "Virgin Hair": 0,
+      "Treated Hair": 0,
+    };
     
-    // Add the base type with 0 adjustment
-    cleanedAdjustments[data.standardHairType] = 0;
+    // Update with actual values
+    Object.entries(hairTypeAdjustments).forEach(([key, value]) => {
+      if (key in adjustments) {
+        (adjustments as any)[key] = value === "" ? 0 : value;
+      }
+    });
+    
+    // Set the base type to 0
+    if (data.standardHairType in adjustments) {
+      (adjustments as any)[data.standardHairType] = 0;
+    }
     
     onNext({
-      globalHairTypeAdjustments: cleanedAdjustments as HairTypeAdjustments,
+      globalHairTypeAdjustments: adjustments,
     });
   };
 

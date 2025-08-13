@@ -11,11 +11,12 @@ interface Props {
 }
 
 export default function CurlyHairScreen({ data, styleName, styleIndex, onNext, onBack }: Props) {
+  const existingAdjustment = data.stylePricing[styleName]?.curlyHairAdjustment;
   const [curlyIncluded, setCurlyIncluded] = useState(
-    data.stylePricing[styleName]?.curlyHairIncluded ?? false
+    existingAdjustment?.included ?? false
   );
   const [curlyCost, setCurlyCost] = useState<number | "">(
-    data.stylePricing[styleName]?.curlyHairCostPerPack || ""
+    existingAdjustment?.costPerPack ?? ""
   );
 
   const handleContinue = () => {
@@ -23,8 +24,10 @@ export default function CurlyHairScreen({ data, styleName, styleIndex, onNext, o
       ...data.stylePricing,
       [styleName]: {
         ...data.stylePricing[styleName],
-        curlyHairIncluded: curlyIncluded,
-        curlyHairCostPerPack: curlyCost === "" ? 0 : curlyCost,
+        curlyHairAdjustment: {
+          included: curlyIncluded,
+          costPerPack: curlyCost === "" ? 0 : curlyCost,
+        },
       },
     };
     onNext({ stylePricing: updatedPricing });
