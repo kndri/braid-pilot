@@ -68,7 +68,16 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
     ];
 
     // Initialize pricing structure for each style
-    const stylePricing: Record<string, any> = {};
+    interface StylePricing {
+      basePrice: number;
+      lengthAdjustments: Record<string, number>;
+      sizeAdjustments: Record<string, number>;
+      curlyHairAdjustment?: {
+        included: boolean;
+        costPerPack: number;
+      };
+    }
+    const stylePricing: Record<string, StylePricing> = {};
     allStyles.forEach(style => {
       stylePricing[style.name] = {
         basePrice: 0,
@@ -109,7 +118,7 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
           Select Your Braiding Styles
         </h2>
         <p className="text-gray-600">
-          Choose all the styles you offer. You'll set individual prices for each style.
+          Choose all the styles you offer. You&apos;ll set individual prices for each style.
         </p>
         {totalSelected > 0 && (
           <div className="mt-2 text-sm text-orange-600 font-medium">

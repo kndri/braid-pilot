@@ -35,7 +35,7 @@ export default function WelcomeScreen({ data, onNext }: WelcomeScreenProps) {
           Welcome to Your Pricing Setup
         </h2>
         <p className="text-gray-600">
-          Let's create your personalized pricing structure for {data.salonName}
+          Let&apos;s create your personalized pricing structure for {data.salonName}
         </p>
       </div>
 
@@ -86,7 +86,7 @@ export default function WelcomeScreen({ data, onNext }: WelcomeScreenProps) {
 
         <div className="border-t pt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">
-            What's your standard hair type?
+            What&apos;s your standard hair type?
           </h3>
           <p className="text-sm text-gray-600 mb-4">
             This will be your base pricing reference. You can add adjustments for other hair types later.

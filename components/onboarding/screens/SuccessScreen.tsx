@@ -6,7 +6,7 @@ interface Props {
   data: WizardData;
 }
 
-export default function SuccessScreen({ data }: Props) {
+export default function SuccessScreen({ }: Props) {
   const router = useRouter();
   
   return (
@@ -17,12 +17,12 @@ export default function SuccessScreen({ data }: Props) {
         </svg>
       </div>
       
-      <h2 className="text-3xl font-bold mb-4">Setup Complete\!</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-4">Setup Complete!</h2>
       <p className="text-gray-600 mb-8">Your pricing configuration has been saved successfully.</p>
       
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
         <p className="text-sm text-gray-600 mb-2">Your unique quote tool URL:</p>
-        <p className="font-mono text-lg">braidpilot.com/quote/abc123</p>
+        <p className="font-mono text-lg text-gray-900">braidpilot.com/quote/abc123</p>
       </div>
       
       <button 

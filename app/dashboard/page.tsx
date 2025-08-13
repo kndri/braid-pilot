@@ -19,7 +19,9 @@ export default function DashboardPage() {
   const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const createInitialSalonRecord = useMutation(api.users.createInitialSalonRecord)
   
-  // Handle user initialization and onboarding redirect
+  // ALL hooks must be called before any conditional returns
+  
+  // Handle user initialization (salon creation)
   useEffect(() => {
     if (!isLoaded || !user || isInitializing) return
     
@@ -47,16 +49,26 @@ export default function DashboardPage() {
         }
         setIsInitializing(false)
       }
-      
-      // Redirect to onboarding if not completed
-      if (onboardingStatus && onboardingStatus.hasRecord && !onboardingStatus.onboardingComplete) {
-        console.log('[Dashboard] redirecting to /onboarding')
-        router.push('/onboarding')
-      }
     }
     
     initializeUser()
-  }, [viewer, onboardingStatus, router, createInitialSalonRecord, isInitializing, user, isLoaded])
+  }, [viewer, createInitialSalonRecord, isInitializing, user, isLoaded])
+  
+  // Redirect to sign-in if not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push('/sign-in')
+    }
+  }, [isLoaded, user, router])
+  
+  // Handle onboarding redirect
+  useEffect(() => {
+    if (onboardingStatus && !onboardingStatus.onboardingComplete) {
+      router.push('/onboarding');
+    }
+  }, [onboardingStatus, router])
+  
+  // Now we can have conditional returns after all hooks are called
   
   // Loading states
   if (!isLoaded || viewer === undefined || onboardingStatus === undefined) {
@@ -71,7 +83,6 @@ export default function DashboardPage() {
   }
   
   if (!user) {
-    router.push('/sign-in')
     return null
   }
   
@@ -114,9 +125,8 @@ export default function DashboardPage() {
     )
   }
   
-  // Redirecting state - actually perform the redirect
+  // Show redirecting state
   if (onboardingStatus && !onboardingStatus.onboardingComplete) {
-    router.push('/onboarding');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -209,12 +219,12 @@ export default function DashboardPage() {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Clients</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">0</p>
+                <p className="text-sm text-gray-600">This Week&apos;s Revenue</p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">$0</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
@@ -223,12 +233,12 @@ export default function DashboardPage() {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Revenue This Month</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">$0</p>
+                <p className="text-sm text-gray-600">Active Clients</p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">0</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
             </div>
@@ -236,53 +246,41 @@ export default function DashboardPage() {
         </div>
         
         {/* Quick Actions */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link
-              href="/bookings/new"
-              className="p-4 border border-gray-200 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
-            >
-              <svg className="w-8 h-8 text-orange-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Link href="/bookings/new" className="flex items-center justify-center px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              <h3 className="font-medium text-gray-900">New Booking</h3>
-              <p className="text-sm text-gray-600 mt-1">Schedule a new appointment</p>
+              New Booking
             </Link>
-            
-            <Link
-              href="/clients/new"
-              className="p-4 border border-gray-200 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
-            >
-              <svg className="w-8 h-8 text-orange-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Link href="/clients/new" className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
               </svg>
-              <h3 className="font-medium text-gray-900">Add Client</h3>
-              <p className="text-sm text-gray-600 mt-1">Register a new client</p>
+              Add Client
             </Link>
-            
-            <Link
-              href="/pricing"
-              className="p-4 border border-gray-200 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
-            >
-              <svg className="w-8 h-8 text-orange-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            <Link href="/pricing" className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 className="font-medium text-gray-900">Update Pricing</h3>
-              <p className="text-sm text-gray-600 mt-1">Manage your service prices</p>
+              View Pricing
             </Link>
           </div>
         </div>
         
-        {/* Debug Info - Remove in production */}
-        {onboardingStatus && (
-          <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
-            <p>Debug Info: You have {onboardingStatus.pricingConfigCount || 0} pricing configurations.</p>
-            <p>Onboarding Status: {onboardingStatus.onboardingComplete ? 'Complete' : 'Incomplete'}</p>
-            <p>User Email: {viewer?.email || user?.emailAddresses?.[0]?.emailAddress}</p>
-            <p>Clerk User ID: {user?.id}</p>
+        {/* Recent Activity */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h2>
+          <div className="text-center py-8 text-gray-500">
+            <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p>No recent activity to display</p>
+            <p className="text-sm text-gray-400 mt-2">Your recent bookings and client interactions will appear here</p>
           </div>
-        )}
+        </div>
       </main>
     </div>
   )

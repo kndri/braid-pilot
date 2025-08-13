@@ -9,7 +9,7 @@ import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const { user } = useUser()
+  useUser()
   const [currentStep, setCurrentStep] = useState(1)
   const [isCompleting, setIsCompleting] = useState(false)
   
@@ -76,7 +76,7 @@ export default function OnboardingPage() {
         <div className="text-center">
           <div className="w-16 h-16 bg-red-500 rounded-lg mx-auto mb-4"></div>
           <p className="text-gray-900 font-semibold mb-2">Account Setup Required</p>
-          <p className="text-gray-600 mb-4">We're having trouble setting up your account.</p>
+          <p className="text-gray-600 mb-4">We&apos;re having trouble setting up your account.</p>
           <p className="text-sm text-gray-500 mb-6">Please try refreshing the page or sign out and back in.</p>
           <div className="space-y-2">
             <button 

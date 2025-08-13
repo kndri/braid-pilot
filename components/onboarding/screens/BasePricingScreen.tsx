@@ -18,8 +18,8 @@ export default function BasePricingScreen({
   onNext, 
   onBack 
 }: BasePricingScreenProps) {
-  const [basePrice, setBasePrice] = useState(
-    data.stylePricing[styleName]?.basePrice || 150
+  const [basePrice, setBasePrice] = useState<number | "">(
+    data.stylePricing[styleName]?.basePrice || ""
   );
 
   const handleContinue = () => {
@@ -27,7 +27,7 @@ export default function BasePricingScreen({
       ...data.stylePricing,
       [styleName]: {
         ...data.stylePricing[styleName],
-        basePrice,
+        basePrice: basePrice === "" ? 0 : basePrice,
       },
     };
 
@@ -108,8 +108,8 @@ export default function BasePricingScreen({
             <input
               type="number"
               value={basePrice}
-              onChange={(e) => setBasePrice(Math.max(0, parseInt(e.target.value) || 0))}
-              className="w-full pl-10 pr-4 py-4 text-2xl font-semibold border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              onChange={(e) => setBasePrice(e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value) || 0))}
+              className="w-full pl-10 pr-4 py-4 text-2xl text-black font-semibold border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               placeholder="0"
             />
           </div>
@@ -132,7 +132,7 @@ export default function BasePricingScreen({
             <div className="text-sm">
               <p className="text-blue-900 font-medium">Remember:</p>
               <p className="text-blue-700">
-                This price is for {data.standardHairType} hair. You'll add adjustments for other hair types later.
+                This price is for {data.standardHairType} hair. You&apos;ll add adjustments for other hair types later.
               </p>
             </div>
           </div>
@@ -144,15 +144,15 @@ export default function BasePricingScreen({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Jumbo + Shoulder (Base):</span>
-              <span className="font-semibold">${basePrice}</span>
+              <span className="font-semibold">${basePrice === "" ? 0 : basePrice}</span>
             </div>
             <div className="flex justify-between text-gray-400">
               <span>Medium + Shoulder:</span>
-              <span>${basePrice} + adjustment</span>
+              <span>${basePrice === "" ? 0 : basePrice} + adjustment</span>
             </div>
             <div className="flex justify-between text-gray-400">
               <span>Small + Waist:</span>
-              <span>${basePrice} + adjustments</span>
+              <span>${basePrice === "" ? 0 : basePrice} + adjustments</span>
             </div>
           </div>
         </div>
@@ -167,9 +167,9 @@ export default function BasePricingScreen({
         </button>
         <button
           onClick={handleContinue}
-          disabled={basePrice <= 0}
+          disabled={basePrice === "" || basePrice <= 0}
           className={`px-6 py-3 rounded-lg transition-colors font-medium ${
-            basePrice > 0
+            basePrice !== "" && basePrice > 0
               ? "bg-orange-500 text-white hover:bg-orange-600"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
