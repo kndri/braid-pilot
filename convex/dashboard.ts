@@ -58,9 +58,9 @@ export const getDashboardData = query({
     const onboardingComplete = user.onboardingComplete || false;
     
     // Get the full quote tool URL
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://braidpilot.com';
+    const baseUrl = 'http://localhost:3002'; // Will be replaced with environment variable in production
     const quoteToolPath = salon.quoteToolUrl || `/quote/${salon.onboardingToken}`;
-    const fullQuoteToolUrl = `${baseUrl}${quoteToolPath}`;
+    const fullQuoteToolUrl = quoteToolPath.startsWith('http') ? quoteToolPath : `${baseUrl}${quoteToolPath}`;
     
     return {
       salon: {

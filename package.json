@@ -19,6 +19,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.30.0",
     "@clerk/themes": "^2.4.6",
+    "@heroicons/react": "^2.2.0",
     "convex": "^1.25.4",
     "convex-helpers": "^0.1.101",
     "jose": "^6.0.12",
