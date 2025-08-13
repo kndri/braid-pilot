@@ -78,10 +78,15 @@ export default function DashboardPage() {
   // Ensure quote tool URL exists for completed onboarding
   useEffect(() => {
     async function ensureUrl() {
+      // Only proceed if we have valid dashboard data (not null from auth loading)
       if (dashboardData && dashboardData.onboardingComplete && !dashboardData.salon.quoteToolUrl) {
         try {
           const result = await ensureQuoteToolUrl();
-          console.log('Generated quote tool URL:', result);
+          if (result.success) {
+            console.log('Generated quote tool URL:', result.quoteToolUrl);
+          } else {
+            console.log('Could not generate URL:', result.error);
+          }
         } catch (error) {
           console.error('Error generating quote tool URL:', error);
         }
@@ -146,7 +151,8 @@ export default function DashboardPage() {
   }
   
   // Wait for dashboard data to load
-  if (!dashboardData) {
+  // dashboardData can be null during auth loading or undefined during query loading
+  if (dashboardData === undefined || dashboardData === null) {
     return <DashboardLoading />
   }
   

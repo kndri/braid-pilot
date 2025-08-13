@@ -4,7 +4,8 @@ export const getDashboardData = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      // Return null instead of throwing error to handle auth loading state
+      return null;
     }
     
     const clerkId = identity.subject;
@@ -16,16 +17,19 @@ export const getDashboardData = query({
       .first();
     
     if (!user) {
-      throw new Error("User not found");
+      // User might not be synced yet
+      return null;
     }
     
     if (!user.salonId) {
-      throw new Error("Salon not found");
+      // User exists but no salon yet
+      return null;
     }
     
     const salon = await ctx.db.get(user.salonId);
     if (!salon) {
-      throw new Error("Salon not found");
+      // Salon ID exists but salon not found
+      return null;
     }
     
     // Get completed bookings for revenue calculation

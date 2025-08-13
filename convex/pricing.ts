@@ -240,7 +240,8 @@ export const ensureQuoteToolUrl = mutation({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      // Don't throw during auth loading
+      return { success: false, error: "Not authenticated" };
     }
     
     const clerkId = identity.subject;
@@ -252,12 +253,12 @@ export const ensureQuoteToolUrl = mutation({
       .first();
     
     if (!user || !user.salonId) {
-      throw new Error("User or salon not found");
+      return { success: false, error: "User or salon not found" };
     }
     
     const salon = await ctx.db.get(user.salonId);
     if (!salon) {
-      throw new Error("Salon not found");
+      return { success: false, error: "Salon not found" };
     }
     
     // If token already exists, return it
