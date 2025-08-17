@@ -1,8 +1,9 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import Features from '@/components/Features'
+import TrustIndicators from '@/components/TrustIndicators'
+import MonitoringFeatures from '@/components/MonitoringFeatures'
 import Testimonials from '@/components/Testimonials'
-import FinalCTA from '@/components/FinalCTA'
+import PricingSection from '@/components/PricingSection'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -11,9 +12,10 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Features />
+        <TrustIndicators />
+        <MonitoringFeatures />
         <Testimonials />
-        <FinalCTA />
+        <PricingSection />
       </main>
       <Footer />
     </>

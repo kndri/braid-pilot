@@ -14,18 +14,32 @@
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "e2e": "cypress run",
-    "e2e:headed": "cypress open"
+    "e2e:headed": "cypress open",
+    "test:e2e:booking": "cypress run --spec 'cypress/e2e/booking-capacity-flow.cy.ts'",
+    "test:e2e:capacity": "cypress run --spec 'cypress/e2e/capacity-braider-management.cy.ts'",
+    "test:e2e:all": "cypress run --spec 'cypress/e2e/**/*.cy.ts'",
+    "test:cleanup": "node -e \"process.env.CYPRESS_TESTING='true'\" && npm run test:e2e:booking -- --env cleanup=true",
+    "test:flow": "node scripts/test-booking-flow.js",
+    "seed": "tsx scripts/seed-dev.ts",
+    "seed:clean": "tsx scripts/cleanup-dev.ts",
+    "test:full": "cypress run --spec 'cypress/e2e/full-salon-experience.cy.ts'"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.30.0",
     "@clerk/themes": "^2.4.6",
     "@heroicons/react": "^2.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "convex": "^1.25.4",
     "convex-helpers": "^0.1.101",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.12",
     "jose": "^6.0.12",
+    "lucide-react": "^0.539.0",
     "next": "15.4.6",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -37,12 +51,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "cypress": "^14.5.4",
+    "dotenv": "^17.2.1",
     "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "tailwindcss": "^4",
+    "tsx": "^4.20.4",
     "typescript": "^5"
   }
 }

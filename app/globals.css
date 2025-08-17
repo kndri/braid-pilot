@@ -1,24 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --orange-500: #f97316;
-  --orange-600: #ea580c;
+  --background: #F5F5F5;
+  --foreground: #1a1a1a;
+  --text-dark: #000000;
+  --text-secondary: #2d2d2d;
+  --border-color: #D3D3D3;
+  --blue-pastel: #66d9ef;
+  --green-pastel: #a6e22e;
+  --pink-pastel: #f92672;
+  --yellow-pastel: #e6db74;
+  --purple-pastel: #ae81ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-orange-500: var(--orange-500);
-  --color-orange-600: var(--orange-600);
+  --color-text-dark: var(--text-dark);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border-color);
+  --color-blue-pastel: var(--blue-pastel);
+  --color-green-pastel: var(--green-pastel);
+  --color-pink-pastel: var(--pink-pastel);
+  --color-yellow-pastel: var(--yellow-pastel);
+  --color-purple-pastel: var(--purple-pastel);
   --font-sans: var(--font-inter);
 }
 
+/* Agentic CLI Design Guide does not specify dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #F5F5F5; /* Keep light theme for dark mode as per design guide */
+    --foreground: #1a1a1a;
+    --text-secondary: #2d2d2d;
   }
 }
 
@@ -26,6 +40,50 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Agentic CLI Design Guide component styles */
+.card {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+.btn {
+  background-color: var(--text-dark);
+  color: white;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-accent {
+  background: linear-gradient(to right, var(--blue-pastel), var(--green-pastel), var(--pink-pastel));
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+  color: white;
+}
+
+.input-field {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  color: var(--foreground);
+  width: 100%;
+}
+
+.input-field::placeholder {
+  color: #666666;
 }
 
 /* Animation classes for quote tool */

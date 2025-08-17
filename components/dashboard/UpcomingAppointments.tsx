@@ -1,93 +1,91 @@
-import Link from 'next/link';
+'use client'
+
+import { Calendar, Clock, User } from 'lucide-react'
 
 interface Appointment {
-  id: string;
-  clientName: string;
-  appointmentDate: string;
-  appointmentTime: string;
-  serviceQuoteDetails: string;
+  id: string
+  clientName: string
+  time: string
+  service: string
+  date: string
 }
 
 interface UpcomingAppointmentsProps {
-  appointments: Appointment[];
-  totalCount: number;
+  appointments?: Appointment[]
+  loading?: boolean
+  bookingProEnabled?: boolean
 }
 
-export function UpcomingAppointments({ appointments, totalCount }: UpcomingAppointmentsProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
+export function UpcomingAppointments({ 
+  appointments = [], 
+  loading = false,
+  bookingProEnabled = true 
+}: UpcomingAppointmentsProps) {
   
-  const formatTime = (timeString: string) => {
-    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
-  };
-  
-  if (appointments.length === 0) {
+  if (!bookingProEnabled) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
-          Upcoming Appointments
-        </h3>
-        
-        <div className="text-center py-8">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No upcoming bookings</h3>
-          <p className="mt-1 text-sm text-gray-500">
-            Share your link to get new clients!
-          </p>
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-200 p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-3">Upgrade to Booking Pro</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Manage appointments, track availability, and automate scheduling with Booking Pro.
+        </p>
+        <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg py-2 px-4 font-medium hover:opacity-90 transition-opacity">
+          Upgrade Now
+        </button>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Upcoming Appointments</h3>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="animate-pulse">
+              <div className="h-16 bg-gray-100 rounded-lg"></div>
+            </div>
+          ))}
         </div>
       </div>
-    );
+    )
   }
-  
+
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-gray-900">
-          Upcoming Appointments
-        </h3>
-        <Link
-          href="/appointments"
-          className="text-sm text-blue-600 hover:text-blue-500"
-        >
-          View All
-        </Link>
-      </div>
-      
-      <div className="space-y-3">
-        {appointments.map((appointment) => (
-          <div key={appointment.id} className="border-l-4 border-blue-500 pl-4 py-2">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 className="text-lg font-bold text-gray-900 mb-4">Upcoming Appointments</h3>
+      {appointments.length === 0 ? (
+        <div className="text-center py-8">
+          <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-500">No upcoming appointments</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {appointments.slice(0, 3).map((appointment) => (
+            <div key={appointment.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-indigo-600" />
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
                   {appointment.clientName}
                 </p>
-                <p className="text-sm text-gray-500">
-                  {appointment.serviceQuoteDetails}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">
-                  {formatDate(appointment.appointmentDate)}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {formatTime(appointment.appointmentTime)}
-                </p>
+                <div className="flex items-center gap-4 mt-1">
+                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                    <Clock className="h-3 w-3" />
+                    {appointment.time}
+                  </span>
+                  <span className="text-xs text-gray-600 truncate">
+                    {appointment.service}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
-  );
+  )
 }

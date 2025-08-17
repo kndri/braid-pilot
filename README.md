@@ -1,24 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Braid Pilot - Professional Braiding Salon Management Platform
+
+Braid Pilot is a comprehensive salon management platform that connects clients with braiding salons through instant pricing quotes and seamless appointment booking.
+
+## 🚀 Key Features
+
+- **Price My Style Tool**: Instant pricing quotes for various braiding styles
+- **Booking Pro System**: Complete appointment booking with $5 platform fee
+- **Salon Dashboard**: Comprehensive business management interface
+- **CRM System**: Client relationship management
+- **AI Communication Agent**: 24/7 automated client communication
+- **Reputation Management**: Automated review collection system
+
+## 📚 Documentation
+
+### For Developers
+- [API Reference](./docs/api/booking-api-reference.md) - Complete API documentation
+- [Architecture Guide](./docs/architecture/booking-pro-architecture.md) - System architecture overview
+- [Quick Reference](./docs/guides/booking-pro-quick-reference.md) - Developer quick start guide
+
+### For Testing
+- [Testing Guide](./docs/testing/booking-pro-testing-guide.md) - Comprehensive testing instructions
+- [Test Checklist](./docs/testing/booking-pro-test-checklist.md) - Complete testing checklist
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+ installed
+- npm or yarn package manager
+- Convex account (for backend)
+- Clerk account (for authentication)
+- Stripe account (for payments)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/braid-pilot.git
+cd braid-pilot
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
+
+4. Configure your `.env.local` with:
+```
+NEXT_PUBLIC_CONVEX_URL=your_convex_url
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+CLERK_SECRET_KEY=your_clerk_secret
+STRIPE_SECRET_KEY=your_stripe_secret
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable
+```
+
+5. Run the development servers:
 
 ```bash
+# Terminal 1 - Next.js
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Terminal 2 - Convex
+npx convex dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💰 Platform Economics
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Booking Fee**: $5 per appointment (platform revenue)
+- **Service Payment**: 100% goes to salon (paid at appointment)
+- **No Hidden Fees**: Transparent pricing for both clients and salons
+
+## 🧪 Testing
+
+### Running Tests
+```bash
+# Unit tests
+npm test
+
+# E2E tests
+npm run test:e2e
+
+# Type checking
+npx convex typecheck
+```
+
+### Test Credit Cards
+- Success: `4242 4242 4242 4242`
+- Decline: `4000 0000 0000 0002`
+- Insufficient: `4000 0000 0000 9995`
+
+## 🏗️ Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Backend**: Convex (serverless database & functions)
+- **Authentication**: Clerk
+- **Payments**: Stripe
+- **Styling**: Tailwind CSS
+- **AI**: Google Gemini API
+- **Testing**: Jest, Cypress
 
 ## Learn More
 

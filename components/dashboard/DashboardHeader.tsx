@@ -19,12 +19,12 @@ export function DashboardHeader({ salonName }: DashboardHeaderProps) {
           <div className="flex items-center space-x-4">
             <Link 
               href="/profile"
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-800 hover:text-black transition-colors"
             >
               View My Profile
             </Link>
             <SignOutButton>
-              <button className="text-gray-600 hover:text-gray-900">
+              <button className="text-gray-800 hover:text-black transition-colors">
                 Sign Out
               </button>
             </SignOutButton>

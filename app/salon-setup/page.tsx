@@ -18,6 +18,7 @@ export default function SalonSetupPage() {
     address: '',
     phone: '',
     website: '',
+    defaultSplitPercentage: 60, // Default 60% to braider
     hours: {
       monday: { open: '9:00 AM', close: '6:00 PM', closed: false },
       tuesday: { open: '9:00 AM', close: '6:00 PM', closed: false },
@@ -61,6 +62,8 @@ export default function SalonSetupPage() {
           phone: formData.phone.trim() || undefined,
           website: formData.website.trim() || undefined,
           hours: JSON.stringify(formData.hours),
+          defaultSplitPercentage: formData.defaultSplitPercentage,
+          splitType: 'percentage' as const,
         }
       });
       
@@ -72,7 +75,7 @@ export default function SalonSetupPage() {
     }
   };
   
-  const handleHoursChange = (day: string, field: 'open' | 'close' | 'closed', value: any) => {
+  const handleHoursChange = (day: string, field: 'open' | 'close' | 'closed', value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
       hours: {
@@ -90,25 +93,25 @@ export default function SalonSetupPage() {
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-800">Loading...</p>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 py-6 sm:py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-10 h-10 bg-orange-500 rounded"></div>
-            <span className="text-2xl font-semibold text-gray-900">braidpilot</span>
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center space-x-2 mb-4 sm:mb-6">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500 rounded"></div>
+            <span className="text-xl sm:text-2xl font-semibold text-gray-900">braidpilot</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Set Up Your Salon</h1>
-          <p className="text-gray-600">Let's get your business information to personalize your experience</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Set Up Your Salon</h1>
+          <p className="text-sm sm:text-base text-gray-800 px-4 sm:px-0">Let&apos;s get your business information to personalize your experience</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
           {/* Salon Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -164,6 +167,41 @@ export default function SalonSetupPage() {
               className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               placeholder="https://www.yoursalon.com"
             />
+          </div>
+          
+          {/* Commission Split Configuration */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Default Braider Commission
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Set the default percentage of each service price that goes to your braiders
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={formData.defaultSplitPercentage}
+                  onChange={(e) => setFormData({ ...formData, defaultSplitPercentage: parseInt(e.target.value) })}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>0%</span>
+                  <span>50%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              <div className="bg-orange-50 px-4 py-3 rounded-lg min-w-[120px] text-center border border-orange-200">
+                <div className="text-2xl font-bold text-orange-600">{formData.defaultSplitPercentage}%</div>
+                <div className="text-xs text-orange-500">to braider</div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Braiders get {formData.defaultSplitPercentage}%, salon keeps {100 - formData.defaultSplitPercentage}%. 
+              You can customize this for individual braiders.
+            </p>
           </div>
           
           {/* Business Hours */}

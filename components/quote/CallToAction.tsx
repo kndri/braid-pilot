@@ -14,6 +14,7 @@ interface CallToActionProps {
     length: string;
     hairType: string;
   } | null;
+  onBookNow?: () => void;
 }
 
 export function CallToAction({ 
@@ -21,7 +22,8 @@ export function CallToAction({
   salonPhone, 
   price, 
   isVisible, 
-  quoteDetails 
+  quoteDetails,
+  onBookNow
 }: CallToActionProps) {
   const [copied, setCopied] = useState(false);
   
@@ -61,6 +63,18 @@ I'd like to book an appointment.`;
   
   return (
     <div className="animate-fadeIn mt-6 space-y-3">
+      {onBookNow && (
+        <button
+          onClick={onBookNow}
+          className="w-full flex items-center justify-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Book Appointment
+        </button>
+      )}
+      
       {whatsappUrl && (
         <a
           href={whatsappUrl}
@@ -81,13 +95,6 @@ I'd like to book an appointment.`;
       >
         {copied ? 'Quote Copied!' : 'Copy Quote Details'}
       </button>
-      
-      <Link
-        href="/book"
-        className="w-full block text-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
-      >
-        Proceed to Booking
-      </Link>
     </div>
   );
 }

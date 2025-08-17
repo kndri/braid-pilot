@@ -1,170 +1,247 @@
 'use client'
 
-import { useQuery, useMutation } from 'convex/react'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { useUser } from '@clerk/nextjs'
-import { ManualUserSync } from '@/components/ManualUserSync'
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader'
-import { WelcomeStatusBar } from '@/components/dashboard/WelcomeStatusBar'
-import { MetricsCards } from '@/components/dashboard/MetricsCards'
-import { PriceMyStyleCard } from '@/components/dashboard/PriceMyStyleCard'
+import { Sidebar } from '@/components/dashboard/Sidebar'
+import { MobileSidebar } from '@/components/dashboard/MobileSidebar'
+import { TopBar } from '@/components/dashboard/TopBar'
+import { SummaryStatCard } from '@/components/dashboard/SummaryStatCard'
+import { IncomeAnalytics } from '@/components/dashboard/IncomeAnalytics'
+import { BalanceOverview } from '@/components/dashboard/BalanceOverview'
+import { RecentTransactions } from '@/components/dashboard/RecentTransactions'
+import { GettingStartedChecklist } from '@/components/dashboard/GettingStartedChecklist'
 import { UpcomingAppointments } from '@/components/dashboard/UpcomingAppointments'
-import { NextStepsCTA } from '@/components/dashboard/NextStepsCTA'
-import { DashboardLoading } from '@/components/dashboard/DashboardLoading'
+import { YourTools } from '@/components/dashboard/YourTools'
+import { 
+  Building2, 
+  Users, 
+  UserCheck, 
+  DollarSign,
+  Calendar,
+  Scissors,
+  TrendingUp,
+  Clock,
+  Phone
+} from 'lucide-react'
+import { useUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
 export default function DashboardPage() {
-  const router = useRouter()
   const { user, isLoaded } = useUser()
-  const [isInitializing, setIsInitializing] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
-  // Get current user data from Convex
-  const viewer = useQuery(api.users.viewer)
-  const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
-  const createInitialSalonRecord = useMutation(api.users.createInitialSalonRecord)
-  const ensureQuoteToolUrl = useMutation(api.pricing.ensureQuoteToolUrl)
+  // Fetch dashboard data
   const dashboardData = useQuery(api.dashboard.getDashboardData)
+  const stats = useQuery(api.dashboard.getStats)
+  const recentBookings = useQuery(api.dashboard.getRecentBookings)
+  const upcomingAppointments = useQuery(api.dashboard.getUpcomingAppointments)
+
+  // Redirect if not authenticated
+  if (isLoaded && !user) {
+    redirect('/sign-in')
+  }
+
+  // Calculate statistics
+  const totalBookings = stats?.totalBookings || 0
+  const totalRevenue = stats?.totalRevenue || 0
+  const totalClients = stats?.totalClients || 0
+  const totalBraiders = stats?.totalBraiders || 0
   
-  // ALL hooks must be called before any conditional returns
-  
-  // Handle user initialization (salon creation)
-  useEffect(() => {
-    if (!isLoaded || !user || isInitializing) return
+  // Calculate month-over-month changes (would need historical data - setting to 0 for now)
+  const bookingsChange = 0
+  const revenueChange = 0
+  const clientsChange = 0
+  const braidersChange = 0
+
+  // Transform bookings to transactions format
+  const transactions = recentBookings?.map(booking => ({
+    id: booking._id,
+    clientName: booking.clientName || 'Unknown Client',
+    clientEmail: booking.clientEmail || '',
+    date: new Date(booking.appointmentDate).toLocaleDateString('en-US', { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric' 
+    }),
+    serviceType: booking.serviceDetails?.style || 'Service',
+    styleName: `${booking.serviceDetails?.size || ''} ${booking.serviceDetails?.style || ''}, ${booking.serviceDetails?.length || ''}`.trim(),
+    status: booking.status === 'confirmed' ? 'paid' as const : 
+            booking.status === 'cancelled' ? 'cancelled' as const : 
+            'pending' as const,
+    amount: booking.serviceDetails?.finalPrice || 0
+  })) || []
+
+  // Generate chart data from real bookings (group by month)
+  const chartData = React.useMemo(() => {
+    if (!recentBookings) return []
     
-    async function initializeUser() {
-      if (!viewer || isInitializing) {
-        console.log('[Dashboard] initializeUser: skipped', { hasViewer: Boolean(viewer), isInitializing })
-        return
-      }
-      
-      // If user doesn't have a salon, redirect to salon setup
-      if (viewer && !viewer.salonId) {
-        console.log('[Dashboard] No salon found, redirecting to salon setup')
-        router.push('/salon-setup')
-      }
-    }
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const currentYear = new Date().getFullYear()
     
-    initializeUser()
-  }, [viewer, router, isInitializing, user, isLoaded])
-  
-  // Redirect to sign-in if not authenticated
-  useEffect(() => {
-    if (isLoaded && !user) {
-      router.push('/sign-in')
-    }
-  }, [isLoaded, user, router])
-  
-  // Handle onboarding redirect
-  useEffect(() => {
-    if (onboardingStatus && !onboardingStatus.onboardingComplete) {
-      router.push('/onboarding');
-    }
-  }, [onboardingStatus, router])
-  
-  // Ensure quote tool URL exists for completed onboarding
-  useEffect(() => {
-    async function ensureUrl() {
-      // Only proceed if we have valid dashboard data (not null from auth loading)
-      if (dashboardData && dashboardData.onboardingComplete && !dashboardData.salon.quoteToolUrl) {
-        try {
-          const result = await ensureQuoteToolUrl();
-          if (result.success) {
-            console.log('Generated quote tool URL:', result.quoteToolUrl);
-          } else {
-            console.log('Could not generate URL:', result.error);
-          }
-        } catch (error) {
-          console.error('Error generating quote tool URL:', error);
-        }
+    // Initialize all months with zero values
+    const monthlyData = months.map(month => ({
+      month,
+      income: 0,
+      expenses: 0
+    }))
+    
+    // Aggregate booking data by month
+    recentBookings.forEach(booking => {
+      const bookingDate = new Date(booking.appointmentDate)
+      if (bookingDate.getFullYear() === currentYear) {
+        const monthIndex = bookingDate.getMonth()
+        const revenue = booking.serviceDetails?.finalPrice || 0
+        const platformFee = booking.platformFee || (revenue * 0.05)
+        
+        monthlyData[monthIndex].income += revenue
+        monthlyData[monthIndex].expenses += platformFee
       }
-    }
-    ensureUrl();
-  }, [dashboardData, ensureQuoteToolUrl])
-  
-  // Now we can have conditional returns after all hooks are called
-  
-  // Loading states
-  if (!isLoaded || viewer === undefined || onboardingStatus === undefined) {
-    return <DashboardLoading />
-  }
-  
-  if (!user) {
-    return null
-  }
-  
-  if (!viewer) {
-    // User is authenticated with Clerk but not yet in Convex - wait for sync
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Setting up your account...</p>
-          <p className="text-sm text-gray-500 mt-2">This should only take a moment</p>
-          
-          {/* Show debug info and manual sync */}
-          <div className="mt-8 space-y-4">
-            <div className="text-xs text-gray-400">
-              <p>Clerk User ID: {user?.id}</p>
-              <p>Email: {user?.emailAddresses?.[0]?.emailAddress}</p>
-            </div>
-            <ManualUserSync />
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
-            >
-              Refresh Page
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-  
-  if (isInitializing) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Setting up your salon...</p>
-        </div>
-      </div>
-    )
-  }
-  
-  // Show redirecting state
-  if (onboardingStatus && !onboardingStatus.onboardingComplete) {
-    return <DashboardLoading />
-  }
-  
-  // Wait for dashboard data to load
-  // dashboardData can be null during auth loading or undefined during query loading
-  if (dashboardData === undefined || dashboardData === null) {
-    return <DashboardLoading />
-  }
-  
-  // Main dashboard content
+    })
+    
+    return monthlyData
+  }, [recentBookings])
+
+  // Balance data (using real stats)
+  const balanceData = [
+    { 
+      label: 'Bookings', 
+      value: totalBookings / 1000, 
+      total: 100, 
+      percentOfTarget: Math.min((totalBookings / 100) * 100, 100),
+      trend: bookingsChange > 0 ? 'up' as const : 'down' as const,
+      trendValue: Math.abs(bookingsChange)
+    },
+    { 
+      label: 'Revenue', 
+      value: totalRevenue / 1000, 
+      total: 100, 
+      percentOfTarget: Math.min((totalRevenue / 10000) * 100, 100),
+      trend: revenueChange > 0 ? 'up' as const : 'down' as const,
+      trendValue: Math.abs(revenueChange)
+    },
+    { 
+      label: 'Clients', 
+      value: totalClients / 1000, 
+      total: 100, 
+      percentOfTarget: Math.min((totalClients / 100) * 100, 100),
+      trend: clientsChange > 0 ? 'up' as const : 'down' as const,
+      trendValue: Math.abs(clientsChange)
+    },
+  ]
+
+  const isLoading = !stats || !recentBookings || !upcomingAppointments
+
+  // Transform upcoming appointments for the component
+  const upcomingAppointmentsList = upcomingAppointments?.map(appointment => ({
+    id: appointment._id,
+    clientName: appointment.clientName || 'Unknown Client',
+    time: new Date(appointment.appointmentDate).toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    }),
+    service: appointment.serviceDetails?.style || 'Service',
+    date: new Date(appointment.appointmentDate).toLocaleDateString('en-US')
+  })) || []
+
+  // Check feature status (mock for now - will come from database)
+  const onboardingComplete = dashboardData?.salon?.quoteToolUrl ? true : false
+  const calendarConnected = false // Would check calendar integration
+  const priceMyStyleShared = false // Would track if shared
+  const firstBookingReceived = totalBookings > 0
+  const virtualReceptionistEnabled = false // Would check VR status
+  const automateReviewsEnabled = false // Would check review automation
+  const bookingProEnabled = true // Would check subscription status
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardHeader salonName={dashboardData.salon.name} />
+    <div className="flex h-screen bg-gray-50">
+      {/* Desktop Sidebar */}
+      <Sidebar />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <WelcomeStatusBar 
-          salonName={dashboardData.salon.name}
-          isOnline={dashboardData.onboardingComplete}
-        />
-        
-        <MetricsCards metrics={dashboardData.metrics} />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <PriceMyStyleCard quoteToolUrl={dashboardData.salon.quoteToolUrl} />
-          <UpcomingAppointments 
-            appointments={dashboardData.upcomingBookings}
-            totalCount={dashboardData.metrics.upcomingAppointmentsCount}
+      {/* Mobile Sidebar */}
+      <MobileSidebar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Bar */}
+        <TopBar />
+
+        {/* Dashboard Content */}
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+          <div className="max-w-[1600px] mx-auto">
+          {/* Getting Started Checklist - Top Priority */}
+          <GettingStartedChecklist
+            onboardingComplete={onboardingComplete}
+            calendarConnected={calendarConnected}
+            priceMyStyleShared={priceMyStyleShared}
+            firstBookingReceived={firstBookingReceived}
+            virtualReceptionistEnabled={virtualReceptionistEnabled}
           />
-        </div>
-        
-        <NextStepsCTA />
+
+          {/* KPI Cards - Moved below checklist */}
+          <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            <SummaryStatCard
+              title="No. of Bookings"
+              value={totalBookings}
+              delta={bookingsChange}
+              icon={Calendar}
+              loading={isLoading}
+            />
+            <SummaryStatCard
+              title="No. of Clients"
+              value={totalClients}
+              delta={clientsChange}
+              icon={Users}
+              loading={isLoading}
+            />
+            <SummaryStatCard
+              title="Revenue"
+              value={`$${(totalRevenue / 1000).toFixed(1)}k`}
+              delta={revenueChange}
+              icon={DollarSign}
+              loading={isLoading}
+            />
+            <SummaryStatCard
+              title="VR Calls"
+              value={virtualReceptionistEnabled ? 0 : '-'}
+              delta={0}
+              icon={Phone}
+              loading={isLoading}
+            />
+          </section>
+
+          {/* Main Content Grid */}
+          <section className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            {/* Left Column */}
+            <div className="xl:col-span-7 space-y-6">
+              {/* Upcoming Appointments */}
+              <UpcomingAppointments
+                appointments={upcomingAppointmentsList}
+                loading={isLoading}
+                bookingProEnabled={bookingProEnabled}
+              />
+              
+              {/* Recent Activity */}
+              <RecentTransactions 
+                transactions={transactions}
+                loading={isLoading}
+              />
+            </div>
+            
+            {/* Right Column */}
+            <div className="xl:col-span-5">
+              {/* Your Tools */}
+              <YourTools
+                quoteToolUrl={dashboardData?.salon?.quoteToolUrl}
+                virtualReceptionistEnabled={virtualReceptionistEnabled}
+                automateReviewsEnabled={automateReviewsEnabled}
+                bookingProEnabled={bookingProEnabled}
+              />
+            </div>
+          </section>
+          </div>
+        </main>
       </div>
     </div>
   )

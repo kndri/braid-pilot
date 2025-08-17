@@ -33,6 +33,33 @@ export const getCurrentUser = query({
   },
 });
 
+// Get user by Clerk ID
+export const getUserByClerkId = query({
+  args: {
+    clerkId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    if (!args.clerkId) {
+      return null;
+    }
+    
+    // Find user by clerkId
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+    
+    if (!user) {
+      return null;
+    }
+    
+    return {
+      ...user,
+      salonId: user.salonId,
+    };
+  },
+});
+
 // Create initial salon record for new user
 export const createInitialSalonRecord = mutation({
   args: {
@@ -43,6 +70,8 @@ export const createInitialSalonRecord = mutation({
       phone: v.optional(v.string()),
       website: v.optional(v.string()),
       hours: v.optional(v.string()),
+      defaultSplitPercentage: v.optional(v.number()),
+      splitType: v.optional(v.union(v.literal("percentage"), v.literal("fixed"))),
     })
   },
   handler: async (ctx, args) => {
@@ -332,6 +361,16 @@ export const linkUserByEmail = mutation({
     });
     
     return { success: true, userId: user._id };
+  },
+});
+
+// Get user by ID
+export const getUserById = query({
+  args: {
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.userId);
   },
 });
 

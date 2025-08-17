@@ -6,6 +6,7 @@ import { api } from '@/convex/_generated/api';
 import { SequentialDropdown } from './SequentialDropdown';
 import { PriceDisplay } from './PriceDisplay';
 import { CallToAction } from './CallToAction';
+import { BookingFlow } from '../booking/BookingFlow';
 
 interface QuoteToolProps {
   token: string;
@@ -17,6 +18,7 @@ export function QuoteTool({ token }: QuoteToolProps) {
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
   const [selectedHairType, setSelectedHairType] = useState<string | null>(null);
   const [includeCurlyHair, setIncludeCurlyHair] = useState(false);
+  const [showBookingFlow, setShowBookingFlow] = useState(false);
   
   // Fetch pricing data
   const pricingData = useQuery(api.quote.getSalonPricingByToken, { token });
@@ -101,6 +103,40 @@ export function QuoteTool({ token }: QuoteToolProps) {
   
   const selectedStyleData = pricingData.styles?.find((s: any) => s.name === selectedStyle);
   const showCurlyHairOption = selectedStyle === "Boho Knotless" && selectedStyleData?.curlyHairAdjustment;
+  
+  const handleBookNow = () => {
+    setShowBookingFlow(true);
+  };
+  
+  const handleBookingComplete = () => {
+    setShowBookingFlow(false);
+    // Reset selections
+    setSelectedStyle(null);
+    setSelectedSize(null);
+    setSelectedLength(null);
+    setSelectedHairType(null);
+    setIncludeCurlyHair(false);
+  };
+  
+  if (showBookingFlow && priceCalculation && pricingData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 py-8 px-4">
+        <BookingFlow
+          salonId={pricingData.salonId}
+          salonName={pricingData.salonName}
+          serviceDetails={{
+            style: selectedStyle!,
+            size: selectedSize!,
+            length: selectedLength!,
+            hairType: selectedHairType!,
+            includeCurlyHair,
+            finalPrice: priceCalculation.totalPrice,
+          }}
+          onComplete={handleBookingComplete}
+        />
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 py-8 px-4">
@@ -201,6 +237,7 @@ export function QuoteTool({ token }: QuoteToolProps) {
                   }
                 : null
             }
+            onBookNow={handleBookNow}
           />
         </div>
         

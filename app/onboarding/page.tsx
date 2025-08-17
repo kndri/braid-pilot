@@ -62,8 +62,8 @@ export default function OnboardingPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-600">Setting up your account...</p>
-          <p className="text-sm text-gray-500 mt-2">This may take a few seconds</p>
+          <p className="text-gray-800">Setting up your account...</p>
+          <p className="text-sm text-gray-700 mt-2">This may take a few seconds</p>
         </div>
       </div>
     )
@@ -76,8 +76,8 @@ export default function OnboardingPage() {
         <div className="text-center">
           <div className="w-16 h-16 bg-red-500 rounded-lg mx-auto mb-4"></div>
           <p className="text-gray-900 font-semibold mb-2">Account Setup Required</p>
-          <p className="text-gray-600 mb-4">We&apos;re having trouble setting up your account.</p>
-          <p className="text-sm text-gray-500 mb-6">Please try refreshing the page or sign out and back in.</p>
+          <p className="text-gray-800 mb-4">We&apos;re having trouble setting up your account.</p>
+          <p className="text-sm text-gray-700 mb-6">Please try refreshing the page or sign out and back in.</p>
           <div className="space-y-2">
             <button 
               onClick={() => window.location.reload()} 
@@ -130,10 +130,10 @@ export default function OnboardingPage() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">Step {currentStep} of {totalSteps}</span>
+            <span className="text-sm text-gray-800">Step {currentStep} of {totalSteps}</span>
             <button
               onClick={handleSkip}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-gray-700 hover:text-gray-900"
             >
               Skip for now
             </button>
@@ -155,7 +155,7 @@ export default function OnboardingPage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 Welcome to Braid Pilot, {viewer?.name?.split(' ')[0]}! 👋
               </h1>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-gray-800 mb-8">
                 Let&apos;s get your salon set up in just a few minutes. We&apos;ll help you configure your pricing, 
                 set your availability, and customize your booking page.
               </p>
