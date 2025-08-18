@@ -22,7 +22,8 @@
     "test:flow": "node scripts/test-booking-flow.js",
     "seed": "tsx scripts/seed-dev.ts",
     "seed:clean": "tsx scripts/cleanup-dev.ts",
-    "test:full": "cypress run --spec 'cypress/e2e/full-salon-experience.cy.ts'"
+    "test:full": "cypress run --spec 'cypress/e2e/full-salon-experience.cy.ts'",
+    "preview:screenshot": "node -e \"process.env.PREVIEW_URL='http://localhost:3000/preview/dashboard';process.env.OUTPUT='public/dashboard-preview.png';process.env.DPR='2';process.env.WIDTH='1600';process.env.HEIGHT='1000'\" && tsx scripts/capture-dashboard-preview.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.30.0",
@@ -60,6 +61,7 @@
     "eslint-config-next": "15.4.6",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
+    "puppeteer": "^23.11.1",
     "tailwindcss": "^4",
     "tsx": "^4.20.4",
     "typescript": "^5"
