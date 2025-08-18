@@ -162,21 +162,21 @@ END:VCALENDAR`;
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-5xl mx-auto px-4">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-6">
+        <div className="bg-white rounded-2xl  border border-gray-100 p-8 mb-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Book Your Appointment</h1>
-              <p className="text-gray-600 mt-1">Complete your booking with {salonName}</p>
+              <p className="text-gray-500 mt-1">Complete your booking with {salonName}</p>
             </div>
             <div className="hidden md:block">
-              <div className="bg-purple-50 rounded-xl p-4">
+              <div className="bg-purple-50 rounded-md p-4">
                 <Scissors className="w-8 h-8 text-purple-600" />
               </div>
             </div>
           </div>
 
           {/* Service Summary Card */}
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-md p-6 border border-purple-100">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Your Selected Service</h3>
@@ -199,7 +199,7 @@ END:VCALENDAR`;
                   </div>
                 </div>
                 {serviceDetails.includeCurlyHair && (
-                  <div className="mt-3 inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                  <div className="mt-3 inline-flex items-center px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
                     <Star className="w-3 h-3 mr-1" />
                     Includes Curly Hair Ends
                   </div>
@@ -214,7 +214,7 @@ END:VCALENDAR`;
         </div>
 
         {/* Progress Steps */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div className="bg-white rounded-2xl  border border-gray-100 p-6 mb-6">
           <div className="relative">
             {/* Progress Bar Background */}
             <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded-full" />
@@ -236,8 +236,8 @@ END:VCALENDAR`;
                     <div className={`
                       w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
                       ${isCompleted ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : 
-                        isCurrent ? 'bg-purple-100 text-purple-600 ring-4 ring-purple-100' : 
-                        'bg-gray-100 text-gray-400'}
+                        isCurrent ? 'bg-purple-50 text-purple-600 ring-4 ring-purple-100' : 
+                        'bg-gray-50 text-gray-400'}
                     `}>
                       {isCompleted && currentStep === 'success' ? (
                         <Check className="w-5 h-5" />
@@ -260,7 +260,7 @@ END:VCALENDAR`;
                   w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
                   ${currentStep === 'success' ? 
                     'bg-gradient-to-r from-green-500 to-emerald-500 text-white ring-4 ring-green-100' : 
-                    'bg-gray-100 text-gray-400'}
+                    'bg-gray-50 text-gray-400'}
                 `}>
                   <Check className="w-5 h-5" />
                 </div>
@@ -276,12 +276,12 @@ END:VCALENDAR`;
         </div>
 
         {/* Main Content Area */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl  border border-gray-100 overflow-hidden">
           {currentStep === 'calendar' && (
             <div className="p-6">
               <div className="mb-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">Choose Your Appointment Time</h2>
-                <p className="text-gray-600">Select an available date and time slot that works best for you</p>
+                <p className="text-gray-500">Select an available date and time slot that works best for you</p>
               </div>
               <BookingCalendar
                 salonId={salonId}
@@ -308,14 +308,14 @@ END:VCALENDAR`;
             <div className="p-6">
               <div className="mb-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">Secure Payment</h2>
-                <p className="text-gray-600">Complete your booking with a small deposit</p>
+                <p className="text-gray-500">Complete your booking with a small deposit</p>
               </div>
               
               {/* Payment Info Card */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
                 <div className="flex items-start">
                   <Info className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
-                  <div className="text-sm text-blue-800">
+                  <div className="text-sm text-blue-700">
                     <p className="font-medium mb-1">Booking Deposit Information</p>
                     <p>You're only paying a $5 booking fee now to secure your appointment. The remaining service amount of ${serviceDetails.finalPrice} will be paid directly to your stylist at the salon.</p>
                   </div>
@@ -339,7 +339,7 @@ END:VCALENDAR`;
                   <Check className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
-                <p className="text-gray-600">Your appointment has been successfully booked</p>
+                <p className="text-gray-500">Your appointment has been successfully booked</p>
               </div>
               
               {/* Appointment Summary Card */}
@@ -366,7 +366,7 @@ END:VCALENDAR`;
                       <div>
                         <p className="text-xs text-gray-500">Service</p>
                         <p className="font-medium text-gray-900">{serviceDetails.style}</p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-500">
                           {serviceDetails.size} • {serviceDetails.length}
                         </p>
                       </div>
@@ -374,18 +374,18 @@ END:VCALENDAR`;
                   </div>
                   
                   <div className="space-y-3">
-                    <div className="bg-white rounded-xl p-4">
+                    <div className="bg-white rounded-md p-4">
                       <p className="text-xs text-gray-500 mb-2">Payment Summary</p>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Service Price:</span>
+                          <span className="text-gray-500">Service Price:</span>
                           <span className="font-medium">${serviceDetails.finalPrice}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Deposit Paid:</span>
+                          <span className="text-gray-500">Deposit Paid:</span>
                           <span className="font-medium text-green-600">$5.00</span>
                         </div>
-                        <div className="pt-2 border-t border-gray-200 flex justify-between">
+                        <div className="pt-2 border-t border-gray-100 flex justify-between">
                           <span className="font-medium text-gray-900">Due at Salon:</span>
                           <span className="font-bold text-lg text-purple-600">${serviceDetails.finalPrice}</span>
                         </div>
@@ -396,18 +396,18 @@ END:VCALENDAR`;
               </div>
               
               {/* Add to Calendar Section */}
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 mb-6">
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-md p-6 border border-purple-200 mb-6">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
                   <Calendar className="w-5 h-5 mr-2 text-purple-600" />
                   Add to Your Calendar
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-500 mb-4">
                   Don't forget your appointment! Add it to your calendar now.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <button
                     onClick={addToGoogleCalendar}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-lg border border-gray-200 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-500 rounded-md border border-gray-100 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -420,7 +420,7 @@ END:VCALENDAR`;
                   
                   <button
                     onClick={addToOutlookCalendar}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-lg border border-gray-200 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-500 rounded-md border border-gray-100 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#0078D4" d="M24 7.5v9.75c0 .83-.67 1.5-1.5 1.5H13.5v-6h4.5v-1.5h-4.5v-6h9c.83 0 1.5.67 1.5 1.5zm-12 0v4.5H7.5v-6h9v1.5H12zm0 6v6H1.5c-.83 0-1.5-.67-1.5-1.5V7.5c0-.83.67-1.5 1.5-1.5h9v7.5H12z"/>
@@ -430,7 +430,7 @@ END:VCALENDAR`;
                   
                   <button
                     onClick={addToAppleCalendar}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-lg border border-gray-200 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-500 rounded-md border border-gray-100 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#000000" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -441,9 +441,9 @@ END:VCALENDAR`;
               </div>
 
               {/* What's Next Section */}
-              <div className="bg-purple-50 rounded-xl p-6 border border-purple-100">
+              <div className="bg-purple-50 rounded-md p-6 border border-purple-100">
                 <h3 className="font-semibold text-gray-900 mb-3">What's Next?</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-sm text-gray-500">
                   <li className="flex items-start">
                     <ChevronRight className="w-4 h-4 text-purple-500 mt-0.5 mr-2 flex-shrink-0" />
                     <span>A confirmation email has been sent to your email address</span>
@@ -464,11 +464,11 @@ END:VCALENDAR`;
               </div>
               
               {/* Success Message */}
-              <div className="text-center mt-8 py-6 border-t border-gray-200">
+              <div className="text-center mt-8 py-6 border-t border-gray-100">
                 <p className="text-lg font-medium text-gray-900 mb-2">
                   🎉 You're all set!
                 </p>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-500 mb-4">
                   We're looking forward to seeing you at your appointment.
                 </p>
                 <p className="text-sm text-gray-500">

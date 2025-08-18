@@ -11,7 +11,7 @@ export function TopBar() {
   const [showDropdown, setShowDropdown] = useState(false)
 
   return (
-    <div className="flex h-16 items-center justify-between bg-white px-4 sm:px-6 border-b border-gray-200">
+    <div className="flex h-14 items-center justify-between bg-white px-4 sm:px-6 border-b border-gray-200">
       {/* Add spacing for mobile menu button */}
       <div className="lg:hidden w-14" />
       
@@ -22,7 +22,7 @@ export function TopBar() {
           <input
             type="text"
             placeholder="Search"
-            className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="block w-full rounded-lg border border-gray-200 bg-gray-50 py-1.5 pl-10 pr-3 text-sm placeholder-gray-400 focus:border-gray-300 focus:outline-none"
           />
         </div>
       </div>
@@ -56,7 +56,7 @@ export function TopBar() {
                 className="h-8 w-8 rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-indigo-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-sm font-medium text-purple-600">
                 {user?.firstName?.[0] || 'U'}
               </div>
             )}

@@ -87,7 +87,6 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
         workingDays: [1, 2, 3, 4, 5, 6]
       });
     } catch (error) {
-      console.error('Failed to create braider:', error);
       alert('Failed to add braider. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -116,13 +115,13 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-md max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">Add New Braider</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -143,7 +142,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="Enter braider's name"
               />
             </div>
@@ -158,7 +157,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="braider@example.com"
                 />
               </div>
@@ -172,7 +171,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -204,7 +203,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                     <span>100%</span>
                   </div>
                 </div>
-                <div className="bg-purple-100 px-4 py-2 rounded-lg min-w-[100px] text-center">
+                <div className="bg-purple-50 px-4 py-2 rounded-md min-w-[100px] text-center">
                   <div className="text-2xl font-bold text-purple-700">{formData.splitPercentage}%</div>
                   <div className="text-xs text-purple-600">to braider</div>
                 </div>
@@ -225,10 +224,10 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                     key={specialty}
                     type="button"
                     onClick={() => toggleSpecialty(specialty)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       formData.specialties.includes(specialty)
-                        ? 'bg-purple-100 text-purple-700 border-2 border-purple-300'
-                        : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:bg-gray-100'
+                        ? 'bg-purple-50 text-purple-700 border-2 border-purple-200'
+                        : 'bg-gray-50 text-gray-500 border-2 border-gray-100 hover:bg-gray-50'
                     }`}
                   >
                     {specialty}
@@ -252,7 +251,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                   type="time"
                   value={formData.defaultStartTime}
                   onChange={(e) => setFormData({ ...formData, defaultStartTime: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -265,7 +264,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                   type="time"
                   value={formData.defaultEndTime}
                   onChange={(e) => setFormData({ ...formData, defaultEndTime: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -279,7 +278,7 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                   max="10"
                   value={formData.maxDailyBookings}
                   onChange={(e) => setFormData({ ...formData, maxDailyBookings: parseInt(e.target.value) || 4 })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -294,10 +293,10 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
                     key={day.value}
                     type="button"
                     onClick={() => toggleWorkingDay(day.value)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       formData.workingDays.includes(day.value)
-                        ? 'bg-purple-100 text-purple-700 border-2 border-purple-300'
-                        : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:bg-gray-100'
+                        ? 'bg-purple-50 text-purple-700 border-2 border-purple-200'
+                        : 'bg-gray-50 text-gray-500 border-2 border-gray-100 hover:bg-gray-50'
                     }`}
                   >
                     {day.label}
@@ -312,14 +311,14 @@ export const AddBraiderModal = ({ salonId, isOpen, onClose, onSuccess }: AddBrai
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+              className="px-6 py-2 text-gray-500 bg-gray-50 hover:bg-gray-100 rounded-md font-medium transition-colors"
               disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-medium hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-md font-medium hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Adding...' : 'Add Braider'}

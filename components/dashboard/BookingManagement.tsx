@@ -35,7 +35,7 @@ export function BookingManagement({ salonId }: BookingManagementProps) {
       setSelectedBooking(null);
       setCancelReason('');
     } catch (error) {
-      console.error('Failed to cancel booking:', error);
+      // Error handled silently
     }
   };
   

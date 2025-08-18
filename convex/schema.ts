@@ -16,6 +16,7 @@ export default defineSchema({
   
   salons: defineTable({
     name: v.string(),
+    username: v.optional(v.string()), // Unique username for custom URLs (e.g., "24braidingsalon")
     address: v.optional(v.string()),
     phone: v.optional(v.string()),
     email: v.string(),
@@ -97,9 +98,13 @@ export default defineSchema({
     defaultSplitPercentage: v.optional(v.number()), // Default percentage for braiders (0-100)
     splitType: v.optional(v.union(v.literal("percentage"), v.literal("fixed"))), // How splits are calculated
     
+    // Timezone Configuration
+    timezone: v.optional(v.string()), // IANA timezone identifier (e.g., "America/New_York")
+    
     createdAt: v.number(),
     updatedAt: v.number(),
-  }).index("by_ownerId", ["ownerId"]),
+  }).index("by_ownerId", ["ownerId"])
+    .index("by_username", ["username"]),
   
   // Updated pricing configs for granular style-specific pricing
   pricingConfigs: defineTable({

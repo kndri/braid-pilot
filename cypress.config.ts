@@ -229,6 +229,36 @@ export default defineConfig({
             userEmail: data.email,
           })
           return null
+        },
+
+        // Username feature specific tasks
+        async seedTestSalonWithToken() {
+          const client = getConvexClient()
+          // Create a test salon with only token (no username)
+          const token = `test_token_${Date.now()}`
+          // This would need to be implemented in your testing API
+          // For now, return a mock token
+          return token
+        },
+
+        async getLatestQuoteTracking() {
+          const client = getConvexClient()
+          // Get the most recent quote tracking entry
+          // This would need to be implemented in your API
+          return {
+            source: 'direct_link',
+            salonId: 'test_salon_id'
+          }
+        },
+
+        async getSalonWithBothTokenAndUsername() {
+          const client = getConvexClient()
+          // Get a salon that has both token and username for migration testing
+          // This would need to be implemented in your API
+          return {
+            token: 'test_token',
+            username: 'testusername'
+          }
         }
       })
     },

@@ -45,8 +45,10 @@ export const seedDevelopmentData = mutation({
     if (!user) throw new Error("Failed to create user");
     
     // 2. Create salon
+    const username = "elitebraids";
     const salonId = await ctx.db.insert("salons", {
       name: "Elite Braids & Beauty",
+      username: username,
       email: args.userEmail,
       address: "1234 Main Street, Atlanta, GA 30301",
       phone: "(404) 555-0123",
@@ -65,7 +67,7 @@ export const seedDevelopmentData = mutation({
       }),
       ownerId: user._id,
       onboardingToken: `token_${Date.now()}`,
-      quoteToolUrl: `https://elitebraids.com/quote/${Date.now()}`,
+      quoteToolUrl: `/quote/${username}`,
       standardHairType: "4A",
       maxConcurrentBookings: 4,
       bufferMinutes: 30,

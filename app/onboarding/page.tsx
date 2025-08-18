@@ -6,6 +6,7 @@ import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { SignOutButton, useUser } from '@clerk/nextjs'
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
+import { trackEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -30,6 +31,10 @@ export default function OnboardingPage() {
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
+      trackEvent(ANALYTICS_EVENTS.ONBOARDING_STEP_COMPLETED, {
+        step: currentStep,
+        totalSteps
+      })
     }
   }
   
@@ -43,9 +48,12 @@ export default function OnboardingPage() {
     setIsCompleting(true)
     try {
       await completeOnboarding()
-      router.push('/dashboard')
+      trackEvent(ANALYTICS_EVENTS.ONBOARDING_COMPLETED, {
+        totalSteps
+      })
+      // Redirect to optional setup page instead of dashboard
+      router.push('/onboarding/setup')
     } catch (error) {
-      console.error('Error completing onboarding:', error)
       setIsCompleting(false)
     }
   }
@@ -59,11 +67,11 @@ export default function OnboardingPage() {
   // Show loading while data is being fetched
   if (viewer === undefined || onboardingStatus === undefined) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
-          <p className="text-gray-800">Setting up your account...</p>
-          <p className="text-sm text-gray-700 mt-2">This may take a few seconds</p>
+          <p className="text-gray-900">Setting up your account...</p>
+          <p className="text-sm text-gray-500 mt-2">This may take a few seconds</p>
         </div>
       </div>
     )

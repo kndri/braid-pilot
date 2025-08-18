@@ -7,11 +7,19 @@ export const getSalonPricingByToken = query({
     token: v.string(),
   },
   handler: async (ctx, args) => {
-    // Find salon by onboarding token
-    const salon = await ctx.db
+    // Try to find salon by username first
+    let salon = await ctx.db
       .query("salons")
-      .filter((q) => q.eq(q.field("onboardingToken"), args.token))
+      .withIndex("by_username", (q) => q.eq("username", args.token))
       .first();
+    
+    // Fallback to token lookup if username not found
+    if (!salon) {
+      salon = await ctx.db
+        .query("salons")
+        .filter((q) => q.eq(q.field("onboardingToken"), args.token))
+        .first();
+    }
     
     if (!salon) {
       return null;
@@ -131,11 +139,19 @@ export const calculateQuotePrice = query({
     includeCurlyHair: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    // Find salon by token
-    const salon = await ctx.db
+    // Try to find salon by username first
+    let salon = await ctx.db
       .query("salons")
-      .filter((q) => q.eq(q.field("onboardingToken"), args.token))
+      .withIndex("by_username", (q) => q.eq("username", args.token))
       .first();
+    
+    // Fallback to token lookup if username not found
+    if (!salon) {
+      salon = await ctx.db
+        .query("salons")
+        .filter((q) => q.eq(q.field("onboardingToken"), args.token))
+        .first();
+    }
     
     if (!salon) {
       return null;

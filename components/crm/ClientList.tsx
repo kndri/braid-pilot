@@ -21,7 +21,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
   
   if (!clients) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md  border border-gray-100 p-6">
         <div className="animate-pulse">
           <div className="h-10 bg-gray-200 rounded mb-4"></div>
           <div className="space-y-3">
@@ -59,19 +59,19 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
   const getTagColor = (tag: string) => {
     switch (tag) {
       case 'VIP':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-50 text-purple-700';
       case 'Regular':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-50 text-blue-700';
       case 'New':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-green-700';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-50 text-gray-700';
     }
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div className="p-6 border-b border-gray-200">
+    <div className="bg-white rounded-md  border border-gray-100">
+      <div className="p-6 border-b border-gray-100">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h2 className="text-xl font-semibold text-gray-900">Client Management</h2>
           
@@ -82,7 +82,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search clients..."
-                className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="pl-10 pr-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
               <svg 
                 className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" 
@@ -97,7 +97,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               <option value="spend">Sort by Spend</option>
               <option value="visits">Sort by Visits</option>
@@ -109,7 +109,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
       
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Client
@@ -148,7 +148,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
                     <div className="text-sm font-medium text-gray-900">{client.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">{client.email}</div>
+                    <div className="text-sm text-gray-500">{client.email}</div>
                     <div className="text-sm text-gray-500">{client.phone}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -160,7 +160,7 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
                     <div className="text-sm text-gray-900">{client.bookingCount}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-500">
                       {client.lastVisit 
                         ? new Date(client.lastVisit).toLocaleDateString()
                         : 'Never'
@@ -188,8 +188,8 @@ export function ClientList({ salonId, onSelectClient }: ClientListProps) {
       </div>
       
       {sortedClients.length > 0 && (
-        <div className="px-6 py-3 bg-gray-50 border-t border-gray-200">
-          <p className="text-sm text-gray-600">
+        <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+          <p className="text-sm text-gray-500">
             Showing {sortedClients.length} client{sortedClients.length !== 1 ? 's' : ''}
           </p>
         </div>

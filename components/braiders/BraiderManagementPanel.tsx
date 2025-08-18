@@ -60,7 +60,6 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
       });
       alert('Availability updated successfully');
     } catch (error) {
-      console.error('Failed to update availability:', error);
       alert('Failed to update availability');
     }
   };
@@ -79,7 +78,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
   });
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white rounded-md  p-6">
       <div className="border-b pb-4 mb-6">
         <div className="flex justify-between items-start">
           <div>
@@ -91,7 +90,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-md hover:from-purple-700 hover:to-purple-800 transition-all"
           >
             <Plus className="w-5 h-5" />
             Add Braider
@@ -110,7 +109,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
               placeholder="Search braiders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 border border-gray-100 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -121,7 +120,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 border border-gray-100 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -148,7 +147,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
               return (
                 <div
                   key={braider._id}
-                  className="border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-all cursor-pointer bg-white group"
+                  className="border border-gray-100 rounded-md p-5 hover: transition-all cursor-pointer bg-white group"
                   onClick={() => {
                     setSelectedBraiderId(braider._id);
                     setShowSchedule(true);
@@ -160,7 +159,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                       <p className="text-sm text-gray-600">{braider.email}</p>
                     </div>
                     {braider.splitPercentage !== undefined && (
-                      <div className="bg-purple-100 px-3 py-1 rounded-lg">
+                      <div className="bg-purple-50 px-3 py-1 rounded-md">
                         <div className="flex items-center gap-1">
                           <Percent className="w-3 h-3 text-purple-600" />
                           <span className="text-sm font-semibold text-purple-700">
@@ -228,7 +227,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                         e.stopPropagation();
                         handleAvailabilityUpdate(braider._id, true);
                       }}
-                      className="flex-1 text-sm px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors font-medium"
+                      className="flex-1 text-sm px-3 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-50 transition-colors font-medium"
                     >
                       Available
                     </button>
@@ -237,7 +236,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                         e.stopPropagation();
                         handleAvailabilityUpdate(braider._id, false, "09:00", "18:00");
                       }}
-                      className="flex-1 text-sm px-3 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+                      className="flex-1 text-sm px-3 py-2 bg-gray-50 text-gray-500 rounded-md hover:bg-gray-50 transition-colors font-medium"
                     >
                       Time Off
                     </button>
@@ -247,10 +246,10 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
             })}
           </div>
         ) : (
-          <div className="text-center py-12 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl">
+          <div className="text-center py-12 bg-gradient-to-br from-purple-50 to-blue-50 rounded-md">
             {braiders && braiders.length === 0 ? (
               <>
-                <div className="w-20 h-20 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-4 bg-purple-50 rounded-full flex items-center justify-center">
                   <User className="w-10 h-10 text-purple-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Braiders Yet</h3>
@@ -259,7 +258,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                 </p>
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-md hover:from-purple-700 hover:to-purple-800 transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   Add Your First Braider
@@ -267,7 +266,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
               </>
             ) : (
               <>
-                <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-4 bg-gray-50 rounded-full flex items-center justify-center">
                   <Search className="w-10 h-10 text-gray-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Results Found</h3>
@@ -283,7 +282,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
       {/* Braider Schedule Modal */}
       {showSchedule && braiderSchedule && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-md p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-xl font-bold">Braider Schedule</h3>
@@ -294,13 +293,13 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                   setShowSchedule(false);
                   setSelectedBraiderId(null);
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-500"
               >
                 ✕
               </button>
             </div>
 
-            <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <div className="mb-4 p-4 bg-blue-50 rounded-md">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-gray-600">Working Hours:</span>
@@ -333,7 +332,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
               {braiderSchedule.bookings.length > 0 ? (
                 <div className="space-y-2">
                   {braiderSchedule.bookings.map((booking) => (
-                    <div key={booking._id} className="border rounded-lg p-3">
+                    <div key={booking._id} className="border rounded-md p-3">
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium">{booking.clientName}</p>
@@ -345,10 +344,10 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                           </p>
                         </div>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                          booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          booking.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                          'bg-gray-100 text-gray-800'
+                          booking.status === 'confirmed' ? 'bg-green-50 text-green-700' :
+                          booking.status === 'pending' ? 'bg-yellow-50 text-yellow-700' :
+                          booking.status === 'completed' ? 'bg-blue-50 text-blue-700' :
+                          'bg-gray-50 text-gray-800'
                         }`}>
                           {booking.status}
                         </span>
@@ -360,7 +359,7 @@ export const BraiderManagementPanel = ({ salonId, selectedDate }: BraiderManagem
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-4 bg-gray-50 rounded-lg">
+                <div className="text-center py-4 bg-gray-50 rounded-md">
                   <p className="text-gray-600">No appointments scheduled</p>
                 </div>
               )}

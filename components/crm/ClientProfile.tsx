@@ -36,7 +36,7 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
       });
       setNewNote('');
     } catch (error) {
-      console.error('Failed to add note:', error);
+      // Error handling - note addition failed
     } finally {
       setIsAddingNote(false);
     }
@@ -56,14 +56,14 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
         tags: newTags,
       });
     } catch (error) {
-      console.error('Failed to update tags:', error);
+      // Error handling - tag update failed
     }
   };
   
   if (!profile) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg max-w-4xl w-full p-6">
+        <div className="bg-white rounded-md max-w-4xl w-full p-6">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
             <div className="space-y-3">
@@ -88,15 +88,15 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-green-700';
       case 'confirmed':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-50 text-blue-700';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-50 text-yellow-700';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-red-700';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-50 text-gray-700';
     }
   };
   
@@ -104,13 +104,13 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
   
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-lg max-w-4xl w-full my-8">
+      <div className="bg-white rounded-md max-w-4xl w-full my-8">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">Client Profile</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-500"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -119,12 +119,12 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
         </div>
         
         {/* Client Info */}
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-lg font-semibold text-gray-900">{profile.client.name}</h3>
-              <p className="text-sm text-gray-600">{profile.client.email}</p>
-              <p className="text-sm text-gray-600">{profile.client.phone}</p>
+              <p className="text-sm text-gray-500">{profile.client.email}</p>
+              <p className="text-sm text-gray-500">{profile.client.phone}</p>
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-orange-600">
@@ -143,7 +143,7 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   profile.client.tags?.includes(tag)
                     ? 'bg-orange-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
                 }`}
               >
                 {tag}
@@ -174,13 +174,13 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
         
         {/* Preferred Styles */}
         {profile.stats.preferredStyles.length > 0 && (
-          <div className="px-6 py-4 border-t border-gray-200">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Preferred Styles</h4>
+          <div className="px-6 py-4 border-t border-gray-100">
+            <h4 className="text-sm font-medium text-gray-500 mb-2">Preferred Styles</h4>
             <div className="flex flex-wrap gap-2">
               {profile.stats.preferredStyles.map((style, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
+                  className="px-3 py-1 bg-purple-50 text-purple-800 rounded-full text-sm"
                 >
                   {style}
                 </span>
@@ -189,22 +189,22 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
           </div>
         )}
         
-        <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="px-6 py-4 border-t border-gray-100 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Booking History */}
           <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Booking History</h4>
+            <h4 className="text-sm font-medium text-gray-500 mb-3">Booking History</h4>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {profile.bookings.length === 0 ? (
                 <p className="text-sm text-gray-500">No bookings yet</p>
               ) : (
                 profile.bookings.map((booking) => (
-                  <div key={booking._id} className="p-3 bg-gray-50 rounded-lg">
+                  <div key={booking._id} className="p-3 bg-gray-50 rounded-md">
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-900">
                           {booking.serviceDetails.style}
                         </p>
-                        <p className="text-xs text-gray-600">
+                        <p className="text-xs text-gray-500">
                           {format(new Date(booking.appointmentDate), 'MMM d, yyyy')} at {booking.appointmentTime}
                         </p>
                         <p className="text-xs text-gray-500">
@@ -228,13 +228,13 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
           
           {/* Notes */}
           <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Notes</h4>
+            <h4 className="text-sm font-medium text-gray-500 mb-3">Notes</h4>
             <div className="space-y-2 max-h-48 overflow-y-auto mb-3">
               {profile.notes.length === 0 ? (
                 <p className="text-sm text-gray-500">No notes yet</p>
               ) : (
                 profile.notes.map((note) => (
-                  <div key={note._id} className="p-3 bg-yellow-50 rounded-lg">
+                  <div key={note._id} className="p-3 bg-yellow-50 rounded-md">
                     <p className="text-sm text-gray-800">{note.note}</p>
                     <p className="text-xs text-gray-500 mt-1">
                       {format(new Date(note.createdAt), 'MMM d, yyyy h:mm a')}
@@ -251,13 +251,13 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
                 onChange={(e) => setNewNote(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
                 placeholder="Add a note..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 disabled={isAddingNote}
               />
               <button
                 onClick={handleAddNote}
                 disabled={!newNote.trim() || isAddingNote}
-                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add
               </button>
@@ -266,10 +266,10 @@ export function ClientProfile({ clientId, salonId, onClose }: ClientProfileProps
         </div>
         
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300"
           >
             Close
           </button>

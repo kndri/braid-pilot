@@ -90,8 +90,8 @@ export function RecentTransactions({
 
   if (loading) {
     return (
-      <div className={cn("rounded-lg border border-gray-200 bg-white p-6", className)}>
-        <div className="animate-pulse">
+      <div className={cn("bg-white", className)}>
+        <div className="animate-pulse p-5">
           <div className="h-6 w-48 bg-gray-200 rounded mb-6"></div>
           <div className="space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
@@ -104,36 +104,33 @@ export function RecentTransactions({
   }
 
   return (
-    <div className={cn("rounded-lg border border-gray-200 bg-white", className)}>
+    <div className={cn("bg-white", className)}>
       {/* Header */}
-      <div className="border-b border-gray-200 px-6 py-4">
+      <div className="px-5 py-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Transaction History</h3>
-          <div className="flex items-center gap-2">
+          <h3 className="text-base font-semibold text-gray-900">Recent Transactions</h3>
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setSelectedPeriod('week')}
               className={cn(
-                "px-3 py-1 text-sm font-medium rounded-md transition-colors",
+                "px-2 py-0.5 text-xs font-medium rounded transition-colors",
                 selectedPeriod === 'week' 
                   ? "bg-gray-100 text-gray-900" 
                   : "text-gray-500 hover:text-gray-700"
               )}
             >
-              This Week
+              Week
             </button>
             <button
               onClick={() => setSelectedPeriod('month')}
               className={cn(
-                "px-3 py-1 text-sm font-medium rounded-md transition-colors",
+                "px-2 py-0.5 text-xs font-medium rounded transition-colors",
                 selectedPeriod === 'month' 
                   ? "bg-gray-100 text-gray-900" 
                   : "text-gray-500 hover:text-gray-700"
               )}
             >
-              This Month
-            </button>
-            <button className="ml-2 rounded-lg p-1 hover:bg-gray-100">
-              <ChevronDown className="h-5 w-5 text-gray-400" />
+              Month
             </button>
           </div>
         </div>
@@ -143,26 +140,26 @@ export function RecentTransactions({
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-200">
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <tr className="border-b border-gray-100 bg-gray-50">
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">
                 Client
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Service Type
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">
+                Service
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Style Details
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">
+                Style
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
-                Price
+              <th className="px-3 py-2 text-right text-xs font-medium text-gray-600">
+                Amount
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-600">
                 
               </th>
             </tr>
@@ -170,48 +167,43 @@ export function RecentTransactions({
           <tbody className="divide-y divide-gray-200">
             {transactions.map((transaction) => (
               <tr key={transaction.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-3 py-2 whitespace-nowrap">
                   <div className="flex items-center">
-                    <div className="h-10 w-10 flex-shrink-0">
-                      {transaction.clientAvatar ? (
-                        <div className="h-10 w-10 rounded-full bg-gray-200"></div>
-                      ) : (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-indigo-600">
-                          {transaction.clientName.split(' ').map(n => n[0]).join('')}
-                        </div>
-                      )}
+                    <div className="h-8 w-8 flex-shrink-0">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-medium text-gray-600">
+                        {transaction.clientName.split(' ').map(n => n[0]).join('')}
+                      </div>
                     </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">{transaction.clientName}</p>
-                      <p className="text-xs text-gray-500">#{transaction.id.padStart(8, '0')}</p>
+                    <div className="ml-2">
+                      <p className="text-sm font-medium text-gray-900 truncate max-w-[120px]">{transaction.clientName}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-600">
                   {transaction.date}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                   {transaction.serviceType}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
+                <td className="px-3 py-2 text-xs text-gray-600 truncate max-w-[150px]">
                   {transaction.styleName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-3 py-2 whitespace-nowrap">
                   <span className={cn(
-                    "inline-flex rounded-full px-3 py-1 text-xs font-medium",
-                    transaction.status === 'paid' && "bg-green-100 text-green-700",
-                    transaction.status === 'pending' && "bg-yellow-100 text-yellow-700",
-                    transaction.status === 'cancelled' && "bg-red-100 text-red-700"
+                    "inline-flex rounded-full px-2 py-0.5 text-xs font-medium",
+                    transaction.status === 'paid' && "bg-green-50 text-green-700",
+                    transaction.status === 'pending' && "bg-yellow-50 text-yellow-700",
+                    transaction.status === 'cancelled' && "bg-red-50 text-red-700"
                   )}>
                     {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-900">
+                <td className="px-3 py-2 whitespace-nowrap text-right text-xs font-semibold text-gray-900">
                   ${transaction.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <ExternalLink className="h-4 w-4" />
+                <td className="px-2 py-2 whitespace-nowrap text-right text-xs">
+                  <button className="text-gray-400 hover:text-gray-600 p-1">
+                    <ExternalLink className="h-3 w-3" />
                   </button>
                 </td>
               </tr>

@@ -130,7 +130,7 @@ export function BookingFormRedesigned({
     <div className="p-6">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Complete Your Booking</h2>
-        <p className="text-gray-600">Please provide your contact information to confirm your appointment</p>
+        <p className="text-gray-500">Please provide your contact information to confirm your appointment</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -139,7 +139,7 @@ export function BookingFormRedesigned({
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="flex items-center text-sm font-medium text-gray-500 mb-2">
                 <User className="w-4 h-4 mr-2 text-gray-400" />
                 Full Name
                 <span className="text-red-500 ml-1">*</span>
@@ -150,9 +150,9 @@ export function BookingFormRedesigned({
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className={`
-                  w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                  w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent
                   transition-all duration-200 text-gray-900
-                  ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
+                  ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-100 hover:border-gray-100'}
                 `}
                 placeholder="Enter your full name"
                 disabled={isSubmitting}
@@ -167,7 +167,7 @@ export function BookingFormRedesigned({
             
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="flex items-center text-sm font-medium text-gray-500 mb-2">
                 <Mail className="w-4 h-4 mr-2 text-gray-400" />
                 Email Address
                 <span className="text-red-500 ml-1">*</span>
@@ -178,9 +178,9 @@ export function BookingFormRedesigned({
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className={`
-                  w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                  w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent
                   transition-all duration-200 text-gray-900
-                  ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
+                  ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-100 hover:border-gray-100'}
                 `}
                 placeholder="your@email.com"
                 disabled={isSubmitting}
@@ -195,7 +195,7 @@ export function BookingFormRedesigned({
             
             {/* Phone Field */}
             <div>
-              <label htmlFor="phone" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="phone" className="flex items-center text-sm font-medium text-gray-500 mb-2">
                 <Phone className="w-4 h-4 mr-2 text-gray-400" />
                 Phone Number
                 <span className="text-red-500 ml-1">*</span>
@@ -206,9 +206,9 @@ export function BookingFormRedesigned({
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className={`
-                  w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                  w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent
                   transition-all duration-200 text-gray-900
-                  ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}
+                  ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-100 hover:border-gray-100'}
                 `}
                 placeholder="(555) 123-4567"
                 disabled={isSubmitting}
@@ -223,7 +223,7 @@ export function BookingFormRedesigned({
             
             {/* Notes Field */}
             <div>
-              <label htmlFor="notes" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="notes" className="flex items-center text-sm font-medium text-gray-500 mb-2">
                 <MessageSquare className="w-4 h-4 mr-2 text-gray-400" />
                 Special Requests or Notes
                 <span className="text-gray-400 text-xs ml-2">(Optional)</span>
@@ -232,8 +232,8 @@ export function BookingFormRedesigned({
                 id="notes"
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                  transition-all duration-200 hover:border-gray-300 text-gray-900"
+                className="w-full px-4 py-3 border border-gray-100 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                  transition-all duration-200 hover:border-gray-100 text-gray-900"
                 rows={4}
                 placeholder="Any special requests or information for your stylist..."
                 disabled={isSubmitting}
@@ -241,7 +241,7 @@ export function BookingFormRedesigned({
             </div>
             
             {errors.submit && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-md">
                 <p className="text-sm text-red-600 flex items-center">
                   <AlertCircle className="w-4 h-4 mr-2" />
                   {errors.submit}
@@ -254,7 +254,7 @@ export function BookingFormRedesigned({
               <button
                 type="button"
                 onClick={onCancel}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl 
+                className="flex-1 px-6 py-3 border border-gray-100 text-gray-500 rounded-md 
                   hover:bg-gray-50 transition-all duration-200 font-medium
                   flex items-center justify-center gap-2"
                 disabled={isSubmitting}
@@ -264,9 +264,9 @@ export function BookingFormRedesigned({
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl 
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-md 
                   hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium
-                  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl
+                  disabled:opacity-50 disabled:cursor-not-allowed  hover:
                   flex items-center justify-center gap-2"
                 disabled={isSubmitting}
               >
@@ -288,7 +288,7 @@ export function BookingFormRedesigned({
                 <Calendar className="w-5 h-5 text-purple-600 mt-0.5 mr-3 flex-shrink-0" />
                 <div>
                   <p className="text-sm font-medium text-gray-900">{formatDate(appointmentDate)}</p>
-                  <p className="text-sm text-gray-600">{formatTime(appointmentTime)}</p>
+                  <p className="text-sm text-gray-500">{formatTime(appointmentTime)}</p>
                 </div>
               </div>
               
@@ -297,24 +297,24 @@ export function BookingFormRedesigned({
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Service Details</p>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Style:</span>
+                    <span className="text-gray-500">Style:</span>
                     <span className="font-medium text-gray-900">{serviceDetails.style}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Size:</span>
+                    <span className="text-gray-500">Size:</span>
                     <span className="font-medium text-gray-900">{serviceDetails.size}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Length:</span>
+                    <span className="text-gray-500">Length:</span>
                     <span className="font-medium text-gray-900">{serviceDetails.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Hair Type:</span>
+                    <span className="text-gray-500">Hair Type:</span>
                     <span className="font-medium text-gray-900">{serviceDetails.hairType}</span>
                   </div>
                   {serviceDetails.includeCurlyHair && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Add-on:</span>
+                      <span className="text-gray-500">Add-on:</span>
                       <span className="font-medium text-purple-600">Curly Hair Ends</span>
                     </div>
                   )}
@@ -324,11 +324,11 @@ export function BookingFormRedesigned({
               {/* Price Breakdown */}
               <div className="pt-4 border-t border-purple-100">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-gray-600">Service Total:</span>
+                  <span className="text-sm text-gray-500">Service Total:</span>
                   <span className="text-2xl font-bold text-gray-900">${serviceDetails.finalPrice}</span>
                 </div>
-                <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
-                  <p className="text-xs text-blue-800">
+                <div className="bg-blue-50 rounded-md p-3 border border-blue-100">
+                  <p className="text-xs text-blue-700">
                     <strong>Note:</strong> You'll pay a $5 booking fee next to secure your appointment. 
                     The remaining ${serviceDetails.finalPrice} is paid at the salon.
                   </p>

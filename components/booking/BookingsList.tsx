@@ -32,15 +32,15 @@ interface BookingsListProps {
 export function BookingsList({ bookings, onBookingClick, loading = false }: BookingsListProps) {
   const getStatusBadge = (status: string) => {
     const styles = {
-      confirmed: 'bg-blue-100 text-blue-700',
-      completed: 'bg-green-100 text-green-700',
-      cancelled: 'bg-red-100 text-red-700',
-      no_show: 'bg-orange-100 text-orange-700',
-      pending: 'bg-yellow-100 text-yellow-700',
+      confirmed: 'bg-blue-50 text-blue-700',
+      completed: 'bg-green-50 text-green-700',
+      cancelled: 'bg-red-50 text-red-700',
+      no_show: 'bg-orange-50 text-orange-700',
+      pending: 'bg-yellow-50 text-yellow-700',
     }
     
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-700'}`}>
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || 'bg-gray-50 text-gray-500'}`}>
         {status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
       </span>
     )
@@ -60,7 +60,7 @@ export function BookingsList({ bookings, onBookingClick, loading = false }: Book
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="h-20 bg-gray-100 rounded-lg"></div>
+              <div className="h-20 bg-gray-50 rounded-md"></div>
             </div>
           ))}
         </div>

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/Providers";
 import { UserSync } from "@/components/UserSync";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,8 +36,12 @@ export default function RootLayout({
           className={`${inter.variable} font-sans antialiased`}
         >
           <ConvexClientProvider>
-            <UserSync />
-            {children}
+            <ErrorBoundary>
+              <AnalyticsProvider>
+                <UserSync />
+                {children}
+              </AnalyticsProvider>
+            </ErrorBoundary>
           </ConvexClientProvider>
         </body>
       </html>

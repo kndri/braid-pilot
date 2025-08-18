@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useDebounce } from '@/lib/hooks/useDebounce';
 
 export default function SalonSetupPage() {
   const router = useRouter();
@@ -13,8 +14,12 @@ export default function SalonSetupPage() {
   const createInitialSalonRecord = useMutation(api.users.createInitialSalonRecord);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [usernameError, setUsernameError] = useState('');
+  const [checkingUsername, setCheckingUsername] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [formData, setFormData] = useState({
     salonName: '',
+    username: '',
     address: '',
     phone: '',
     website: '',
@@ -43,11 +48,49 @@ export default function SalonSetupPage() {
       router.push('/dashboard');
     }
   }, [viewer, router]);
+
+  // Debounce username for checking availability
+  const debouncedUsername = useDebounce(formData.username, 500);
+  const usernameAvailability = useQuery(
+    api.salons.isUsernameAvailable,
+    debouncedUsername.length >= 3 
+      ? { username: debouncedUsername.toLowerCase() }
+      : "skip"
+  );
+
+  // Update username availability status
+  useEffect(() => {
+    if (formData.username.length < 3) {
+      setUsernameError('');
+      setUsernameAvailable(null);
+      return;
+    }
+
+    if (usernameAvailability === undefined) {
+      setCheckingUsername(true);
+    } else {
+      setCheckingUsername(false);
+      if (usernameAvailability) {
+        setUsernameAvailable(usernameAvailability.available);
+        setUsernameError(usernameAvailability.error || '');
+      }
+    }
+  }, [usernameAvailability, formData.username]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.salonName.trim()) {
       alert('Please enter your salon name');
+      return;
+    }
+    
+    if (!formData.username.trim() || formData.username.length < 3) {
+      alert('Please enter a valid username (at least 3 characters)');
+      return;
+    }
+
+    if (!usernameAvailable) {
+      alert('Please choose an available username');
       return;
     }
     
@@ -57,6 +100,7 @@ export default function SalonSetupPage() {
       await createInitialSalonRecord({
         salonData: {
           name: formData.salonName.trim(),
+          username: formData.username.toLowerCase().trim(),
           email: user?.emailAddresses[0]?.emailAddress || '',
           address: formData.address.trim() || undefined,
           phone: formData.phone.trim() || undefined,
@@ -69,7 +113,6 @@ export default function SalonSetupPage() {
       
       router.push('/onboarding');
     } catch (error) {
-      console.error('Error creating salon:', error);
       alert('Failed to create salon. Please try again.');
       setIsSubmitting(false);
     }
@@ -125,6 +168,54 @@ export default function SalonSetupPage() {
               placeholder="e.g., Bella's Braids & Beauty"
               required
             />
+          </div>
+          
+          {/* Username for Custom URL */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Custom URL Username <span className="text-red-500">*</span>
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              This will be your unique quote link: braidpilot.com/quote/{formData.username || 'yourusername'}
+            </p>
+            <div className="relative">
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '') })}
+                className={`w-full px-4 py-3 pr-10 text-gray-900 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                  usernameError ? 'border-red-500' : 
+                  usernameAvailable === true ? 'border-green-500' : 
+                  'border-gray-300'
+                }`}
+                placeholder="e.g., 24braidingsalon"
+                required
+                minLength={3}
+                maxLength={30}
+                pattern="[a-z0-9][a-z0-9-_]{2,29}"
+              />
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                {checkingUsername && (
+                  <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                )}
+                {!checkingUsername && usernameAvailable === true && (
+                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+                {!checkingUsername && usernameAvailable === false && (
+                  <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+            </div>
+            {usernameError && (
+              <p className="mt-2 text-xs text-red-600">{usernameError}</p>
+            )}
+            {usernameAvailable === true && (
+              <p className="mt-2 text-xs text-green-600">Username is available!</p>
+            )}
           </div>
           
           {/* Address */}

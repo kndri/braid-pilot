@@ -59,7 +59,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
       })
       alert('Payment marked as complete')
     } catch (error) {
-      console.error('Failed to update payout status:', error)
+      // Error handled by alert
       alert('Failed to update payment status')
     }
   }
@@ -80,7 +80,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
       alert(result.message)
       setSelectedTransactions([])
     } catch (error) {
-      console.error('Failed to process bulk payout:', error)
+      // Error handled by alert
       alert('Failed to process payouts')
     } finally {
       setIsProcessingPayout(false)
@@ -105,11 +105,11 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case 'paid':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Paid</span>
+        return <span className="px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Paid</span>
       case 'pending':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">Pending</span>
+        return <span className="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs font-medium">Pending</span>
       default:
-        return <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Pending Payout</span>
+        return <span className="px-2 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-medium">Pending Payout</span>
     }
   }
 
@@ -128,11 +128,11 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-md  max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-full flex items-center justify-center">
               <User className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
@@ -155,7 +155,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
           >
             <X className="h-5 w-5 text-gray-500" />
           </button>
@@ -172,9 +172,9 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                   <button
                     key={period}
                     onClick={() => setSelectedPeriod(period)}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                       selectedPeriod === period
-                        ? 'bg-white text-indigo-600 shadow-sm'
+                        ? 'bg-white text-indigo-600 '
                         : 'text-gray-600 hover:bg-white/50'
                     }`}
                   >
@@ -185,7 +185,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-white rounded-lg p-4">
+              <div className="bg-white rounded-md p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Total Earned</span>
                   <TrendingUp className="h-4 w-4 text-gray-400" />
@@ -195,7 +195,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg p-4">
+              <div className="bg-white rounded-md p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Paid</span>
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -205,7 +205,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg p-4">
+              <div className="bg-white rounded-md p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Pending</span>
                   <AlertCircle className="h-4 w-4 text-orange-500" />
@@ -215,7 +215,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                 </p>
               </div>
               
-              <div className="bg-white rounded-lg p-4">
+              <div className="bg-white rounded-md p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Bookings</span>
                   <Calendar className="h-4 w-4 text-gray-400" />
@@ -244,7 +244,7 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                   <select
                     value={payoutMethod}
                     onChange={(e) => setPayoutMethod(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="cash">Cash</option>
                     <option value="bank_transfer">Bank Transfer</option>
@@ -254,14 +254,14 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                   </select>
                   <button
                     onClick={selectAllPending}
-                    className="px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
                   >
                     Select All Pending
                   </button>
                   <button
                     onClick={handleBulkPayout}
                     disabled={selectedTransactions.length === 0 || isProcessingPayout}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-300 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-300 transition-colors flex items-center gap-2"
                   >
                     <CreditCard className="h-4 w-4" />
                     Process Selected Payouts
@@ -285,10 +285,10 @@ export function BraiderDetailModal({ braiderId, isOpen, onClose }: BraiderDetail
                 {payouts.transactions.map((transaction) => (
                   <div
                     key={transaction._id}
-                    className={`border rounded-lg p-4 ${
+                    className={`border rounded-md p-4 ${
                       selectedTransactions.includes(transaction._id)
                         ? 'border-indigo-500 bg-indigo-50'
-                        : 'border-gray-200 bg-white'
+                        : 'border-gray-100 bg-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">

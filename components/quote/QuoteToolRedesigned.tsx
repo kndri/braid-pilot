@@ -5,6 +5,7 @@ import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { BookingFlowRedesigned } from '../booking/BookingFlowRedesigned';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent, ANALYTICS_EVENTS, trackFunnelStep } from '@/lib/analytics';
 import { 
   Sparkles, 
   Clock, 
@@ -74,38 +75,38 @@ function SelectionCard({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`relative p-6 rounded-2xl border-2 transition-all text-left w-full ${
+      className={`relative p-5 rounded-lg border transition-all text-left w-full ${
         selected 
-          ? 'border-purple-500 bg-purple-50 shadow-lg' 
-          : 'border-gray-200 bg-white hover:border-purple-300 hover:shadow-md'
+          ? 'border-purple-500 bg-purple-50' 
+          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
       }`}
     >
       {popular && (
-        <div className="absolute -top-3 -right-2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-          Most Popular
+        <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-medium px-2.5 py-0.5 rounded-md">
+          Popular
         </div>
       )}
       
       {image && (
-        <div className="w-full h-32 mb-4 rounded-lg bg-purple-100 flex items-center justify-center">
-          <Scissors className="w-12 h-12 text-purple-500" />
+        <div className="w-full h-28 mb-3 rounded-md bg-purple-50 flex items-center justify-center">
+          <Scissors className="w-10 h-10 text-purple-500" />
         </div>
       )}
       
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="font-bold text-lg text-gray-900 mb-1">{option}</h3>
+          <h3 className="font-semibold text-base text-gray-900 mb-1">{option}</h3>
           {description && (
-            <p className="text-sm text-gray-600">{description}</p>
+            <p className="text-sm text-gray-500">{description}</p>
           )}
           {price !== null && (
-            <p className="text-sm font-semibold text-purple-600 mt-2">
+            <p className="text-sm font-medium text-purple-600 mt-2">
               Starting at ${price}
             </p>
           )}
         </div>
         
-        <div className={`ml-3 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+        <div className={`ml-3 w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
           selected 
             ? 'border-purple-500 bg-purple-500' 
             : 'border-gray-300'
@@ -215,13 +216,13 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
   // Loading state
   if (pricingData === undefined) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center"
+          className="bg-white rounded-lg border border-gray-200 p-6 max-w-md w-full text-center"
         >
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full mx-auto mb-4 animate-pulse"></div>
+          <div className="w-16 h-16 bg-purple-50 rounded-full mx-auto mb-3 animate-pulse"></div>
           <p className="text-gray-700 font-medium">Loading your style journey...</p>
         </motion.div>
       </div>
@@ -231,16 +232,16 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
   // Error states
   if (!pricingData || !pricingData.isActive) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center"
+          className="bg-white rounded-lg border border-gray-200 p-6 max-w-md w-full text-center"
         >
-          <div className="w-20 h-20 bg-red-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <X className="w-10 h-10 text-red-600" />
+          <div className="w-16 h-16 bg-red-50 rounded-full mx-auto mb-3 flex items-center justify-center">
+            <X className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
             {pricingData?.salonName || 'Salon Not Found'}
           </h2>
           <p className="text-gray-600">
@@ -278,12 +279,12 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
   const progress = ((steps.indexOf(currentStep) + 1) / steps.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-gray-50 to-gray-100">
+    <div className="min-h-screen bg-white">
       {/* Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
-        <div className="h-1 bg-gray-200">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+        <div className="h-1 bg-gray-100">
           <motion.div
-            className="h-full bg-gradient-to-r from-purple-500 to-purple-600"
+            className="h-full bg-purple-600"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
@@ -298,13 +299,13 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-            <StepIcon className="w-8 h-8 text-purple-600" />
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-purple-50 rounded-full mb-3">
+            <StepIcon className="w-7 h-7 text-purple-600" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-2">
             {pricingData.salonName}
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-500 text-base">
             {STEP_TITLES[currentStep]}
           </p>
         </motion.div>
@@ -317,7 +318,7 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
           exit={{ opacity: 0, x: -20 }}
           className="max-w-4xl mx-auto"
         >
-          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
+          <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
             <AnimatePresence mode="wait">
               {/* Welcome Step */}
               {currentStep === 'welcome' && (
@@ -327,31 +328,31 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   exit={{ opacity: 0 }}
                   className="text-center space-y-6"
                 >
-                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-16 h-16 text-purple-600" />
+                  <div className="w-24 h-24 mx-auto bg-purple-50 rounded-full flex items-center justify-center">
+                    <Sparkles className="w-12 h-12 text-purple-600" />
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-semibold text-gray-900">
                     Welcome to Your Style Journey! ✨
                   </h2>
-                  <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  <p className="text-lg text-gray-500 max-w-2xl mx-auto">
                     Let's create your perfect braided look. In just a few steps, you'll get an instant quote 
                     tailored to your style preferences. Ready to transform your hair?
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-                      <Clock className="w-10 h-10 text-purple-600 mx-auto mb-3" />
-                      <h3 className="font-semibold text-gray-900">Quick & Easy</h3>
-                      <p className="text-sm text-gray-600 mt-1">Get your quote in under 2 minutes</p>
+                    <div className="bg-gray-50 border border-gray-100 rounded-md p-5">
+                      <Clock className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                      <h3 className="font-medium text-gray-900">Quick & Easy</h3>
+                      <p className="text-sm text-gray-500 mt-1">Get your quote in under 2 minutes</p>
                     </div>
-                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-                      <DollarSign className="w-10 h-10 text-purple-600 mx-auto mb-3" />
-                      <h3 className="font-semibold text-gray-900">Transparent Pricing</h3>
-                      <p className="text-sm text-gray-600 mt-1">No hidden fees or surprises</p>
+                    <div className="bg-gray-50 border border-gray-100 rounded-md p-5">
+                      <DollarSign className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                      <h3 className="font-medium text-gray-900">Transparent Pricing</h3>
+                      <p className="text-sm text-gray-500 mt-1">No hidden fees or surprises</p>
                     </div>
-                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-                      <Calendar className="w-10 h-10 text-purple-600 mx-auto mb-3" />
-                      <h3 className="font-semibold text-gray-900">Book Instantly</h3>
-                      <p className="text-sm text-gray-600 mt-1">Secure your appointment today</p>
+                    <div className="bg-gray-50 border border-gray-100 rounded-md p-5">
+                      <Calendar className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                      <h3 className="font-medium text-gray-900">Book Instantly</h3>
+                      <p className="text-sm text-gray-500 mt-1">Secure your appointment today</p>
                     </div>
                   </div>
                 </motion.div>
@@ -366,10 +367,10 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                       Which style speaks to you?
                     </h2>
-                    <p className="text-gray-600">Choose the perfect braiding style for your personality</p>
+                    <p className="text-gray-500">Choose the perfect braiding style for your personality</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {pricingData.styles?.map((style: any) => (
@@ -397,10 +398,10 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                       How bold do you want to go?
                     </h2>
-                    <p className="text-gray-600">Select your preferred braid size</p>
+                    <p className="text-gray-500">Select your preferred braid size</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {pricingData.availableSizes?.map((size: string) => (
@@ -426,10 +427,10 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                       How long do you like it?
                     </h2>
-                    <p className="text-gray-600">Choose your ideal braid length</p>
+                    <p className="text-gray-500">Choose your ideal braid length</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {pricingData.availableLengths?.map((length: string) => (
@@ -455,10 +456,10 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                       Select your hair type
                     </h2>
-                    <p className="text-gray-600">Choose the hair material for your braids</p>
+                    <p className="text-gray-500">Choose the hair material for your braids</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {pricingData.availableHairTypes?.map((type: string) => (
@@ -484,17 +485,17 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                       Any special touches?
                     </h2>
-                    <p className="text-gray-600">Customize your style with these add-ons</p>
+                    <p className="text-gray-500">Customize your style with these add-ons</p>
                   </div>
                   
                   {showCurlyHairOption && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-gray-50 border border-gray-200 rounded-2xl p-6"
+                      className="bg-gray-50 border border-gray-200 rounded-lg p-6"
                     >
                       <label className="flex items-start space-x-4 cursor-pointer">
                         <input
@@ -504,15 +505,15 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                           className="mt-1 w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
                         />
                         <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 mb-1">Add Curly Hair Ends</h3>
-                          <p className="text-sm text-gray-600">
+                          <h3 className="font-semibold text-gray-900 mb-1">Add Curly Hair Ends</h3>
+                          <p className="text-sm text-gray-500">
                             Give your Boho Knotless braids that signature wavy, carefree look with curly ends
                           </p>
                           <p className="text-sm font-semibold text-purple-600 mt-2">
                             +$40 to your total
                           </p>
                         </div>
-                        <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center">
+                        <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
                           <Heart className="w-10 h-10 text-pink-500" />
                         </div>
                       </label>
@@ -524,7 +525,7 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                       <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
                         <Check className="w-12 h-12 text-green-500" />
                       </div>
-                      <p className="text-gray-600">No additional options available for your selected style</p>
+                      <p className="text-gray-500">No additional options available for your selected style</p>
                     </div>
                   )}
                 </motion.div>
@@ -539,20 +540,20 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   className="space-y-6"
                 >
                   <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-3xl font-semibold text-gray-900 mb-2">
                       Your Perfect Style is Ready! 🎉
                     </h2>
-                    <p className="text-gray-600">Here's your personalized quote</p>
+                    <p className="text-gray-500">Here's your personalized quote</p>
                   </div>
                   
                   {/* Quote Summary Card */}
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 text-white">
+                  <div className="bg-gray-800 border border-gray-200 rounded-lg p-8 text-white">
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <p className="text-white/80 text-sm uppercase tracking-wider">Total Price</p>
                         <p className="text-5xl font-bold">${priceCalculation.totalPrice}</p>
                       </div>
-                      <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 bg-white/20 rounded-lg flex items-center justify-center">
                         <Star className="w-10 h-10 text-yellow-300" />
                       </div>
                     </div>
@@ -560,24 +561,24 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                     <div className="space-y-3 border-t border-white/20 pt-6">
                       <div className="flex justify-between">
                         <span className="text-white/80">Style:</span>
-                        <span className="font-semibold">{selectedStyle}</span>
+                        <span className="font-medium">{selectedStyle}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/80">Size:</span>
-                        <span className="font-semibold">{selectedSize}</span>
+                        <span className="font-medium">{selectedSize}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/80">Length:</span>
-                        <span className="font-semibold">{selectedLength}</span>
+                        <span className="font-medium">{selectedLength}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/80">Hair Type:</span>
-                        <span className="font-semibold">{selectedHairType}</span>
+                        <span className="font-medium">{selectedHairType}</span>
                       </div>
                       {includeCurlyHair && (
                         <div className="flex justify-between">
                           <span className="text-white/80">Curly Ends:</span>
-                          <span className="font-semibold">Yes (+$40)</span>
+                          <span className="font-medium">Yes (+$40)</span>
                         </div>
                       )}
                     </div>
@@ -589,7 +590,7 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleBookNow}
-                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg flex items-center justify-center space-x-2 transition-colors"
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-8 rounded-lg border border-gray-200 flex items-center justify-center space-x-2 transition-colors"
                     >
                       <Calendar className="w-5 h-5" />
                       <span>Book Now</span>
@@ -599,7 +600,7 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => window.location.href = `tel:${pricingData.salonPhone}`}
-                      className="bg-white text-gray-900 font-bold py-4 px-8 rounded-2xl shadow-lg border-2 border-gray-200 flex items-center justify-center space-x-2"
+                      className="bg-gray-50 hover:bg-gray-100 text-gray-900 font-semibold py-4 px-8 rounded-lg border border-gray-200 flex items-center justify-center space-x-2"
                     >
                       <Phone className="w-5 h-5" />
                       <span>Call Salon</span>
@@ -635,7 +636,7 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                 <button
                   onClick={goToPreviousStep}
                   disabled={currentStep === 'welcome'}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${
                     currentStep === 'welcome'
                       ? 'text-gray-400 cursor-not-allowed'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -665,9 +666,9 @@ export function QuoteToolRedesigned({ token }: QuoteToolRedesignedProps) {
                   whileTap={{ scale: canProceed() ? 0.95 : 1 }}
                   onClick={goToNextStep}
                   disabled={!canProceed()}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${
                     canProceed()
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl'
+                      ? 'bg-purple-600 hover:bg-purple-700 text-white border border-gray-200'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >

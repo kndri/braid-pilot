@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FEATURE_FLAGS } from '@/lib/featureFlags';
 
 interface QuickActionsProps {
   quoteToolUrl?: string | null;
@@ -27,7 +28,7 @@ export function QuickActions({
         if (onCopyLink) onCopyLink();
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        console.error('Failed to copy link:', err);
+        // Silent fail - clipboard API might not be available
       }
     }
   };
@@ -102,7 +103,7 @@ export function QuickActions({
         </svg>
       ),
       onClick: () => router.push('/dashboard/virtual-receptionist'),
-      enabled: true,
+      enabled: FEATURE_FLAGS.VIRTUAL_RECEPTIONIST,
       color: 'bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700',
       isNew: true,
     },
@@ -115,7 +116,7 @@ export function QuickActions({
         </svg>
       ),
       onClick: () => router.push('/dashboard/reputation'),
-      enabled: true,
+      enabled: FEATURE_FLAGS.REPUTATION_MANAGEMENT,
       color: 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700',
       isNew: true,
     },

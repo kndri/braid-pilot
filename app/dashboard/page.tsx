@@ -7,21 +7,15 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { MobileSidebar } from '@/components/dashboard/MobileSidebar'
 import { TopBar } from '@/components/dashboard/TopBar'
 import { SummaryStatCard } from '@/components/dashboard/SummaryStatCard'
-import { IncomeAnalytics } from '@/components/dashboard/IncomeAnalytics'
-import { BalanceOverview } from '@/components/dashboard/BalanceOverview'
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions'
-import { GettingStartedChecklist } from '@/components/dashboard/GettingStartedChecklist'
 import { UpcomingAppointments } from '@/components/dashboard/UpcomingAppointments'
 import { YourTools } from '@/components/dashboard/YourTools'
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary'
+import { useTimezone } from '@/hooks/useTimezone'
 import { 
-  Building2, 
   Users, 
-  UserCheck, 
   DollarSign,
   Calendar,
-  Scissors,
-  TrendingUp,
-  Clock,
   Phone
 } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
@@ -30,6 +24,7 @@ import { redirect } from 'next/navigation'
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { formatTime, formatDate } = useTimezone()
   
   // Fetch dashboard data
   const dashboardData = useQuery(api.dashboard.getDashboardData)
@@ -46,13 +41,11 @@ export default function DashboardPage() {
   const totalBookings = stats?.totalBookings || 0
   const totalRevenue = stats?.totalRevenue || 0
   const totalClients = stats?.totalClients || 0
-  const totalBraiders = stats?.totalBraiders || 0
   
   // Calculate month-over-month changes (would need historical data - setting to 0 for now)
   const bookingsChange = 0
   const revenueChange = 0
   const clientsChange = 0
-  const braidersChange = 0
 
   // Transform bookings to transactions format
   const transactions = recentBookings?.map(booking => ({
@@ -72,90 +65,29 @@ export default function DashboardPage() {
     amount: booking.serviceDetails?.finalPrice || 0
   })) || []
 
-  // Generate chart data from real bookings (group by month)
-  const chartData = React.useMemo(() => {
-    if (!recentBookings) return []
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const currentYear = new Date().getFullYear()
-    
-    // Initialize all months with zero values
-    const monthlyData = months.map(month => ({
-      month,
-      income: 0,
-      expenses: 0
-    }))
-    
-    // Aggregate booking data by month
-    recentBookings.forEach(booking => {
-      const bookingDate = new Date(booking.appointmentDate)
-      if (bookingDate.getFullYear() === currentYear) {
-        const monthIndex = bookingDate.getMonth()
-        const revenue = booking.serviceDetails?.finalPrice || 0
-        const platformFee = booking.platformFee || (revenue * 0.05)
-        
-        monthlyData[monthIndex].income += revenue
-        monthlyData[monthIndex].expenses += platformFee
-      }
-    })
-    
-    return monthlyData
-  }, [recentBookings])
-
-  // Balance data (using real stats)
-  const balanceData = [
-    { 
-      label: 'Bookings', 
-      value: totalBookings / 1000, 
-      total: 100, 
-      percentOfTarget: Math.min((totalBookings / 100) * 100, 100),
-      trend: bookingsChange > 0 ? 'up' as const : 'down' as const,
-      trendValue: Math.abs(bookingsChange)
-    },
-    { 
-      label: 'Revenue', 
-      value: totalRevenue / 1000, 
-      total: 100, 
-      percentOfTarget: Math.min((totalRevenue / 10000) * 100, 100),
-      trend: revenueChange > 0 ? 'up' as const : 'down' as const,
-      trendValue: Math.abs(revenueChange)
-    },
-    { 
-      label: 'Clients', 
-      value: totalClients / 1000, 
-      total: 100, 
-      percentOfTarget: Math.min((totalClients / 100) * 100, 100),
-      trend: clientsChange > 0 ? 'up' as const : 'down' as const,
-      trendValue: Math.abs(clientsChange)
-    },
-  ]
 
   const isLoading = !stats || !recentBookings || !upcomingAppointments
 
-  // Transform upcoming appointments for the component
+  // Transform upcoming appointments for the component with timezone support
   const upcomingAppointmentsList = upcomingAppointments?.map(appointment => ({
     id: appointment._id,
     clientName: appointment.clientName || 'Unknown Client',
-    time: new Date(appointment.appointmentDate).toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    }),
+    time: formatTime(appointment.appointmentDate),
     service: appointment.serviceDetails?.style || 'Service',
-    date: new Date(appointment.appointmentDate).toLocaleDateString('en-US')
+    date: formatDate(appointment.appointmentDate, { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    })
   })) || []
 
-  // Check feature status (mock for now - will come from database)
-  const onboardingComplete = dashboardData?.salon?.quoteToolUrl ? true : false
-  const calendarConnected = false // Would check calendar integration
-  const priceMyStyleShared = false // Would track if shared
-  const firstBookingReceived = totalBookings > 0
+  // Check feature status
   const virtualReceptionistEnabled = false // Would check VR status
   const automateReviewsEnabled = false // Would check review automation
   const bookingProEnabled = true // Would check subscription status
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       {/* Desktop Sidebar */}
       <Sidebar />
       
@@ -169,17 +101,9 @@ export default function DashboardPage() {
 
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <div className="max-w-[1600px] mx-auto">
-          {/* Getting Started Checklist - Top Priority */}
-          <GettingStartedChecklist
-            onboardingComplete={onboardingComplete}
-            calendarConnected={calendarConnected}
-            priceMyStyleShared={priceMyStyleShared}
-            firstBookingReceived={firstBookingReceived}
-            virtualReceptionistEnabled={virtualReceptionistEnabled}
-          />
-
-          {/* KPI Cards - Moved below checklist */}
+          <DashboardErrorBoundary>
+            <div className="max-w-[1600px] mx-auto">
+          {/* KPI Cards */}
           <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
             <SummaryStatCard
               title="No. of Bookings"
@@ -241,6 +165,7 @@ export default function DashboardPage() {
             </div>
           </section>
           </div>
+          </DashboardErrorBoundary>
         </main>
       </div>
     </div>

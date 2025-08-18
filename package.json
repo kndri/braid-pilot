@@ -28,6 +28,7 @@
     "@clerk/nextjs": "^6.30.0",
     "@clerk/themes": "^2.4.6",
     "@heroicons/react": "^2.2.0",
+    "@sentry/nextjs": "^10.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.25.4",
@@ -37,6 +38,8 @@
     "jose": "^6.0.12",
     "lucide-react": "^0.539.0",
     "next": "15.4.6",
+    "posthog-js": "^1.260.1",
+    "posthog-node": "^5.7.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "tailwind-merge": "^3.3.1"

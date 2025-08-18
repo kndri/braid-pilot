@@ -77,11 +77,14 @@ export const getDashboardData = query({
     const baseUrl = 'http://localhost:3002'; // Will be replaced with environment variable in production
     let fullQuoteToolUrl = '';
     
-    if (salon.onboardingToken) {
+    if (salon.username) {
+      const quoteToolPath = `/quote/${salon.username}`;
+      fullQuoteToolUrl = `${baseUrl}${quoteToolPath}`;
+    } else if (salon.onboardingToken) {
       const quoteToolPath = salon.quoteToolUrl || `/quote/${salon.onboardingToken}`;
       fullQuoteToolUrl = quoteToolPath.startsWith('http') ? quoteToolPath : `${baseUrl}${quoteToolPath}`;
     } else if (onboardingComplete) {
-      // If onboarding is complete but no token exists, it needs to be generated
+      // If onboarding is complete but no token/username exists, it needs to be generated
       // This will be handled by a separate mutation
       fullQuoteToolUrl = '';
     }

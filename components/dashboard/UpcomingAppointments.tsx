@@ -24,12 +24,12 @@ export function UpcomingAppointments({
   
   if (!bookingProEnabled) {
     return (
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border border-indigo-200 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-3">Upgrade to Booking Pro</h3>
+      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Upgrade to Booking Pro</h3>
         <p className="text-sm text-gray-600 mb-4">
           Manage appointments, track availability, and automate scheduling with Booking Pro.
         </p>
-        <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg py-2 px-4 font-medium hover:opacity-90 transition-opacity">
+        <button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg py-2 px-4 font-medium hover:opacity-90 transition-opacity">
           Upgrade Now
         </button>
       </div>
@@ -38,8 +38,8 @@ export function UpcomingAppointments({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Upcoming Appointments</h3>
+      <div className="bg-white p-5">
+        <h3 className="text-base font-semibold text-gray-900 mb-4">Upcoming Appointments</h3>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="animate-pulse">
@@ -52,8 +52,8 @@ export function UpcomingAppointments({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">Upcoming Appointments</h3>
+    <div className="bg-white p-5">
+      <h3 className="text-base font-semibold text-gray-900 mb-4">Upcoming Appointments</h3>
       {appointments.length === 0 ? (
         <div className="text-center py-8">
           <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-3" />
@@ -62,10 +62,10 @@ export function UpcomingAppointments({
       ) : (
         <div className="space-y-3">
           {appointments.slice(0, 3).map((appointment) => (
-            <div key={appointment.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+            <div key={appointment.id} className="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
-                  <User className="h-5 w-5 text-indigo-600" />
+                <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
+                  <User className="h-4 w-4 text-gray-500" />
                 </div>
               </div>
               <div className="flex-1 min-w-0">

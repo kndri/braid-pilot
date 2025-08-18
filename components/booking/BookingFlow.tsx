@@ -78,7 +78,7 @@ export function BookingFlow({ salonId, salonName, serviceDetails, onComplete }: 
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Book Your Appointment</h2>
-        <p className="text-gray-600">Complete your booking with {salonName}</p>
+        <p className="text-gray-500">Complete your booking with {salonName}</p>
       </div>
       
       <div className="mb-8">
@@ -159,43 +159,43 @@ export function BookingFlow({ salonId, salonName, serviceDetails, onComplete }: 
       )}
       
       {currentStep === 'success' && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+        <div className="bg-white rounded-md  border border-gray-100 p-8 text-center">
+          <div className="w-16 h-16 bg-green-50 rounded-full mx-auto mb-4 flex items-center justify-center">
             <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
           
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-500 mb-6">
             Your appointment has been successfully booked.
           </p>
           
-          <div className="bg-gray-50 rounded-lg p-6 text-left max-w-md mx-auto">
+          <div className="bg-gray-50 rounded-md p-6 text-left max-w-md mx-auto">
             <h4 className="font-semibold text-gray-900 mb-3">Appointment Details</h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Style:</span>
+                <span className="text-gray-500">Style:</span>
                 <span className="font-medium">{serviceDetails.style}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Date:</span>
+                <span className="text-gray-500">Date:</span>
                 <span className="font-medium">{formatDate(selectedDate)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Time:</span>
+                <span className="text-gray-500">Time:</span>
                 <span className="font-medium">{formatTime(selectedTime)}</span>
               </div>
-              <div className="flex justify-between pt-2 border-t border-gray-200">
-                <span className="text-gray-600">Service Price:</span>
+              <div className="flex justify-between pt-2 border-t border-gray-100">
+                <span className="text-gray-500">Service Price:</span>
                 <span className="font-medium">${serviceDetails.finalPrice}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Booking Fee Paid:</span>
+                <span className="text-gray-500">Booking Fee Paid:</span>
                 <span className="font-bold text-green-600">$5.00</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Due at Appointment:</span>
+                <span className="text-gray-500">Due at Appointment:</span>
                 <span className="font-bold text-orange-600">${serviceDetails.finalPrice}</span>
               </div>
             </div>

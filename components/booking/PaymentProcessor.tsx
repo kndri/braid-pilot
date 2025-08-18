@@ -98,24 +98,23 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
       
       onSuccess();
     } catch (error) {
-      console.error('Payment failed:', error);
       setErrors({ submit: 'Payment failed. Please try again.' });
       setIsProcessing(false);
     }
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-md  border border-gray-100 p-6">
       <h3 className="text-lg font-semibold mb-4">Complete Your Booking</h3>
       
-      <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+      <div className="mb-6 p-4 bg-blue-50 rounded-md">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-600">Service Price:</span>
+          <span className="text-sm text-gray-500">Service Price:</span>
           <span className="font-medium">${(serviceTotal || 0).toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-600">Due at Appointment:</span>
-          <span className="text-sm text-gray-600">${(serviceTotal || 0).toFixed(2)}</span>
+          <span className="text-sm text-gray-500">Due at Appointment:</span>
+          <span className="text-sm text-gray-500">${(serviceTotal || 0).toFixed(2)}</span>
         </div>
         <div className="pt-2 mt-2 border-t border-blue-100">
           <div className="flex justify-between items-center mb-1">
@@ -130,7 +129,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="cardholderName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="cardholderName" className="block text-sm font-medium text-gray-500 mb-1">
             Cardholder Name
           </label>
           <input
@@ -139,8 +138,8 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
             className={`
-              text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-              ${errors.cardholderName ? 'border-red-500' : 'border-gray-300'}
+              text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+              ${errors.cardholderName ? 'border-red-500' : 'border-gray-100'}
             `}
             placeholder="John Doe"
             disabled={isProcessing}
@@ -151,7 +150,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
         </div>
         
         <div>
-          <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-500 mb-1">
             Card Number
           </label>
           <input
@@ -161,8 +160,8 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
             onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
             maxLength={19}
             className={`
-              text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-              ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'}
+              text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+              ${errors.cardNumber ? 'border-red-500' : 'border-gray-100'}
             `}
             placeholder="1234 5678 9012 3456"
             disabled={isProcessing}
@@ -174,7 +173,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
         
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-500 mb-1">
               Expiry Date
             </label>
             <input
@@ -184,8 +183,8 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
               onChange={(e) => setExpiryDate(formatExpiryDate(e.target.value))}
               maxLength={5}
               className={`
-                text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-                ${errors.expiryDate ? 'border-red-500' : 'border-gray-300'}
+                text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+                ${errors.expiryDate ? 'border-red-500' : 'border-gray-100'}
               `}
               placeholder="MM/YY"
               disabled={isProcessing}
@@ -196,7 +195,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
           </div>
           
           <div>
-            <label htmlFor="cvv" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="cvv" className="block text-sm font-medium text-gray-500 mb-1">
               CVV
             </label>
             <input
@@ -206,8 +205,8 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
               onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
               maxLength={4}
               className={`
-                text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-                ${errors.cvv ? 'border-red-500' : 'border-gray-300'}
+                text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+                ${errors.cvv ? 'border-red-500' : 'border-gray-100'}
               `}
               placeholder="123"
               disabled={isProcessing}
@@ -219,7 +218,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
         </div>
         
         {errors.submit && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="p-3 bg-red-50 border border-red-200 rounded-md">
             <p className="text-sm text-red-600">{errors.submit}</p>
           </div>
         )}
@@ -227,7 +226,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
         <div className="pt-4 space-y-3">
           <button
             type="submit"
-            className="w-full px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="w-full px-4 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             disabled={isProcessing}
           >
             {isProcessing ? (
@@ -246,7 +245,7 @@ export function PaymentProcessor({ bookingId, amount, serviceTotal, onSuccess, o
           <button
             type="button"
             onClick={onFailure}
-            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="w-full px-4 py-3 border border-gray-100 text-gray-500 rounded-md hover:bg-gray-50 transition-colors"
             disabled={isProcessing}
           >
             Cancel

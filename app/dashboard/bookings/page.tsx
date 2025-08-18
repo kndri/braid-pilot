@@ -9,17 +9,24 @@ import { TopBar } from '@/components/dashboard/TopBar'
 import { BookingDetailsModal } from '@/components/booking/BookingDetailsModal'
 import { CalendarView } from '@/components/booking/CalendarView'
 import { BookingsList } from '@/components/booking/BookingsList'
-import { Calendar, List, Filter } from 'lucide-react'
+import { CapacityManagementPanel } from '@/components/capacity/CapacityManagementPanel'
+import { Calendar, List, Filter, Settings } from 'lucide-react'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
-type ViewMode = 'calendar' | 'list'
+type ViewMode = 'calendar' | 'list' | 'settings'
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
 
 export default function BookingsPage() {
   const { user, isLoaded } = useUser()
-  const [viewMode, setViewMode] = useState<ViewMode>('calendar')
+  
+  // Check if coming from setup flow
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+  const viewParam = searchParams.get('view')
+  const initialView: ViewMode = viewParam === 'settings' ? 'settings' : 'calendar'
+  
+  const [viewMode, setViewMode] = useState<ViewMode>(initialView)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [selectedBookingId, setSelectedBookingId] = useState<Id<'bookings'> | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -69,7 +76,7 @@ export default function BookingsPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       <Sidebar />
       
       {/* Mobile Sidebar */}
@@ -81,60 +88,73 @@ export default function BookingsPage() {
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <div className="max-w-[1600px] mx-auto">
           {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Booking Management</h1>
-            <p className="text-gray-600 mt-1">Manage appointments, track status, and assign braiders</p>
+          <div className="mb-4">
+            <h1 className="text-xl font-semibold text-gray-900">Bookings</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Manage appointments and assign braiders</p>
           </div>
 
           {/* Controls */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div className="bg-white border-b border-gray-200 pb-4 mb-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               {/* View Toggle */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('calendar')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                     viewMode === 'calendar'
-                      ? 'bg-indigo-100 text-indigo-700'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-purple-50 text-purple-700'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   <Calendar className="h-4 w-4" />
-                  Calendar View
+                  Calendar
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                     viewMode === 'list'
-                      ? 'bg-indigo-100 text-indigo-700'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-purple-50 text-purple-700'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   <List className="h-4 w-4" />
-                  List View
+                  List
+                </button>
+                <button
+                  onClick={() => setViewMode('settings')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === 'settings'
+                      ? 'bg-purple-50 text-purple-700'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Settings className="h-4 w-4" />
+                  Capacity Settings
                 </button>
               </div>
 
-              {/* Status Filter */}
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-gray-500" />
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  {statusOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* Status Filter - Only show for calendar and list views */}
+              {viewMode !== 'settings' && (
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-gray-500" />
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+                    className="px-3 py-1.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-gray-300"
+                  >
+                    {statusOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white">
             {viewMode === 'calendar' ? (
               <CalendarView
                 bookings={bookings?.map(b => ({
@@ -151,7 +171,7 @@ export default function BookingsPage() {
                 onBookingClick={handleBookingClick}
                 loading={!bookings}
               />
-            ) : (
+            ) : viewMode === 'list' ? (
               <BookingsList
                 bookings={bookings?.map(b => ({
                   _id: b._id,
@@ -171,6 +191,8 @@ export default function BookingsPage() {
                 onBookingClick={handleBookingClick}
                 loading={!bookings}
               />
+            ) : (
+              salonId && <CapacityManagementPanel salonId={salonId} />
             )}
           </div>
           </div>

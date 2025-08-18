@@ -27,7 +27,7 @@ export default function ClientsPage() {
   // Show loading state while fetching user data
   if (!userData || !userData.salonId) {
     return (
-      <div className="flex h-screen bg-gray-50">
+      <div className="flex h-screen bg-white">
         <Sidebar />
       
       {/* Mobile Sidebar */}
@@ -61,7 +61,10 @@ export default function ClientsPage() {
         <TopBar />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <div className="max-w-[1600px] mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Client Management</h1>
+            <div className="mb-4">
+              <h1 className="text-xl font-semibold text-gray-900">Clients</h1>
+              <p className="text-sm text-gray-500 mt-0.5">Manage client relationships and history</p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
                 <ClientList 

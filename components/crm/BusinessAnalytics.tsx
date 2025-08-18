@@ -16,7 +16,7 @@ export function BusinessAnalytics({ salonId }: BusinessAnalyticsProps) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div key={i} className="bg-white rounded-md  border border-gray-100 p-6">
             <div className="animate-pulse">
               <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
               <div className="h-8 bg-gray-200 rounded w-32"></div>
@@ -89,7 +89,7 @@ export function BusinessAnalytics({ salonId }: BusinessAnalyticsProps) {
       </div>
       
       {/* Service Breakdown */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md  border border-gray-100 p-6">
         <h3 className="text-lg font-semibold mb-4">Service Performance</h3>
         <div className="space-y-3">
           {analytics.popularServices.breakdown.slice(0, 5).map((service, index) => (
@@ -123,12 +123,12 @@ export function BusinessAnalytics({ salonId }: BusinessAnalyticsProps) {
       
       {/* Monthly Revenue Trend */}
       {analytics.monthlyTrend.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-md  border border-gray-100 p-6">
           <h3 className="text-lg font-semibold mb-4">Monthly Revenue Trend</h3>
           <div className="space-y-2">
             {analytics.monthlyTrend.slice(-6).map((month, index) => (
               <div key={index} className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-500">
                   {new Date(month.month + '-01').toLocaleDateString('en-US', { 
                     month: 'short', 
                     year: 'numeric' 

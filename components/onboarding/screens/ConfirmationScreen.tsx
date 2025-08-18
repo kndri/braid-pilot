@@ -148,19 +148,19 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Review Your Pricing Configuration</h2>
+        <h2 className="text-3xl font-semibold text-gray-900 mb-4">Review Your Pricing Configuration</h2>
         <p className="text-gray-600">Please review your pricing setup before finalizing</p>
       </div>
       
       <div className="space-y-6">
         {/* Selected Styles */}
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-md p-4">
           <h3 className="font-semibold text-gray-900 mb-3">Selected Styles ({data.selectedStyles.length}):</h3>
           <div className="grid grid-cols-2 gap-3">
             {data.selectedStyles.map(style => (
-              <div key={style.name} className="bg-white rounded-lg p-3 border border-gray-200">
+              <div key={style.name} className="bg-white rounded-md p-3 border border-gray-200">
                 <span className="text-gray-900 font-medium">{style.name}</span>
                 <p className="text-sm text-gray-500 mt-1">
                   Base: ${data.stylePricing[style.name]?.basePrice || 0}
@@ -171,7 +171,7 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
         </div>
         
         {/* Standard Hair Type */}
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-md p-4">
           <h3 className="font-semibold text-gray-900 mb-2">Standard Hair Type:</h3>
           <p className="text-gray-700">{data.standardHairType}</p>
           <p className="text-sm text-gray-500 mt-1">All base prices are calculated with this hair type</p>
@@ -179,7 +179,7 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
         
         {/* Sample Price Calculations */}
         {data.selectedStyles.length > 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
             <h3 className="font-semibold text-blue-900 mb-3">Sample Price Calculations:</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -200,7 +200,7 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
         
         {/* Global Adjustments */}
         {data.globalHairTypeAdjustments && (
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 rounded-md p-4">
             <h3 className="font-semibold text-gray-900 mb-3">Hair Type Adjustments:</h3>
             <div className="space-y-2 text-sm">
               {Object.entries(data.globalHairTypeAdjustments).map(([type, adjustment]) => (
@@ -215,7 +215,7 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
         
         {/* Error message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-800">{error}</p>
           </div>
         )}
@@ -225,17 +225,17 @@ export default function ConfirmationScreen({ data, onNext, onBack }: Props) {
         <button 
           onClick={onBack}
           disabled={isSaving}
-          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Back
         </button>
         <button 
           onClick={handleFinalize}
           disabled={isSaving}
-          className={`px-6 py-3 rounded-lg transition-colors font-medium ${
+          className={`px-6 py-3 rounded-md transition-colors font-medium ${
             isSaving 
               ? "bg-gray-400 text-gray-200 cursor-not-allowed" 
-              : "bg-orange-500 text-white hover:bg-orange-600"
+              : "bg-purple-600 text-white hover:bg-purple-700"
           }`}
         >
           {isSaving ? "Saving..." : "Finalize Setup"}

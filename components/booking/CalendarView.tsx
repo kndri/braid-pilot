@@ -101,12 +101,12 @@ export function CalendarView({ bookings, onBookingClick, loading = false }: Cale
   
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-blue-100 text-blue-700 border-blue-200'
-      case 'completed': return 'bg-green-100 text-green-700 border-green-200'
-      case 'cancelled': return 'bg-red-100 text-red-700 border-red-200'
-      case 'no_show': return 'bg-orange-100 text-orange-700 border-orange-200'
-      case 'pending': return 'bg-yellow-100 text-yellow-700 border-yellow-200'
-      default: return 'bg-gray-100 text-gray-700 border-gray-200'
+      case 'confirmed': return 'bg-blue-50 text-blue-700 border-blue-200'
+      case 'completed': return 'bg-green-50 text-green-700 border-green-200'
+      case 'cancelled': return 'bg-red-50 text-red-700 border-red-200'
+      case 'no_show': return 'bg-orange-50 text-orange-700 border-orange-200'
+      case 'pending': return 'bg-yellow-50 text-yellow-700 border-yellow-200'
+      default: return 'bg-gray-50 text-gray-500 border-gray-100'
     }
   }
   
@@ -117,7 +117,7 @@ export function CalendarView({ bookings, onBookingClick, loading = false }: Cale
           <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
           <div className="grid grid-cols-7 gap-4">
             {[...Array(35)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-100 rounded"></div>
+              <div key={i} className="h-24 bg-gray-50 rounded"></div>
             ))}
           </div>
         </div>
@@ -135,21 +135,21 @@ export function CalendarView({ bookings, onBookingClick, loading = false }: Cale
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigateMonth('prev')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
           >
-            <ChevronLeft className="h-5 w-5 text-gray-600" />
+            <ChevronLeft className="h-5 w-5 text-gray-500" />
           </button>
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-md transition-colors"
           >
             Today
           </button>
           <button
             onClick={() => navigateMonth('next')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
           >
-            <ChevronRight className="h-5 w-5 text-gray-600" />
+            <ChevronRight className="h-5 w-5 text-gray-500" />
           </button>
         </div>
       </div>
@@ -157,7 +157,7 @@ export function CalendarView({ bookings, onBookingClick, loading = false }: Cale
       {/* Day Headers */}
       <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-t-lg overflow-hidden">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="bg-gray-50 py-2 text-center text-sm font-medium text-gray-700">
+          <div key={day} className="bg-gray-50 py-2 text-center text-sm font-medium text-gray-500">
             {day}
           </div>
         ))}

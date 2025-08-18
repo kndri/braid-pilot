@@ -112,9 +112,9 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
   const totalSelected = selectedStyles.length;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-semibold text-gray-900 mb-2">
           Select Your Braiding Styles
         </h2>
         <p className="text-gray-600">
@@ -136,16 +136,16 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
               <button
                 key={style}
                 onClick={() => toggleStyle(style)}
-                className={`p-3 rounded-lg border-2 transition-all text-left ${
+                className={`p-3 rounded-md border-2 transition-all text-left ${
                   selectedStyles.includes(style)
-                    ? "border-orange-500 bg-orange-50"
+                    ? "border-purple-500 bg-purple-50"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-gray-900">{style}</span>
                   {selectedStyles.includes(style) && (
-                    <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   )}
@@ -168,11 +168,11 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
               onChange={(e) => setCustomStyle(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && addCustomStyle()}
               placeholder="Enter custom style name"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
             />
             <button
               onClick={addCustomStyle}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
             >
               Add
             </button>
@@ -183,12 +183,12 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
               {customStyles.map((style) => (
                 <div
                   key={style}
-                  className="inline-flex items-center px-3 py-1 rounded-full bg-orange-100 text-orange-700"
+                  className="inline-flex items-center px-3 py-1 rounded-full bg-orange-50 text-orange-700"
                 >
                   <span>{style}</span>
                   <button
                     onClick={() => removeCustomStyle(style)}
-                    className="ml-2 text-orange-500 hover:text-orange-700"
+                    className="ml-2 text-purple-600 hover:text-purple-700"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -204,16 +204,16 @@ export default function StyleSelectionScreen({ data, onNext, onBack }: StyleSele
       <div className="mt-8 flex justify-between">
         <button
           onClick={onBack}
-          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors font-medium"
         >
           Back
         </button>
         <button
           onClick={handleContinue}
           disabled={totalSelected === 0}
-          className={`px-6 py-3 rounded-lg transition-colors font-medium ${
+          className={`px-6 py-3 rounded-md transition-colors font-medium ${
             totalSelected > 0
-              ? "bg-orange-500 text-white hover:bg-orange-600"
+              ? "bg-purple-600 text-white hover:bg-purple-700"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >

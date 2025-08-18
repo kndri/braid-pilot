@@ -61,7 +61,7 @@ export default function HelpCenterPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       <Sidebar />
       
       {/* Mobile Sidebar */}
@@ -70,22 +70,22 @@ export default function HelpCenterPage() {
         <TopBar />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <div className="max-w-[1600px] mx-auto">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Help Center</h1>
-              <p className="text-sm text-gray-600 mt-1">Get help and learn how to use Braid Pilot effectively</p>
+            <div className="mb-4">
+              <h1 className="text-xl font-semibold text-gray-900">Help Center</h1>
+              <p className="text-sm text-gray-500 mt-1">Get help and learn how to use Braid Pilot effectively</p>
             </div>
 
             {/* Quick Help Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               {helpTopics.map((topic) => (
                 <a
                   key={topic.title}
                   href={topic.link}
-                  className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-lg border border-gray-100 p-5 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="rounded-lg bg-indigo-100 p-3">
-                      <topic.icon className="h-6 w-6 text-indigo-600" />
+                    <div className="rounded-lg bg-purple-100 p-3">
+                      <topic.icon className="h-6 w-6 text-purple-600" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900">{topic.title}</h3>
@@ -97,7 +97,7 @@ export default function HelpCenterPage() {
             </div>
 
             {/* FAQs Section */}
-            <div className="bg-white rounded-lg border border-gray-200 mb-8">
+            <div className="bg-white rounded-lg border border-gray-100 mb-4">
               <div className="px-6 py-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold">Frequently Asked Questions</h2>
               </div>
@@ -117,12 +117,12 @@ export default function HelpCenterPage() {
             </div>
 
             {/* Contact Support */}
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+            <div className="bg-white rounded-lg border border-gray-100 p-5">
               <h2 className="text-lg font-semibold mb-4">Contact Support</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <a
                   href="mailto:support@braidpilot.com"
-                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:bg-gray-50"
                 >
                   <Mail className="h-5 w-5 text-gray-600" />
                   <div>
@@ -133,7 +133,7 @@ export default function HelpCenterPage() {
 
                 <a
                   href="tel:+1-555-0123"
-                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:bg-gray-50"
                 >
                   <Phone className="h-5 w-5 text-gray-600" />
                   <div>
@@ -144,7 +144,7 @@ export default function HelpCenterPage() {
 
                 <a
                   href="#"
-                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                  className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:bg-gray-50"
                 >
                   <MessageCircle className="h-5 w-5 text-gray-600" />
                   <div>
@@ -169,7 +169,7 @@ export default function HelpCenterPage() {
                   href="https://docs.braidpilot.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                  className="flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
                 >
                   View Docs
                   <ExternalLink className="h-4 w-4" />

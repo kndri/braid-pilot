@@ -27,7 +27,7 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       <Sidebar />
       
       {/* Mobile Sidebar */}
@@ -36,12 +36,12 @@ export default function SettingsPage() {
         <TopBar />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <div className="max-w-[1600px] mx-auto">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-              <p className="text-sm text-gray-600 mt-1">Manage your salon preferences and configuration</p>
+            <div className="mb-4">
+              <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
+              <p className="text-sm text-gray-500 mt-1">Manage your salon preferences and configuration</p>
             </div>
 
-            <div className="flex gap-4 lg:p-6">
+            <div className="flex gap-4">
               {/* Sidebar Navigation */}
               <div className="w-64">
                 <nav className="space-y-1">
@@ -51,7 +51,7 @@ export default function SettingsPage() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeTab === tab.id
-                          ? 'bg-indigo-50 text-indigo-600'
+                          ? 'bg-purple-50 text-purple-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -64,7 +64,7 @@ export default function SettingsPage() {
 
               {/* Settings Content */}
               <div className="flex-1">
-                <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+                <div className="bg-white rounded-lg border border-gray-100 p-5">
                   {activeTab === 'business' && (
                     <div>
                       <h2 className="text-lg font-semibold mb-4">Business Information</h2>
@@ -99,7 +99,7 @@ export default function SettingsPage() {
                             placeholder="123 Main St, City, State 12345"
                           />
                         </div>
-                        <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                        <button className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
                           Save Changes
                         </button>
                       </div>
@@ -132,7 +132,7 @@ export default function SettingsPage() {
                             </div>
                           </div>
                         ))}
-                        <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 mt-4">
+                        <button className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 mt-4">
                           Update Hours
                         </button>
                       </div>
@@ -164,7 +164,7 @@ export default function SettingsPage() {
                             placeholder="50"
                           />
                         </div>
-                        <button className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                        <button className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
                           Update Pricing
                         </button>
                       </div>
@@ -206,10 +206,10 @@ export default function SettingsPage() {
                             <span className="font-medium">Two-factor authentication:</span> Enabled
                           </p>
                         </div>
-                        <button className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                        <button className="rounded-lg bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 border border-gray-200">
                           Change Password
                         </button>
-                        <button className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                        <button className="rounded-lg bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 border border-gray-200">
                           Manage API Keys
                         </button>
                         <button className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">
@@ -228,13 +228,13 @@ export default function SettingsPage() {
                             Theme
                           </label>
                           <div className="flex gap-2">
-                            <button className="rounded-lg border-2 border-indigo-600 bg-white px-4 py-2 text-sm font-medium text-indigo-600">
+                            <button className="rounded-lg border-2 border-purple-600 bg-purple-50 px-4 py-2 text-sm font-medium text-purple-700">
                               Light
                             </button>
-                            <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <button className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">
                               Dark
                             </button>
-                            <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <button className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">
                               System
                             </button>
                           </div>

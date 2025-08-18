@@ -65,6 +65,7 @@ export const createInitialSalonRecord = mutation({
   args: {
     salonData: v.object({
       name: v.string(),
+      username: v.optional(v.string()),
       email: v.string(),
       address: v.optional(v.string()),
       phone: v.optional(v.string()),

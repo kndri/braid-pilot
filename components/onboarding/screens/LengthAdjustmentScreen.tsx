@@ -99,20 +99,20 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
   const allLengths = [...defaultLengths, ...customLengths];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="mb-8">
         <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-            <span className="text-orange-600 font-semibold">{styleIndex + 1}</span>
+          <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mr-3">
+            <span className="text-purple-600 font-semibold">{styleIndex + 1}</span>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">{styleName}</h2>
+          <h2 className="text-3xl font-semibold text-gray-900">{styleName}</h2>
         </div>
         <h3 className="text-xl font-semibold text-gray-800 mb-2">Length Adjustments</h3>
         <p className="text-gray-600">Set price additions for longer lengths (base is Shoulder-Length)</p>
       </div>
       
       <div className="space-y-6">
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-md p-4">
           <p className="text-sm text-gray-600 mb-3">
             Enter how much MORE to charge for each length compared to Shoulder-Length
           </p>
@@ -120,7 +120,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
 
         <div className="space-y-4">
           {allLengths.map((length) => (
-            <div key={length.name} className="flex justify-between items-center p-4 bg-white border border-gray-200 rounded-lg">
+            <div key={length.name} className="flex justify-between items-center p-4 bg-white border border-gray-200 rounded-md">
               <div className="flex-1">
                 <span className="text-gray-900 font-medium">{length.name}</span>
                 {length.description && (
@@ -138,7 +138,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
                       [length.name]: e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value))
                     })}
                     placeholder="0"
-                    className="w-24 px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500" 
+                    className="w-24 px-3 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-600 focus:border-purple-600" 
                   />
                 </div>
                 {customLengths.some(cl => cl.name === length.name) && (
@@ -159,7 +159,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
 
         {/* Add Custom Length Form */}
         {showAddForm ? (
-          <div className="border-2 border-dashed border-orange-300 rounded-lg p-4 bg-orange-50">
+          <div className="border-2 border-dashed border-purple-300 rounded-md p-4 bg-purple-50">
             <h4 className="font-medium text-gray-900 mb-3">Add Custom Length</h4>
             <div className="space-y-3">
               <div>
@@ -171,7 +171,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
                   value={newLengthName}
                   onChange={(e) => setNewLengthName(e.target.value)}
                   placeholder="e.g., Under-Butt, Hip-Length"
-                  className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
                 />
               </div>
               <div>
@@ -183,14 +183,14 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
                   value={newLengthDescription}
                   onChange={(e) => setNewLengthDescription(e.target.value)}
                   placeholder="e.g., Below the buttocks"
-                  className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
                 />
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={handleAddCustomLength}
                   disabled={!newLengthName.trim()}
-                  className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   Add Length
                 </button>
@@ -200,7 +200,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
                     setNewLengthName("");
                     setNewLengthDescription("");
                   }}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                 >
                   Cancel
                 </button>
@@ -210,7 +210,7 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
         ) : (
           <button
             onClick={() => setShowAddForm(true)}
-            className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-orange-400 hover:text-orange-600 transition-colors"
+            className="w-full py-3 border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-purple-400 hover:text-purple-600 transition-colors"
           >
             <svg className="w-5 h-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -223,13 +223,13 @@ export default function LengthAdjustmentScreen({ data, styleName, styleIndex, on
       <div className="mt-8 flex justify-between">
         <button 
           onClick={onBack} 
-          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors font-medium"
         >
           Back
         </button>
         <button 
           onClick={handleContinue} 
-          className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
+          className="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium"
         >
           Continue
         </button>

@@ -114,12 +114,12 @@ export function BookingForm({
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-md  border border-gray-100 p-6">
       <h3 className="text-lg font-semibold mb-4">Complete Your Booking</h3>
       
-      <div className="mb-6 p-4 bg-orange-50 rounded-lg">
+      <div className="mb-6 p-4 bg-orange-50 rounded-md">
         <h4 className="font-medium text-gray-900 mb-2">Appointment Details</h4>
-        <div className="space-y-1 text-sm text-gray-600">
+        <div className="space-y-1 text-sm text-gray-500">
           <p><span className="font-medium">Style:</span> {serviceDetails.style}</p>
           <p><span className="font-medium">Size:</span> {serviceDetails.size}</p>
           <p><span className="font-medium">Length:</span> {serviceDetails.length}</p>
@@ -140,7 +140,7 @@ export function BookingForm({
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-500 mb-1">
             Full Name *
           </label>
           <input
@@ -149,8 +149,8 @@ export function BookingForm({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className={`
-              text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-              ${errors.name ? 'border-red-500' : 'border-gray-300'}
+              text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+              ${errors.name ? 'border-red-500' : 'border-gray-100'}
             `}
             placeholder="Enter your full name"
             disabled={isSubmitting}
@@ -161,7 +161,7 @@ export function BookingForm({
         </div>
         
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-500 mb-1">
             Email Address *
           </label>
           <input
@@ -170,8 +170,8 @@ export function BookingForm({
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className={`
-              text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-              ${errors.email ? 'border-red-500' : 'border-gray-300'}
+              text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+              ${errors.email ? 'border-red-500' : 'border-gray-100'}
             `}
             placeholder="your@email.com"
             disabled={isSubmitting}
@@ -182,7 +182,7 @@ export function BookingForm({
         </div>
         
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-500 mb-1">
             Phone Number *
           </label>
           <input
@@ -191,8 +191,8 @@ export function BookingForm({
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             className={`
-              text-black w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent
-              ${errors.phone ? 'border-red-500' : 'border-gray-300'}
+              text-black w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent
+              ${errors.phone ? 'border-red-500' : 'border-gray-100'}
             `}
             placeholder="(555) 123-4567"
             disabled={isSubmitting}
@@ -203,14 +203,14 @@ export function BookingForm({
         </div>
         
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-500 mb-1">
             Special Requests or Notes (Optional)
           </label>
           <textarea
             id="notes"
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="text-black w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="text-black w-full px-3 py-2 border border-gray-100 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             rows={3}
             placeholder="Any special requests or information for your stylist..."
             disabled={isSubmitting}
@@ -218,7 +218,7 @@ export function BookingForm({
         </div>
         
         {errors.submit && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="p-3 bg-red-50 border border-red-200 rounded-md">
             <p className="text-sm text-red-600">{errors.submit}</p>
           </div>
         )}
@@ -227,14 +227,14 @@ export function BookingForm({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex-1 px-4 py-3 border border-gray-100 text-gray-500 rounded-md hover:bg-gray-50 transition-colors"
             disabled={isSubmitting}
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Creating Booking...' : 'Proceed to Payment'}

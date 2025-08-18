@@ -62,13 +62,13 @@ export default function BasePricingScreen({
   const suggested = suggestedPrices[styleName as keyof typeof suggestedPrices];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="mb-8">
         <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-            <span className="text-orange-600 font-semibold">{styleIndex + 1}</span>
+          <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mr-3">
+            <span className="text-purple-600 font-semibold">{styleIndex + 1}</span>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">{styleName}</h2>
+          <h2 className="text-3xl font-semibold text-gray-900">{styleName}</h2>
         </div>
         <p className="text-gray-600">
           Set your base price for <strong>Jumbo size at Shoulder-Length</strong>
@@ -80,15 +80,15 @@ export default function BasePricingScreen({
 
       <div className="space-y-6">
         {/* Visual Guide */}
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-gray-50 rounded-md p-4">
           <h3 className="font-semibold text-gray-900 mb-3">Base Configuration:</h3>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg p-3 border border-gray-200">
+            <div className="bg-white rounded-md p-3 border border-gray-200">
               <div className="text-sm text-gray-600">Size</div>
               <div className="font-semibold text-gray-900">Jumbo</div>
               <div className="text-xs text-gray-500">Largest braid size</div>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-gray-200">
+            <div className="bg-white rounded-md p-3 border border-gray-200">
               <div className="text-sm text-gray-600">Length</div>
               <div className="font-semibold text-gray-900">Shoulder-Length</div>
               <div className="text-xs text-gray-500">Shortest option</div>
@@ -109,14 +109,14 @@ export default function BasePricingScreen({
               type="number"
               value={basePrice}
               onChange={(e) => setBasePrice(e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value) || 0))}
-              className="w-full pl-10 pr-4 py-4 text-2xl text-black font-semibold border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="w-full pl-10 pr-4 py-4 text-2xl text-black font-semibold border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
               placeholder="0"
             />
           </div>
           {suggested && (
             <button
               onClick={() => setBasePrice(suggested)}
-              className="mt-2 text-sm text-orange-600 hover:text-orange-700 font-medium"
+              className="mt-2 text-sm text-purple-600 hover:text-purple-700 font-medium"
             >
               Use suggested price: ${suggested}
             </button>
@@ -124,7 +124,7 @@ export default function BasePricingScreen({
         </div>
 
         {/* Hair Type Reminder */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
           <div className="flex items-start">
             <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
@@ -161,16 +161,16 @@ export default function BasePricingScreen({
       <div className="mt-8 flex justify-between">
         <button
           onClick={onBack}
-          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+          className="px-6 py-3 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors font-medium"
         >
           Back
         </button>
         <button
           onClick={handleContinue}
           disabled={basePrice === "" || basePrice <= 0}
-          className={`px-6 py-3 rounded-lg transition-colors font-medium ${
+          className={`px-6 py-3 rounded-md transition-colors font-medium ${
             basePrice !== "" && basePrice > 0
-              ? "bg-orange-500 text-white hover:bg-orange-600"
+              ? "bg-purple-600 text-white hover:bg-purple-700"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >

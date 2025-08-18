@@ -208,7 +208,26 @@ export const generateQuoteToolUrl = mutation({
       throw new Error("Salon not found");
     }
     
-    // If token already exists, return it
+    // If username exists, use it for the URL
+    if (salon.username) {
+      const quoteUrl = `/quote/${salon.username}`;
+      
+      // Update the quote URL if needed
+      if (salon.quoteToolUrl !== quoteUrl) {
+        await ctx.db.patch(args.salonId, {
+          quoteToolUrl: quoteUrl,
+          updatedAt: Date.now(),
+        });
+      }
+      
+      return { 
+        success: true, 
+        quoteToolUrl: quoteUrl,
+        token: salon.username, // Return username as token for backward compatibility
+      };
+    }
+    
+    // Fallback to token if no username (shouldn't happen with new salons)
     if (salon.onboardingToken) {
       return { 
         success: true, 
@@ -217,7 +236,7 @@ export const generateQuoteToolUrl = mutation({
       };
     }
     
-    // Generate a unique token for the quote tool
+    // Generate a unique token as fallback
     const token = Math.random().toString(36).substring(2, 15) + 
                   Math.random().toString(36).substring(2, 15);
     
@@ -261,9 +280,30 @@ export const ensureQuoteToolUrl = mutation({
       return { success: false, error: "Salon not found" };
     }
     
-    // If token already exists, return it
+    const baseUrl = 'http://localhost:3002';
+    
+    // If username exists, use it for the URL
+    if (salon.username) {
+      const quoteUrl = `/quote/${salon.username}`;
+      const fullUrl = `${baseUrl}${quoteUrl}`;
+      
+      // Update the quote URL if needed
+      if (salon.quoteToolUrl !== quoteUrl) {
+        await ctx.db.patch(user.salonId, {
+          quoteToolUrl: quoteUrl,
+          updatedAt: Date.now(),
+        });
+      }
+      
+      return { 
+        success: true, 
+        quoteToolUrl: fullUrl,
+        token: salon.username, // Return username as token for backward compatibility
+      };
+    }
+    
+    // Fallback to token if no username
     if (salon.onboardingToken) {
-      const baseUrl = 'http://localhost:3002';
       const quoteToolPath = salon.quoteToolUrl || `/quote/${salon.onboardingToken}`;
       const fullUrl = quoteToolPath.startsWith('http') ? quoteToolPath : `${baseUrl}${quoteToolPath}`;
       
@@ -274,7 +314,7 @@ export const ensureQuoteToolUrl = mutation({
       };
     }
     
-    // Generate a unique token
+    // Generate a unique token as fallback
     const token = Math.random().toString(36).substring(2, 15) + 
                   Math.random().toString(36).substring(2, 15);
     
@@ -284,7 +324,6 @@ export const ensureQuoteToolUrl = mutation({
       updatedAt: Date.now(),
     });
     
-    const baseUrl = 'http://localhost:3002';
     const fullUrl = `${baseUrl}/quote/${token}`;
     
     return { 

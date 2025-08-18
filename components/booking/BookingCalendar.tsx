@@ -70,12 +70,12 @@ export function BookingCalendar({ salonId, onSlotSelect, selectedDate, selectedT
   
   if (!availability) {
     return (
-      <div className="bg-white rounded-lg p-6">
+      <div className="bg-white rounded-md p-6">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 rounded mb-4"></div>
           <div className="grid grid-cols-8 gap-2">
             {[...Array(56)].map((_, i) => (
-              <div key={i} className="h-12 bg-gray-100 rounded"></div>
+              <div key={i} className="h-12 bg-gray-50 rounded"></div>
             ))}
           </div>
         </div>
@@ -84,12 +84,12 @@ export function BookingCalendar({ salonId, onSlotSelect, selectedDate, selectedT
   }
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div className="p-4 border-b border-gray-200">
+    <div className="bg-white rounded-md  border border-gray-100">
+      <div className="p-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <button
             onClick={handlePreviousWeek}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
             aria-label="Previous week"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,7 +103,7 @@ export function BookingCalendar({ salonId, onSlotSelect, selectedDate, selectedT
           
           <button
             onClick={handleNextWeek}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-50 rounded-md transition-colors"
             aria-label="Next week"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,12 +148,12 @@ export function BookingCalendar({ salonId, onSlotSelect, selectedDate, selectedT
                       onClick={() => handleSlotClick(day, time)}
                       disabled={isDisabled}
                       className={`
-                        p-3 rounded-lg text-sm font-medium transition-all
+                        p-3 rounded-md text-sm font-medium transition-all
                         ${isSelected 
                           ? 'bg-orange-500 text-white shadow-md' 
                           : isDisabled
                             ? 'bg-gray-50 text-gray-300 cursor-not-allowed'
-                            : 'bg-green-50 text-green-700 hover:bg-green-100 cursor-pointer'
+                            : 'bg-green-50 text-green-700 hover:bg-green-50 cursor-pointer'
                         }
                       `}
                     >
@@ -167,19 +167,19 @@ export function BookingCalendar({ salonId, onSlotSelect, selectedDate, selectedT
         </div>
       </div>
       
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
+      <div className="p-4 border-t border-gray-100 bg-gray-50">
         <div className="flex items-center justify-center space-x-6 text-sm">
           <div className="flex items-center">
-            <div className="w-4 h-4 bg-green-100 rounded mr-2"></div>
-            <span className="text-gray-600">Available</span>
+            <div className="w-4 h-4 bg-green-50 rounded mr-2"></div>
+            <span className="text-gray-500">Available</span>
           </div>
           <div className="flex items-center">
-            <div className="w-4 h-4 bg-gray-100 rounded mr-2"></div>
-            <span className="text-gray-600">Unavailable</span>
+            <div className="w-4 h-4 bg-gray-50 rounded mr-2"></div>
+            <span className="text-gray-500">Unavailable</span>
           </div>
           <div className="flex items-center">
             <div className="w-4 h-4 bg-orange-500 rounded mr-2"></div>
-            <span className="text-gray-600">Selected</span>
+            <span className="text-gray-500">Selected</span>
           </div>
         </div>
       </div>

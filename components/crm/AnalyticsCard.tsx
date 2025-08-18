@@ -23,13 +23,13 @@ export function AnalyticsCard({
   className = ''
 }: AnalyticsCardProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-white rounded-md  border border-gray-100 p-6 ${className}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm text-gray-500 mb-1">{title}</p>
           <p className="text-2xl font-bold text-gray-900">{value}</p>
           {subtitle && (
-            <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
           )}
           {trend && (
             <div className="flex items-center mt-2">
@@ -53,7 +53,7 @@ export function AnalyticsCard({
           )}
         </div>
         {icon && (
-          <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600">
+          <div className="w-12 h-12 bg-orange-50 rounded-md flex items-center justify-center text-orange-600">
             {icon}
           </div>
         )}
