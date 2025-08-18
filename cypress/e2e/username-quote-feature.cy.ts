@@ -119,7 +119,7 @@ describe('Username-based Quote URL Feature', () => {
 
     it('should still support legacy token URLs', () => {
       // Create a test salon with token
-      cy.task('seedTestSalonWithToken').then((token: string) => {
+      cy.task('seedTestSalonWithToken').then((token) => {
         // Visit quote tool with token
         cy.visit(`/quote/${token}`);
         
@@ -132,7 +132,7 @@ describe('Username-based Quote URL Feature', () => {
   describe('Dashboard Quote URL Display', () => {
     it('should display username-based URL in dashboard', () => {
       // Login as salon owner
-      cy.loginAsSalonOwner(testEmail, testPassword);
+      cy.loginAsSalonOwner();
       
       // Navigate to dashboard
       cy.visit('/dashboard');
@@ -148,7 +148,7 @@ describe('Username-based Quote URL Feature', () => {
     });
 
     it('should copy username URL to clipboard', () => {
-      cy.loginAsSalonOwner(testEmail, testPassword);
+      cy.loginAsSalonOwner();
       cy.visit('/dashboard');
       
       // Click copy button
@@ -168,7 +168,7 @@ describe('Username-based Quote URL Feature', () => {
 
   describe('Username Update Flow', () => {
     it('should allow username update in settings', () => {
-      cy.loginAsSalonOwner(testEmail, testPassword);
+      cy.loginAsSalonOwner();
       
       // Navigate to settings
       cy.visit('/dashboard/settings');
@@ -196,7 +196,7 @@ describe('Username-based Quote URL Feature', () => {
     });
 
     it('should validate username uniqueness on update', () => {
-      cy.loginAsSalonOwner(testEmail, testPassword);
+      cy.loginAsSalonOwner();
       cy.visit('/dashboard/settings');
       
       // Try to change to existing username
@@ -267,21 +267,4 @@ describe('Username-based Quote URL Feature', () => {
       });
     });
   });
-});
-
-// Add custom commands for reusability
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      loginAsSalonOwner(email: string, password: string): Chainable<void>;
-    }
-  }
-}
-
-Cypress.Commands.add('loginAsSalonOwner', (email: string, password: string) => {
-  cy.visit('/sign-in');
-  cy.get('input[type="email"]').type(email);
-  cy.get('input[type="password"]').type(password);
-  cy.get('button[type="submit"]').click();
-  cy.url({ timeout: 10000 }).should('include', '/dashboard');
 });

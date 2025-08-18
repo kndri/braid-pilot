@@ -30,6 +30,8 @@
     "@clerk/themes": "^2.4.6",
     "@heroicons/react": "^2.2.0",
     "@sentry/nextjs": "^10.5.0",
+    "@stripe/react-stripe-js": "^3.9.0",
+    "@stripe/stripe-js": "^7.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.25.4",
@@ -62,6 +64,7 @@
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "puppeteer": "^23.11.1",
+    "stripe": "^18.4.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.4",
     "typescript": "^5"

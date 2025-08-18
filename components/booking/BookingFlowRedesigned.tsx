@@ -5,6 +5,8 @@ import { Id } from '@/convex/_generated/dataModel';
 import { BookingCalendar } from './BookingCalendar';
 import { BookingFormRedesigned } from './BookingFormRedesigned';
 import { PaymentProcessor } from './PaymentProcessor';
+import { PaymentProcessorStripe } from './PaymentProcessorStripe';
+import { config } from '@/lib/config';
 import { 
   Calendar, 
   User, 
@@ -62,7 +64,16 @@ export function BookingFlowRedesigned({
   
   const handleBookingCreated = (newBookingId: Id<"bookings">) => {
     setBookingId(newBookingId);
-    setCurrentStep('payment');
+    
+    // Skip payment if disabled
+    if (!config.payment.enabled) {
+      setCurrentStep('success');
+      if (onComplete) {
+        setTimeout(onComplete, 3000);
+      }
+    } else {
+      setCurrentStep('payment');
+    }
   };
   
   const handlePaymentSuccess = () => {

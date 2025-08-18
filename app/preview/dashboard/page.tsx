@@ -1,3 +1,5 @@
+"use client"
+import { useEffect } from 'react'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { TopBar } from '@/components/dashboard/TopBar'
 import { SummaryStatCard } from '@/components/dashboard/SummaryStatCard'
@@ -7,6 +9,33 @@ import { YourTools } from '@/components/dashboard/YourTools'
 import { Calendar, Users, DollarSign, Phone } from 'lucide-react'
 
 export default function DashboardMarketingPreview() {
+  // Hide Next.js dev logo/toolbar in dev for clean marketing screenshots
+  useEffect(() => {
+    const hide = () => {
+      const selectors = [
+        '[aria-label="Next.js"]',
+        '#__nextDevToolbar',
+        '#__nextDevOverlay',
+        '#__next-build-watcher',
+        '#__nextDevTools',
+        '[data-nextjs-devtools]',
+        '[data-nextjs-toolbox]',
+        '#nextjs__container',
+        '#nextjs-toast',
+        '.nextjs-container',
+      ]
+      const css = `
+        ${selectors.join(',')} { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+      `
+      const style = document.createElement('style')
+      style.textContent = css
+      document.head.appendChild(style)
+    }
+    hide()
+    const mo = new MutationObserver(hide)
+    mo.observe(document.documentElement, { subtree: true, childList: true })
+    return () => mo.disconnect()
+  }, [])
   // Mock stats
   const totalBookings = 150
   const totalClients = 78

@@ -6,6 +6,9 @@ import { Id } from "./_generated/dataModel";
 // Platform fee constant
 const PLATFORM_FEE = 5; // $5 per booking
 
+// Check if payment is required (can be configured)
+const PAYMENT_REQUIRED = true; // Stripe is now ready!
+
 // Query: Get booking by ID
 export const getBookingById = query({
   args: {
@@ -307,9 +310,9 @@ export const createBooking = mutation({
       },
       appointmentDate: args.appointmentDate,
       appointmentTime: args.appointmentTime,
-      status: "pending",
+      status: PAYMENT_REQUIRED ? "pending" : "confirmed", // Auto-confirm if payment disabled
       notes: args.notes,
-      platformFee: bookingFee, // $5 booking fee
+      platformFee: PAYMENT_REQUIRED ? bookingFee : 0, // No fee if payment disabled
       payoutAmount: salonPayout, // Full service price goes to salon
       
       // Emergency Capacity Tracking

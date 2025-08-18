@@ -5,6 +5,8 @@ import { Id } from '@/convex/_generated/dataModel';
 import { BookingCalendar } from './BookingCalendar';
 import { BookingForm } from './BookingForm';
 import { PaymentProcessor } from './PaymentProcessor';
+import { PaymentProcessorStripe } from './PaymentProcessorStripe';
+import { config } from '@/lib/config';
 
 interface BookingFlowProps {
   salonId: Id<"salons">;
@@ -36,7 +38,16 @@ export function BookingFlow({ salonId, salonName, serviceDetails, onComplete }: 
   
   const handleBookingCreated = (newBookingId: Id<"bookings">) => {
     setBookingId(newBookingId);
-    setCurrentStep('payment');
+    
+    // Skip payment if disabled
+    if (!config.payment.enabled) {
+      setCurrentStep('success');
+      if (onComplete) {
+        setTimeout(onComplete, 3000);
+      }
+    } else {
+      setCurrentStep('payment');
+    }
   };
   
   const handlePaymentSuccess = () => {
@@ -149,7 +160,7 @@ export function BookingFlow({ salonId, salonName, serviceDetails, onComplete }: 
       )}
       
       {currentStep === 'payment' && bookingId && (
-        <PaymentProcessor
+        <PaymentProcessorStripe
           bookingId={bookingId}
           amount={5} // Only $5 platform booking fee is charged at booking time
           serviceTotal={serviceDetails.finalPrice} // Show the full service price for clarity
@@ -169,6 +180,11 @@ export function BookingFlow({ salonId, salonName, serviceDetails, onComplete }: 
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
           <p className="text-gray-500 mb-6">
             Your appointment has been successfully booked.
+            {!config.payment.enabled && (
+              <span className="block mt-2 text-sm">
+                Please pay the service fee directly at the salon.
+              </span>
+            )}
           </p>
           
           <div className="bg-gray-50 rounded-md p-6 text-left max-w-md mx-auto">

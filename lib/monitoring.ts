@@ -42,18 +42,18 @@ class ErrorMonitor {
         debug: false,
         replaysOnErrorSampleRate: 1.0,
         replaysSessionSampleRate: 0.1,
-        integrations: [
-          new Sentry.BrowserTracing({
-            tracePropagationTargets: [
-              'localhost',
-              /^https:\/\/yourapp\.com\/api/,
-            ],
-          }),
-          new Sentry.Replay({
-            maskAllText: true,
-            blockAllMedia: true,
-          }),
-        ],
+        // integrations: [
+        //   new Sentry.BrowserTracing({
+        //     tracePropagationTargets: [
+        //       'localhost',
+        //       /^https:\/\/yourapp\.com\/api/,
+        //     ],
+        //   }),
+        //   new Sentry.Replay({
+        //     maskAllText: true,
+        //     blockAllMedia: true,
+        //   }),
+        // ],
       });
 
       this.isInitialized = true;
