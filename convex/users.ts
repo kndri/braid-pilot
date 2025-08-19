@@ -114,6 +114,18 @@ export const createInitialSalonRecord = mutation({
       return user.salonId;
     }
     
+    // If username is provided, check if it's still available (race condition check)
+    if (args.salonData.username) {
+      const existingSalon = await ctx.db
+        .query("salons")
+        .withIndex("by_username", (q) => q.eq("username", args.salonData.username!))
+        .first();
+      
+      if (existingSalon) {
+        throw new Error("Username is already taken");
+      }
+    }
+    
     // Create salon record
     const salonId = await ctx.db.insert("salons", {
       ...args.salonData,

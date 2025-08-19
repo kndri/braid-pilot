@@ -1,3 +1,5 @@
+'use client';
+
 import { SignOutButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
@@ -23,7 +25,7 @@ export function DashboardHeader({ salonName }: DashboardHeaderProps) {
             >
               View My Profile
             </Link>
-            <SignOutButton>
+            <SignOutButton redirectUrl="/">
               <button className="text-gray-800 hover:text-black transition-colors">
                 Sign Out
               </button>

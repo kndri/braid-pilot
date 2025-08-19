@@ -15,6 +15,7 @@ export default function SalonSetupPage() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [usernameError, setUsernameError] = useState('');
+  const [generalError, setGeneralError] = useState('');
   const [checkingUsername, setCheckingUsername] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [formData, setFormData] = useState({
@@ -79,25 +80,38 @@ export default function SalonSetupPage() {
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clear previous errors
+    setGeneralError('');
+    setUsernameError('');
+    
+    // Validate salon name
     if (!formData.salonName.trim()) {
-      alert('Please enter your salon name');
+      setGeneralError('Please enter your salon name');
       return;
     }
     
+    // Validate username
     if (!formData.username.trim() || formData.username.length < 3) {
-      alert('Please enter a valid username (at least 3 characters)');
+      setUsernameError('Username must be at least 3 characters');
+      return;
+    }
+
+    // Check username availability
+    if (checkingUsername) {
+      setGeneralError('Please wait while we check username availability');
       return;
     }
 
     if (!usernameAvailable) {
-      alert('Please choose an available username');
+      setUsernameError('This username is not available. Please choose another.');
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      await createInitialSalonRecord({
+      const salonId = await createInitialSalonRecord({
         salonData: {
           name: formData.salonName.trim(),
           username: formData.username.toLowerCase().trim(),
@@ -111,9 +125,25 @@ export default function SalonSetupPage() {
         }
       });
       
-      router.push('/onboarding');
-    } catch (error) {
-      alert('Failed to create salon. Please try again.');
+      if (salonId) {
+        router.push('/onboarding');
+      } else {
+        throw new Error('Failed to create salon');
+      }
+    } catch (error: any) {
+      console.error('Salon creation error:', error);
+      
+      // Check for specific error messages
+      if (error?.message?.includes('Username is already taken')) {
+        setUsernameError('This username was just taken. Please choose another.');
+        setUsernameAvailable(false);
+      } else if (error?.message?.includes('Not authenticated')) {
+        setGeneralError('Your session has expired. Please sign in again.');
+        setTimeout(() => router.push('/sign-in'), 2000);
+      } else {
+        setGeneralError('Failed to create salon. Please try again.');
+      }
+      
       setIsSubmitting(false);
     }
   };
@@ -155,6 +185,16 @@ export default function SalonSetupPage() {
         </div>
         
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+          {/* General Error Display */}
+          {generalError && (
+            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-start">
+              <svg className="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-sm">{generalError}</span>
+            </div>
+          )}
+          
           {/* Salon Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -343,14 +383,17 @@ export default function SalonSetupPage() {
           <div className="pt-4">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || checkingUsername || !usernameAvailable}
               className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
-                isSubmitting
+                isSubmitting || checkingUsername || !usernameAvailable
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   : 'bg-orange-500 text-white hover:bg-orange-600'
               }`}
             >
-              {isSubmitting ? 'Setting up...' : 'Continue to Pricing Setup'}
+              {isSubmitting ? 'Setting up...' : 
+               checkingUsername ? 'Checking username...' : 
+               !usernameAvailable && formData.username.length >= 3 ? 'Username unavailable' :
+               'Continue to Pricing Setup'}
             </button>
           </div>
         </form>

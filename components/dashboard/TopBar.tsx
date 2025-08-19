@@ -1,7 +1,7 @@
 'use client'
 
 import { Search, Bell, ChevronDown } from 'lucide-react'
-import { useUser } from '@clerk/nextjs'
+import { useUser, SignOutButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -73,9 +73,11 @@ export function TopBar() {
                 Settings
               </a>
               <hr className="my-1" />
-              <a href="/sign-out" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Sign out
-              </a>
+              <SignOutButton redirectUrl="/">
+                <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  Sign out
+                </button>
+              </SignOutButton>
             </div>
           )}
         </div>
