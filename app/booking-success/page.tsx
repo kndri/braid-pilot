@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Check, Loader2, AlertCircle, Calendar, Clock, Scissors, ChevronRight } from 'lucide-react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 
-export default function BookingSuccessPage() {
+function BookingSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const bookingId = searchParams.get('booking_id');
@@ -228,5 +228,24 @@ export default function BookingSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <Loader2 className="w-12 h-12 animate-spin text-purple-600" />
+              <p className="text-gray-600">Loading booking details...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <BookingSuccessContent />
+    </Suspense>
   );
 }

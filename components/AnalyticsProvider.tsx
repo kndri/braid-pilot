@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { identifyUser, trackPageView } from '@/lib/analytics';
 import { errorMonitor } from '@/lib/monitoring';
 import { initPerformanceMonitoring } from '@/lib/performance';
 
-export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+function AnalyticsContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
@@ -79,4 +79,12 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   }, [isLoaded, user]);
 
   return <>{children}</>;
+}
+
+export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<>{children}</>}>
+      <AnalyticsContent>{children}</AnalyticsContent>
+    </Suspense>
+  );
 }
