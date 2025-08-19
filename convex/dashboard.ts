@@ -73,8 +73,16 @@ export const getDashboardData = query({
     // Check onboarding completion
     const onboardingComplete = user.onboardingComplete || false;
     
-    // Get the full quote tool URL
-    const baseUrl = 'http://localhost:3002'; // Will be replaced with environment variable in production
+    // Check if pricing is configured
+    const pricingConfigs = await ctx.db
+      .query("pricingConfigs")
+      .withIndex("by_salonId", (q) => q.eq("salonId", user.salonId!))
+      .collect();
+    
+    const hasPricingConfigured = pricingConfigs.length > 0;
+    
+    // Get the full quote tool URL based on environment
+    const baseUrl = process.env.PLATFORM_URL || 'https://braidpilot.com';
     let fullQuoteToolUrl = '';
     
     if (salon.username) {
@@ -115,6 +123,7 @@ export const getDashboardData = query({
         };
       })),
       onboardingComplete,
+      hasPricingConfigured,
     };
   },
 });

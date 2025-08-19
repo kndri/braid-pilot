@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
@@ -36,6 +37,13 @@ export default function DashboardPage() {
   if (isLoaded && !user) {
     redirect('/sign-in')
   }
+
+  // Redirect to onboarding if pricing is not configured
+  useEffect(() => {
+    if (dashboardData && !dashboardData.hasPricingConfigured) {
+      redirect('/onboarding')
+    }
+  }, [dashboardData])
 
   // Calculate statistics
   const totalBookings = stats?.totalBookings || 0
