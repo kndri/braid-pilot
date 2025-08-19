@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createBookingFeePayment } from '@/lib/stripe';
-import { auth } from '@clerk/nextjs/server';
+// import { auth } from '@clerk/nextjs/server'; // Uncomment if you want to require authentication
 
 export async function POST(request: NextRequest) {
   try {
     // Verify authentication (optional - bookings can be made by guests)
-    const { userId } = auth();
+    // await auth(); // Uncomment if you want to require authentication
     
     const body = await request.json();
     

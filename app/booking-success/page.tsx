@@ -142,7 +142,7 @@ export default function BookingSuccessPage() {
                       <Scissors className="w-4 h-4 text-gray-400 mr-3" />
                       <div>
                         <p className="text-sm text-gray-500">Service</p>
-                        <p className="font-medium text-gray-900">{booking.serviceName}</p>
+                        <p className="font-medium text-gray-900">{booking.serviceDetails?.style || 'Service'}</p>
                       </div>
                     </div>
                   </div>
@@ -155,7 +155,7 @@ export default function BookingSuccessPage() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Service Price:</span>
-                        <span className="font-medium">${booking.servicePrice}</span>
+                        <span className="font-medium">${booking.serviceDetails?.finalPrice || 0}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Booking Fee Paid:</span>
@@ -163,7 +163,7 @@ export default function BookingSuccessPage() {
                       </div>
                       <div className="pt-2 border-t border-purple-200 flex justify-between">
                         <span className="font-medium text-gray-900">Due at Salon:</span>
-                        <span className="font-bold text-lg text-purple-600">${booking.servicePrice}</span>
+                        <span className="font-bold text-lg text-purple-600">${booking.serviceDetails?.finalPrice || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -176,7 +176,7 @@ export default function BookingSuccessPage() {
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start">
                     <ChevronRight className="w-4 h-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                    <span>A confirmation email has been sent to {booking.clientEmail}</span>
+                    <span>A confirmation email has been sent to {booking.client?.email || 'your email'}</span>
                   </li>
                   <li className="flex items-start">
                     <ChevronRight className="w-4 h-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -188,7 +188,7 @@ export default function BookingSuccessPage() {
                   </li>
                   <li className="flex items-start">
                     <ChevronRight className="w-4 h-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                    <span>Bring ${booking.servicePrice} to pay at the salon</span>
+                    <span>Bring ${booking.serviceDetails?.finalPrice || 0} to pay at the salon</span>
                   </li>
                 </ul>
               </div>

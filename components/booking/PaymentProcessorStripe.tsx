@@ -53,8 +53,8 @@ export function PaymentProcessorStripe({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             bookingId,
-            clientEmail: booking.clientEmail || 'customer@example.com',
-            clientName: booking.clientName || 'Customer',
+            clientEmail: booking.client?.email || 'customer@example.com',
+            clientName: booking.client?.name || 'Customer',
             serviceName: booking.serviceDetails?.style || 'Service',
             servicePrice: serviceTotal || booking.serviceDetails?.finalPrice || 0,
             salonName: 'BraidPilot Salon', // TODO: Get actual salon name
@@ -159,8 +159,8 @@ export function PaymentProcessorStripe({
         salonName="BraidPilot Salon"
         appointmentDate={booking.appointmentDate}
         appointmentTime={booking.appointmentTime}
-        clientEmail={booking.clientEmail || ''}
-        clientName={booking.clientName || ''}
+        clientEmail={booking.client?.email || ''}
+        clientName={booking.client?.name || ''}
         onSuccess={handlePaymentSuccess}
         onError={handlePaymentError}
         onCancel={handleCancel}

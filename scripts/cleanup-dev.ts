@@ -18,6 +18,9 @@ if (!CONVEX_URL) {
 }
 
 async function cleanupDatabase() {
+  if (!CONVEX_URL) {
+    throw new Error('NEXT_PUBLIC_CONVEX_URL environment variable is not set');
+  }
   const client = new ConvexHttpClient(CONVEX_URL);
   
   console.log("🧹 Starting database cleanup...");
