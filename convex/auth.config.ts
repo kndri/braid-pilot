@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://worthy-grackle-1.clerk.accounts.dev",
+      domain: "https://clerk.braidpilot.com",
       applicationID: "convex",
     },
   ],

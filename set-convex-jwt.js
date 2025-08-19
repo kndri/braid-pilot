@@ -14,7 +14,8 @@ try {
   console.log('Removed old JWT_PRIVATE_KEY');
   
   // Set the new key from file
-  execSync('npx convex env set JWT_PRIVATE_KEY < temp_jwt.txt', { stdio: 'inherit', shell: true });
+  const keyContent = fs.readFileSync('temp_jwt.txt', 'utf8');
+  execSync(`npx convex env set JWT_PRIVATE_KEY "${keyContent.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`, { stdio: 'inherit', shell: true });
   console.log('JWT_PRIVATE_KEY has been successfully set');
   
   // Clean up
