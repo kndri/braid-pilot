@@ -81,7 +81,12 @@ export default function OnboardingWizard({ salonId, salonName, isEditMode = fals
         standardHairType: existingPricingData.standardHairType,
         selectedStyles: existingPricingData.selectedStyles,
         stylePricing: existingPricingData.stylePricing,
-        globalHairTypeAdjustments: existingPricingData.globalHairTypeAdjustments,
+        globalHairTypeAdjustments: {
+          "Synthetic": existingPricingData.globalHairTypeAdjustments["Synthetic"] || 0,
+          "100% Human Hair": existingPricingData.globalHairTypeAdjustments["100% Human Hair"] || 50,
+          "Virgin Hair": existingPricingData.globalHairTypeAdjustments["Virgin Hair"] || 100,
+          "Treated Hair": existingPricingData.globalHairTypeAdjustments["Treated Hair"] || 30,
+        } as HairTypeAdjustments,
       }));
       setIsLoadingExistingData(false);
       // Skip welcome screen in edit mode

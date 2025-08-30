@@ -15,7 +15,7 @@ interface Props {
 export default function ReviewAndCustomizeScreen({ data, onNext, onBack }: Props) {
   const [expandedStyles, setExpandedStyles] = useState<Set<string>>(new Set());
   const [editingStyle, setEditingStyle] = useState<string | null>(null);
-  const [customAdjustments, setCustomAdjustments] = useState(data.customAdjustments);
+  const [customAdjustments, setCustomAdjustments] = useState<Record<string, any>>(data.customAdjustments);
   const [isSaving, setIsSaving] = useState(false);
   const [editingPrice, setEditingPrice] = useState<{style: string, length: string, size: string, hairType: string} | null>(null);
   const [tempPrice, setTempPrice] = useState<number>(0);
@@ -145,7 +145,13 @@ export default function ReviewAndCustomizeScreen({ data, onNext, onBack }: Props
       });
 
       // Prepare pricing configs
-      const configs = [];
+      const configs: Array<{
+        styleName: string;
+        adjustmentType: "base_price" | "length_adj" | "size_adj" | "hair_type_adj" | "curly_hair_adj";
+        adjustmentLabel: string;
+        adjustmentValue: number;
+        metadata?: any;
+      }> = [];
       
       for (const style of data.selectedStyles) {
         // Base price
@@ -163,7 +169,7 @@ export default function ReviewAndCustomizeScreen({ data, onNext, onBack }: Props
             styleName: style.name,
             adjustmentType: "length_adj" as const,
             adjustmentLabel: length,
-            adjustmentValue: value
+            adjustmentValue: value as number
           });
         }
 
@@ -174,7 +180,7 @@ export default function ReviewAndCustomizeScreen({ data, onNext, onBack }: Props
             styleName: style.name,
             adjustmentType: "size_adj" as const,
             adjustmentLabel: size,
-            adjustmentValue: value
+            adjustmentValue: value as number
           });
         }
 
@@ -196,7 +202,7 @@ export default function ReviewAndCustomizeScreen({ data, onNext, onBack }: Props
             styleName: "Global",
             adjustmentType: "hair_type_adj" as const,
             adjustmentLabel: hairType,
-            adjustmentValue: value
+            adjustmentValue: value as number
           });
         }
       }

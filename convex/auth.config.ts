@@ -3,7 +3,7 @@
 // - Production: https://clerk.braidpilot.com
 // - Development: https://worthy-grackle-1.clerk.accounts.dev
 
-const clerkDomain = process.env.CLERK_ISSUER_URL || "https://worthy-grackle-1.clerk.accounts.dev";
+const clerkDomain = "https://worthy-grackle-1.clerk.accounts.dev";
 
 export default {
   providers: [
