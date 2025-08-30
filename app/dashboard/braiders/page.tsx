@@ -22,9 +22,7 @@ export default function BraidersPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   // Check if coming from setup flow
-  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
-  const isSetupMode = searchParams.get('setup') === 'true'
-  const [viewMode, setViewMode] = useState<'overview' | 'settings'>(isSetupMode ? 'settings' : 'overview')
+  const [viewMode, setViewMode] = useState<'overview' | 'settings'>('overview')
   
   // Get user data from Convex to get salonId
   const userData = useQuery(api.users.viewer)

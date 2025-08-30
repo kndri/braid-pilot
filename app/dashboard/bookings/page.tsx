@@ -22,11 +22,7 @@ export default function BookingsPage() {
   const { user, isLoaded } = useUser()
   
   // Check if coming from setup flow
-  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
-  const viewParam = searchParams.get('view')
-  const initialView: ViewMode = viewParam === 'settings' ? 'settings' : 'calendar'
-  
-  const [viewMode, setViewMode] = useState<ViewMode>(initialView)
+  const [viewMode, setViewMode] = useState<ViewMode>('calendar')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [selectedBookingId, setSelectedBookingId] = useState<Id<'bookings'> | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
