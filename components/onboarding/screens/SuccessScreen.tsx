@@ -1,6 +1,6 @@
 "use client";
 import { WizardData } from "../OnboardingWizard";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   data: WizardData;
@@ -8,6 +8,8 @@ interface Props {
 
 export default function SuccessScreen({ }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get('mode') === 'edit';
   
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
@@ -17,19 +19,27 @@ export default function SuccessScreen({ }: Props) {
         </svg>
       </div>
       
-      <h2 className="text-3xl font-semibold text-gray-900 mb-4">Setup Complete!</h2>
-      <p className="text-gray-600 mb-8">Your pricing configuration has been saved successfully.</p>
+      <h2 className="text-3xl font-semibold text-gray-900 mb-4">
+        {isEditMode ? 'Pricing Updated!' : 'Setup Complete!'}
+      </h2>
+      <p className="text-gray-600 mb-8">
+        {isEditMode 
+          ? 'Your pricing configuration has been updated successfully.'
+          : 'Your pricing configuration has been saved successfully.'}
+      </p>
       
-      <div className="bg-gray-50 rounded-md p-4 mb-6">
-        <p className="text-sm text-gray-600 mb-2">Your unique quote tool URL:</p>
-        <p className="font-mono text-lg text-gray-900">braidpilot.com/quote/abc123</p>
-      </div>
+      {!isEditMode && (
+        <div className="bg-gray-50 rounded-md p-4 mb-6">
+          <p className="text-sm text-gray-600 mb-2">Your unique quote tool URL:</p>
+          <p className="font-mono text-lg text-gray-900">braidpilot.com/quote/abc123</p>
+        </div>
+      )}
       
       <button 
         onClick={() => router.push("/dashboard")}
         className="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700"
       >
-        Go to Dashboard
+        {isEditMode ? 'Back to Dashboard' : 'Go to Dashboard'}
       </button>
     </div>
   );

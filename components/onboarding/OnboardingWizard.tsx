@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import StyleSelectionScreen from "./screens/StyleSelectionScreen";
@@ -43,9 +45,10 @@ export interface HairTypeAdjustments {
 interface OnboardingWizardProps {
   salonId: Id<"salons">;
   salonName: string;
+  isEditMode?: boolean;
 }
 
-export default function OnboardingWizard({ salonId, salonName }: OnboardingWizardProps) {
+export default function OnboardingWizard({ salonId, salonName, isEditMode = false }: OnboardingWizardProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardData, setWizardData] = useState<WizardData>({
@@ -62,6 +65,31 @@ export default function OnboardingWizard({ salonId, salonName }: OnboardingWizar
     },
     currentStyleIndex: 0,
   });
+  const [isLoadingExistingData, setIsLoadingExistingData] = useState(isEditMode);
+
+  // Fetch existing pricing data if in edit mode
+  const existingPricingData = useQuery(
+    api.pricing.getFormattedPricingData,
+    isEditMode ? { salonId } : "skip"
+  );
+
+  // Load existing data when in edit mode
+  useEffect(() => {
+    if (isEditMode && existingPricingData) {
+      setWizardData((prev) => ({
+        ...prev,
+        standardHairType: existingPricingData.standardHairType,
+        selectedStyles: existingPricingData.selectedStyles,
+        stylePricing: existingPricingData.stylePricing,
+        globalHairTypeAdjustments: existingPricingData.globalHairTypeAdjustments,
+      }));
+      setIsLoadingExistingData(false);
+      // Skip welcome screen in edit mode
+      if (currentStep === 0) {
+        setCurrentStep(1);
+      }
+    }
+  }, [isEditMode, existingPricingData, currentStep]);
 
   const updateWizardData = (data: Partial<WizardData>) => {
     setWizardData((prev) => ({ ...prev, ...data }));
@@ -80,11 +108,12 @@ export default function OnboardingWizard({ salonId, salonName }: OnboardingWizar
 
   const getStepComponent = () => {
     // Static screens
-    if (currentStep === 0) {
+    if (currentStep === 0 && !isEditMode) {
       return <WelcomeScreen data={wizardData} onNext={handleNext} />;
     }
     
-    if (currentStep === 1) {
+    // Start at style selection for edit mode or step 1 for new setup
+    if ((currentStep === 0 && isEditMode) || currentStep === 1) {
       return <StyleSelectionScreen data={wizardData} onNext={handleNext} onBack={handleBack} />;
     }
 
@@ -179,7 +208,7 @@ export default function OnboardingWizard({ salonId, salonName }: OnboardingWizar
 
   // Calculate total steps
   const calculateTotalSteps = () => {
-    let total = 2; // Welcome + Style Selection
+    let total = isEditMode ? 1 : 2; // Skip welcome in edit mode
     wizardData.selectedStyles.forEach((style) => {
       total += 3; // Base + Length + Size
       if (style.name === "Boho Knotless") {
@@ -191,7 +220,20 @@ export default function OnboardingWizard({ salonId, salonName }: OnboardingWizar
   };
 
   const totalSteps = calculateTotalSteps();
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  const adjustedStep = isEditMode && currentStep > 0 ? currentStep : currentStep + 1;
+  const progress = (adjustedStep / totalSteps) * 100;
+
+  // Show loading state while fetching existing data
+  if (isLoadingExistingData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-orange-500 rounded-lg mx-auto mb-4 animate-pulse"></div>
+          <p className="text-gray-900">Loading your pricing configuration...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -200,13 +242,13 @@ export default function OnboardingWizard({ salonId, salonName }: OnboardingWizar
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-600">
-              Step {currentStep + 1} of {totalSteps}
+              {isEditMode ? 'Edit Pricing - ' : ''}Step {adjustedStep} of {totalSteps}
             </span>
             <button
               onClick={() => router.push("/dashboard")}
               className="text-sm text-gray-500 hover:text-gray-700"
             >
-              Save & Exit
+              {isEditMode ? 'Cancel' : 'Save & Exit'}
             </button>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">

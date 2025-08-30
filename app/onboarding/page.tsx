@@ -1,15 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { SignOutButton, useUser } from '@clerk/nextjs'
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
+import SimplifiedOnboardingWizard from '@/components/onboarding/SimplifiedOnboardingWizard'
 import { trackEvent, ANALYTICS_EVENTS } from '@/lib/analytics'
 
 export default function OnboardingPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isEditMode = searchParams.get('mode') === 'edit'
   useUser()
   const [currentStep, setCurrentStep] = useState(1)
   const [isCompleting, setIsCompleting] = useState(false)
@@ -19,12 +22,12 @@ export default function OnboardingPage() {
   const onboardingStatus = useQuery(api.users.checkOnboardingStatus)
   const completeOnboarding = useMutation(api.users.completeOnboarding)
   
-  // Redirect to dashboard if onboarding is already complete
+  // Redirect to dashboard if onboarding is already complete (unless in edit mode)
   useEffect(() => {
-    if (onboardingStatus?.onboardingComplete) {
+    if (onboardingStatus?.onboardingComplete && !isEditMode) {
       router.replace('/dashboard')
     }
-  }, [onboardingStatus, router])
+  }, [onboardingStatus, router, isEditMode])
   
   const totalSteps = 3
   
@@ -104,14 +107,25 @@ export default function OnboardingPage() {
     )
   }
   
-  // Use the new comprehensive wizard if we have salon data
+  // Use the simplified wizard if we have salon data
   if (currentUser?.salon?._id && currentUser.salon.name) {
+    // Use simplified wizard for better UX
     return (
-      <OnboardingWizard 
+      <SimplifiedOnboardingWizard 
         salonId={currentUser.salon._id} 
-        salonName={currentUser.salon.name} 
+        salonName={currentUser.salon.name}
+        isEditMode={isEditMode}
       />
     );
+    
+    // Legacy wizard (kept for reference, can be removed later)
+    // return (
+    //   <OnboardingWizard 
+    //     salonId={currentUser.salon._id} 
+    //     salonName={currentUser.salon.name}
+    //     isEditMode={isEditMode}
+    //   />
+    // );
   }
   
   // Fallback to simple onboarding for initial setup

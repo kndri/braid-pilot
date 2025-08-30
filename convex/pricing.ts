@@ -254,6 +254,92 @@ export const generateQuoteToolUrl = mutation({
   },
 });
 
+// Get formatted pricing data for wizard edit mode
+export const getFormattedPricingData = query({
+  args: {
+    salonId: v.id("salons"),
+  },
+  handler: async (ctx, args) => {
+    const salon = await ctx.db.get(args.salonId);
+    if (!salon) {
+      throw new Error("Salon not found");
+    }
+
+    // Get selected styles
+    const styles = await ctx.db
+      .query("salonStyles")
+      .withIndex("by_salonId", (q) => q.eq("salonId", args.salonId))
+      .collect();
+
+    // Get all pricing configs
+    const configs = await ctx.db
+      .query("pricingConfigs")
+      .withIndex("by_salonId", (q) => q.eq("salonId", args.salonId))
+      .collect();
+
+    // Format the data for the wizard
+    const selectedStyles = styles
+      .sort((a, b) => a.displayOrder - b.displayOrder)
+      .map(s => ({ name: s.styleName, isCustom: s.isCustom }));
+
+    // Build stylePricing object
+    const stylePricing: Record<string, any> = {};
+    
+    for (const style of selectedStyles) {
+      const styleConfigs = configs.filter(c => c.styleName === style.name);
+      
+      const basePrice = styleConfigs.find(c => c.adjustmentType === "base_price")?.adjustmentValue || 0;
+      
+      const lengthAdjustments: Record<string, number> = {};
+      const sizeAdjustments: Record<string, number> = {};
+      
+      styleConfigs.forEach(config => {
+        if (config.adjustmentType === "length_adj") {
+          lengthAdjustments[config.adjustmentLabel] = config.adjustmentValue;
+        } else if (config.adjustmentType === "size_adj") {
+          sizeAdjustments[config.adjustmentLabel] = config.adjustmentValue;
+        }
+      });
+
+      // Check for curly hair adjustment (Boho Knotless specific)
+      const curlyConfig = styleConfigs.find(c => c.adjustmentType === "curly_hair_adj");
+      
+      stylePricing[style.name] = {
+        basePrice,
+        lengthAdjustments,
+        sizeAdjustments,
+        ...(curlyConfig && {
+          curlyHairAdjustment: {
+            included: true,
+            costPerPack: curlyConfig.adjustmentValue,
+          }
+        })
+      };
+    }
+
+    // Get global hair type adjustments
+    const globalHairTypeAdjustments: Record<string, number> = {
+      "Synthetic": 0, // Default values
+      "100% Human Hair": 50,
+      "Virgin Hair": 100,
+      "Treated Hair": 30,
+    };
+
+    // Update with actual values from configs
+    const hairTypeConfigs = configs.filter(c => c.adjustmentType === "hair_type_adj");
+    hairTypeConfigs.forEach(config => {
+      globalHairTypeAdjustments[config.adjustmentLabel] = config.adjustmentValue;
+    });
+
+    return {
+      standardHairType: salon.standardHairType || "Synthetic",
+      selectedStyles,
+      stylePricing,
+      globalHairTypeAdjustments,
+    };
+  },
+});
+
 // Ensure salon has a quote tool URL (for existing salons)
 export const ensureQuoteToolUrl = mutation({
   handler: async (ctx) => {

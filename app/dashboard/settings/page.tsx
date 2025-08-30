@@ -143,10 +143,16 @@ export default function SettingsPage() {
                     <div>
                       <h2 className="text-lg font-semibold mb-4">Pricing Configuration</h2>
                       <div className="space-y-4">
-                        <div className="rounded-lg bg-yellow-50 p-4">
-                          <p className="text-sm text-yellow-800">
-                            <span className="font-medium">Note:</span> To update your pricing, please use the onboarding tool or contact support for bulk pricing updates.
+                        <div className="rounded-lg bg-blue-50 p-4">
+                          <p className="text-sm text-blue-800 mb-3">
+                            <span className="font-medium">Service Pricing:</span> Manage your service prices, length adjustments, and hair type pricing.
                           </p>
+                          <button 
+                            onClick={() => window.location.href = '/onboarding?mode=edit'}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                          >
+                            Edit Service Pricing
+                          </button>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -165,7 +171,7 @@ export default function SettingsPage() {
                           />
                         </div>
                         <button className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
-                          Update Pricing
+                          Update Deposit
                         </button>
                       </div>
                     </div>
